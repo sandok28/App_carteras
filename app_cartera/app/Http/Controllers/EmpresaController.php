@@ -27,7 +27,7 @@ class EmpresaController extends Controller
      */
     public function create()
     {
-        //
+        return view('empresas.create');
     }
 
     /**
@@ -38,7 +38,13 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $empresa = new Empresa();
+        $empresa->nombre = $request->input('nombre');
+        $empresa->descripcion = $request->input('descripcion');
+        $empresa->save();
+
+        return redirect('/empresas');
     }
 
     /**
@@ -49,7 +55,7 @@ class EmpresaController extends Controller
      */
     public function show(Empresa $empresa)
     {
-        //
+        
     }
 
     /**
@@ -60,7 +66,8 @@ class EmpresaController extends Controller
      */
     public function edit(Empresa $empresa)
     {
-        //
+        dd($empresa);
+        return view('empresas.edit', compact('empresa'));
     }
 
     /**
@@ -72,7 +79,10 @@ class EmpresaController extends Controller
      */
     public function update(Request $request, Empresa $empresa)
     {
-        //
+        $empresa->fill($request->all());
+        $empresa->save();
+
+        return redirect('/empresas');
     }
 
     /**
@@ -81,8 +91,25 @@ class EmpresaController extends Controller
      * @param  \App\Empresa  $empresa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Empresa $empresa)
+    public function desActivarEmpresa(Empresa $empresa)
     {
-        //
+        $empresa->estado = "I";
+        $empresa->save();
+
+        return redirect('/empresas');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Empresa  $empresa
+     * @return \Illuminate\Http\Response
+     */
+    public function activarEmpresa(Empresa $empresa)
+    {
+        $empresa->estado = "A";
+        $empresa->save();
+
+        return redirect('/empresas');
     }
 }
