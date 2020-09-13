@@ -16,8 +16,8 @@ class EmpresaController extends Controller
     {
         
         $empresas = Empresa::all();
-        //dd($empresas);
-    return view('empresas.index', compact('empresas'));
+        
+        return view('empresas.index', compact('empresas')); 
     } 
 
     /**
