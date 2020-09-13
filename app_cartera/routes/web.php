@@ -20,3 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::resource('empresas','EmpresaController');
+Route::get('/empresas/desactivar/{empresa}', 'EmpresaController@desActivarEmpresa')->name('empresas.desActivarEmpresa');
+Route::get('/empresas/activar/{empresa}', 'EmpresaController@activarEmpresa')->name('empresas.activarEmpresa');
