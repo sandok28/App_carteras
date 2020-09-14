@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
+    /**composer dump-autoload
      * Seed the application's database.
      *
      * @return void
@@ -13,6 +13,8 @@ class DatabaseSeeder extends Seeder
     {
          $this->call(EmpresasTableSeeder::class);
          $this->call(CarterasSeeder::class);
+         $this->call(ProductosSeeder::class);
+         
 
          
     }
