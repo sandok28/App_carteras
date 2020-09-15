@@ -30,3 +30,9 @@ Route::get('/empresas/activar/{empresa}', 'EmpresaController@activarEmpresa')->n
 Route::resource('carteras','CarterasController');
 Route::get('/carteras/desactivar/{cartera}', 'CarterasController@desActivarCartera')->name('carteras.desActivarCartera');
 Route::get('/carteras/activar/{cartera}', 'CarterasController@activarCartera')->name('carteras.activarCartera');
+
+
+
+Route::resource('usuarios','Usuarioscontroller');
+Route::get('/usuarios/desactivar/{usario}', 'UsuariosController@desActivarUsuario')->name('usuarios.desActivarUsuario');
+Route::get('/usuarios/activar/{usuario}', 'UsuariosController@activarUsuario')->name('usuarios.activarUsuario');
