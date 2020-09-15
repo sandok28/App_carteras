@@ -57,18 +57,18 @@
                                             <input class="form-control" id="exampleFormControlInput1" name="tipo" type="text"value="{{$usuario->tipo}}">
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">User_id</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="user_id" type="text"value="{{$usuario->user_id}}">
-                                        </div>
 
                                         <div class="form-group">
-                                            <label for="exampleFormControlInput1">Empresa_id</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text"value="{{$usuario->empresa_id}}">
+                                            <label for="exampleFormControlInput1">Correo</label>
+                                            @if(is_null($usuario->user))
+                                                <input class="form-control" id="exampleFormControlInput1" name="email" type="text" value="">
+                                                
+                                            @else
+                                                <input class="form-control" id="exampleFormControlInput1" name="email" type="text" value="{{$usuario->user->email}}">
+                                            @endif
+                                            
                                         </div>
-
-
-
+                                        
                                         <button type="submit" class="btn btn-success">
                                                 Actualizar
                                         </button>
