@@ -40,3 +40,8 @@ Route::get('/usuarios/activar/{usuario}', 'UsuariosController@activarUsuario')->
 Route::resource('productos','ProductosController');
 Route::get('/productos/desactivar/{producto}', 'ProductosController@desActivarProducto')->name('productos.desActivarProducto');
 Route::get('/productos/activar/{producto}', 'ProductosController@activarProducto')->name('productos.activarProducto');
+
+
+Route::get('/administrador/empresas', 'AdministradorController@empresas')->name('administrador.empresas');
+
+Route::get('/administrador/empresa/{empresa_id}/cartera', 'AdministradorController@administradorEmpresaCartera')->name('administrador.empresas');

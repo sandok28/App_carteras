@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista empresas
+    Panel administrador - empresas
 @endsection
 
 @section('content_css')
@@ -87,8 +87,8 @@
                                         @elseif ($empresa->estado === "I")
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/activar/'.$empresa->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
-
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/empresa/'.$empresa->id.'/cartera') }}"><i data-feather="archive"></i></a>
+                                        
                                     </td>
                                 </tr>
                                 

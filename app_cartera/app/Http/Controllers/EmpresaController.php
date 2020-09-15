@@ -44,7 +44,7 @@ class EmpresaController extends Controller
         $empresa->descripcion = $request->input('descripcion');
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 
     /**
@@ -82,7 +82,7 @@ class EmpresaController extends Controller
         $empresa->fill($request->all());
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 
     /**
@@ -96,7 +96,7 @@ class EmpresaController extends Controller
         $empresa->estado = "I";
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 
     /**
@@ -110,6 +110,6 @@ class EmpresaController extends Controller
         $empresa->estado = "A";
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 }

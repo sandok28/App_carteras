@@ -82,7 +82,7 @@ class CarterasController extends Controller
         $cartera->fill($request->all());
         $cartera->save();
 
-        return redirect('/carteras');
+        return redirect('/administrador/empresa/'.$cartera->empresa_id.'/cartera');
     }
 
     /**
