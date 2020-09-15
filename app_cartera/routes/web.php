@@ -22,7 +22,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::resource('empresas','EmpresaController');
+Route::resource('empresas','EmpresaController')->except([
+    'show'
+]);;
 Route::get('/empresas/desactivar/{empresa}', 'EmpresaController@desActivarEmpresa')->name('empresas.desActivarEmpresa');
 Route::get('/empresas/activar/{empresa}', 'EmpresaController@activarEmpresa')->name('empresas.activarEmpresa');
 
@@ -36,7 +38,7 @@ Route::get('/carteras/activar/{cartera}', 'CarterasController@activarCartera')->
 Route::resource('usuarios','Usuarioscontroller');
 Route::get('/usuarios/desactivar/{usario}', 'UsuariosController@desActivarUsuario')->name('usuarios.desActivarUsuario');
 Route::get('/usuarios/activar/{usuario}', 'UsuariosController@activarUsuario')->name('usuarios.activarUsuario');
-
+          
 Route::resource('productos','ProductosController');
 Route::get('/productos/desactivar/{producto}', 'ProductosController@desActivarProducto')->name('productos.desActivarProducto');
 Route::get('/productos/activar/{producto}', 'ProductosController@activarProducto')->name('productos.activarProducto');
@@ -44,4 +46,7 @@ Route::get('/productos/activar/{producto}', 'ProductosController@activarProducto
 
 Route::get('/administrador/empresas', 'AdministradorController@empresas')->name('administrador.empresas');
 
-Route::get('/administrador/empresa/{empresa_id}/cartera', 'AdministradorController@administradorEmpresaCartera')->name('administrador.empresas');
+Route::get('/administrador/empresa/{empresa_id}/cartera', 'AdministradorController@administradorEmpresaCartera')->name('administrador.empresas.carteras');
+
+Route::get('/empresas/productos', 'EmpresaController@vistaproductosempresa')->name('empresas.productos');
+

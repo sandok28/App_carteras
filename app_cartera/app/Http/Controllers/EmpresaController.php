@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Empresa;
+use App\Producto;
 use Illuminate\Http\Request;
 
 class EmpresaController extends Controller
@@ -11,7 +12,18 @@ class EmpresaController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * 
      */
+
+    public function vistaproductosempresa()
+    {
+        //
+    
+         $producto_empresa = Producto::where('empresa_id','2')->get();
+         return view('administradores.productos_empresas')->with('producto_empresa', $producto_empresa);
+         //dd($producto_empresa);
+    }
+
     public function index()
     {
         
@@ -47,16 +59,6 @@ class EmpresaController extends Controller
         return redirect('/administrador/empresas');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Empresa  $empresa
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Empresa $empresa)
-    {
-        
-    }
 
     /**
      * Show the form for editing the specified resource.
