@@ -11,4 +11,25 @@ class Empresa extends Model
                             'descripcion',
                             'estado'
     ];
+
+
+    /**
+     * obtiene las carteras por empresa
+     *  
+     */
+    public function carteras()
+    {
+        return $this->hasMany('App\Cartera', 'empresa_id', 'id');
+    }
+
+    /**
+     * obtiene las usuarios por empresa
+     *  
+     */
+    public function usuarios()
+    {
+        return $this->hasMany('App\Usuario', 'empresa_id', 'id');
+    }
+
+
 }
