@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cartera;
 use Illuminate\Http\Request;
+use Auth;
 
 class CarterasController extends Controller
 {
@@ -14,7 +15,10 @@ class CarterasController extends Controller
      */
     public function index()
     {
-        $carteras = Cartera::all();
+
+        $user = Auth::user();
+             
+        $carteras = $user->usuarios->get(0)->empresa->carteras;
        
         return view('carteras.index', compact('carteras'));
     }

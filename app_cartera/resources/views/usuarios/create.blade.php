@@ -56,15 +56,10 @@
                                         </div>
                                         
                                         <div class="form-group">
-                                            <label for="exampleFormControlInput1">User_id</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="user_id" type="text">
+                                            <label for="exampleFormControlInput1">Correo</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="email" type="text">
                                         </div>
-
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Empresa_id</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text">
-                                        </div>
-
+                                        
                                         <button type="submit" class="btn btn-success">
                                                 Guardar
                                         </button>

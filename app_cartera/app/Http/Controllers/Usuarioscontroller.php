@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Usuario;
+use App\User;
 use Illuminate\Http\Request;
 
 class Usuarioscontroller extends Controller
@@ -43,9 +44,12 @@ class Usuarioscontroller extends Controller
         $usuario->nit = $request->input('nit');
         $usuario->telefono = $request->input('telefono');
         $usuario->direccion = $request->input('direccion');
-        $usuario->tipo = $request->input('tipo');
-        $usuario->estado = 'A';
-        $usuario->user_id = $request->input('user_id');
+        $usuario->tipo = '3'; // 3 - Carterista
+        $usuario->estado = 'A'; // A - Activo
+
+        $user = User::Where('email',$request->input('email'))->take(1)->get();
+        $usuario->user_id = $user->get(0)->id;
+
         $usuario->empresa_id = $request->input('empresa_id');
         $usuario->save();
 
@@ -72,7 +76,7 @@ class Usuarioscontroller extends Controller
     public function edit(Usuario $usuario)
     {
 
-        //dd($usuario);
+        //dd($usuario->user->email);
         return view('usuarios.edit', compact('usuario'));
     }
 
@@ -86,7 +90,18 @@ class Usuarioscontroller extends Controller
     
     public function update(Request $request, Usuario $usuario)
     {
+
+
         $usuario->fill($request->all());
+        $user = User::Where('email',$request->input('email'))->take(1)->get();
+        //dd($user,$request->input('email'));
+
+        if(is_null($user->get(0))){
+            dd("El correo no existe");
+        }
+
+        $usuario->user_id = $user->get(0)->id; 
+
         $usuario->save();
 
         return redirect('/usuarios');
