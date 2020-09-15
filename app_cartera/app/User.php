@@ -36,4 +36,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+     /**
+     * obtiene los usuarios por user(Usuarios que inician sesion)
+     * 
+     */
+    public function usuarios()
+    {
+        return $this->hasMany('App\Usuario', 'user_id', 'id');
+    }
 }
