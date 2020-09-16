@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Empresa;
+use App\Producto;
+use Auth;
 use Illuminate\Http\Request;
 
 class EmpresaController extends Controller
@@ -11,7 +13,24 @@ class EmpresaController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * 
      */
+
+    public function vistaproductosempresa()
+    {
+        //
+         $user = Auth::user();
+         //dd($user->usuarios->get(0)->empresa->hola());
+         $producto_empresa = $user->usuarios->get(0)->empresa->productos;
+         
+         //dd($producto_empresa);
+
+
+        // $producto_empresa = Producto::where('empresa_id','2')->get();
+         return view('administradores.productos_empresas')->with('producto_empresa', $producto_empresa);
+         //dd($producto_empresa);
+    }
+
     public function index()
     {
         
@@ -38,25 +57,20 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required'
+            
+            ]);
         
         $empresa = new Empresa();
         $empresa->nombre = $request->input('nombre');
         $empresa->descripcion = $request->input('descripcion');
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Empresa  $empresa
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Empresa $empresa)
-    {
-        
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -82,7 +96,7 @@ class EmpresaController extends Controller
         $empresa->fill($request->all());
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 
     /**
@@ -96,7 +110,7 @@ class EmpresaController extends Controller
         $empresa->estado = "I";
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 
     /**
@@ -110,6 +124,6 @@ class EmpresaController extends Controller
         $empresa->estado = "A";
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador/empresas');
     }
 }
