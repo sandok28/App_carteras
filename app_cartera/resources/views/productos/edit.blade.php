@@ -42,10 +42,7 @@
                                             <input class="form-control" id="exampleFormControlInput1" name="cantidad" type="text" value="{{$producto->cantidad}}">
                                         </div>
                                         
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Empresa_id</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text" value="{{$producto->empresa_id}}">
-                                        </div>
+                                       
 
                                         <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Descripcion</label>

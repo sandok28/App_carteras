@@ -21,6 +21,11 @@
                         <div class="col-xl-12">
                             <!-- Account details card-->
                             <div class="card mb-4">
+                            @if ($errors->any())
+                                @foreach($errors->all() as $error)
+                                 <p>{{$error}}</p>
+                                @endforeach
+                            @endif
                                 <div class="card-header">Registrar usuario</div>
                                 <div class="card-body">
                                     <form method="POST" action="/usuarios" enctype="mutipart/form-data">
@@ -53,6 +58,11 @@
                                         <div class="form-group">
                                             <label for="exampleFormControlInput1">Tipo de usuario</label>
                                             <input class="form-control" id="exampleFormControlInput1" name="tipo" type="text">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Empresa_id</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text">
                                         </div>
                                         
                                         <div class="form-group">
