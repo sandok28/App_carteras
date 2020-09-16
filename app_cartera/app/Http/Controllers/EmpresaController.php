@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Empresa;
 use App\Producto;
+use Auth;
 use Illuminate\Http\Request;
 
 class EmpresaController extends Controller
@@ -18,8 +19,14 @@ class EmpresaController extends Controller
     public function vistaproductosempresa()
     {
         //
-    
-         $producto_empresa = Producto::where('empresa_id','2')->get();
+         $user = Auth::user();
+         //dd($user->usuarios->get(0)->empresa->hola());
+         $producto_empresa = $user->usuarios->get(0)->empresa->productos;
+         
+         //dd($producto_empresa);
+
+
+        // $producto_empresa = Producto::where('empresa_id','2')->get();
          return view('administradores.productos_empresas')->with('producto_empresa', $producto_empresa);
          //dd($producto_empresa);
     }
@@ -50,6 +57,11 @@ class EmpresaController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required'
+            
+            ]);
         
         $empresa = new Empresa();
         $empresa->nombre = $request->input('nombre');

@@ -41,6 +41,12 @@ class CarterasController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'nombre' => 'required',
+            'usuario_id' => 'required',
+            'empresa_id' => 'required'
+            
+            ]);
         $cartera = new Cartera();
         $cartera->nombre = $request->input('nombre');
         $cartera->descripcion = $request->input('descripcion');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Producto;
+use Auth;
 use Illuminate\Http\Request;
 
 class ProductosController extends Controller
@@ -41,17 +42,25 @@ class ProductosController extends Controller
     public function store(Request $request)
     {
         //
+        $validatedData = $request->validate([
+        'nombre' => 'required',
+        'precio' => 'required',
+        'cantidad' => 'required',
+        'descripcion' => 'required'
+        
+        ]);
+        $user = Auth::user();
         $producto = new Producto();
         $producto->nombre = $request->input('nombre');
         $producto->precio = $request->input('precio');
         $producto->cantidad = $request->input('cantidad');
-        $producto->empresa_id = $request->input('empresa_id');
+        $producto->empresa_id = $user->usuarios->get(0)->empresa_id;
         $producto->descripcion = $request->input('descripcion');
         $producto->estado ='A';
 
         $producto->save();
 
-        return redirect('/productos');
+        return redirect('/empresas/productos');
     }
 
     /**
@@ -88,7 +97,7 @@ class ProductosController extends Controller
         $producto->fill($request->all());
         $producto->save();
 
-        return redirect('/productos');
+        return redirect('/empresas/productos');
     }
 
     public function desActivarProducto(Producto $producto)
@@ -96,7 +105,7 @@ class ProductosController extends Controller
         $producto->estado = "I";
         $producto->save();
 
-        return redirect('/productos');
+        return redirect('/empresas/productos');
     }
 
     /**
@@ -110,7 +119,7 @@ class ProductosController extends Controller
         $producto->estado = "A";
         $producto->save();
 
-        return redirect('/productos');
+        return redirect('/empresas/productos');
     }
 }
 

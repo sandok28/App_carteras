@@ -21,6 +21,11 @@
                         <div class="col-xl-12">
                             <!-- Account details card-->
                             <div class="card mb-4">
+                            @if ($errors->any())
+                                @foreach($errors->all() as $error)
+                                 <p>{{$error}}</p>
+                                @endforeach
+                            @endif
                                 <div class="card-header">Registrar empresa</div>
                                 <div class="card-body">
                                     <form method="POST" action="/empresas" enctype="mutipart/form-data">
