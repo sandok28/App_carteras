@@ -16,3 +16,27 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::resource('empresas','EmpresaController');
+Route::get('/empresas/desactivar/{empresa}', 'EmpresaController@desActivarEmpresa')->name('empresas.desActivarEmpresa');
+Route::get('/empresas/activar/{empresa}', 'EmpresaController@activarEmpresa')->name('empresas.activarEmpresa');
+
+
+Route::resource('carteras','CarterasController');
+Route::get('/carteras/desactivar/{cartera}', 'CarterasController@desActivarCartera')->name('carteras.desActivarCartera');
+Route::get('/carteras/activar/{cartera}', 'CarterasController@activarCartera')->name('carteras.activarCartera');
+
+
+
+Route::resource('usuarios','Usuarioscontroller');
+Route::get('/usuarios/desactivar/{usario}', 'UsuariosController@desActivarUsuario')->name('usuarios.desActivarUsuario');
+Route::get('/usuarios/activar/{usuario}', 'UsuariosController@activarUsuario')->name('usuarios.activarUsuario');
+
+Route::resource('productos','ProductosController');
+Route::get('/productos/desactivar/{producto}', 'ProductosController@desActivarProducto')->name('productos.desActivarProducto');
+Route::get('/productos/activar/{producto}', 'ProductosController@activarProducto')->name('productos.activarProducto');
