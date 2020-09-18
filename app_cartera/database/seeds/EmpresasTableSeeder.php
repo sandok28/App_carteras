@@ -18,6 +18,7 @@ class EmpresasTableSeeder extends Seeder
             'id'=>'1',
             'nombre' => 'Distri Quesos',
             'descripcion' => 'Se venden quesos',
+            'telefono' => '111111',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -26,6 +27,7 @@ class EmpresasTableSeeder extends Seeder
             'id'=>'2',
             'nombre' => 'Distri Yogurt',
             'descripcion' => 'Se venden yogurt',
+            'telefono' => '222222',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);

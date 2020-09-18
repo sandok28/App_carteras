@@ -18,7 +18,7 @@ class Cartera extends Model
     /**
      * obtiene la empresa a la cual pertenecen la cartera
      */
-    public function user()
+    public function empresas()
     {
         return $this->belongsTo('App\Empresa', 'empresa_id', 'id');
     }

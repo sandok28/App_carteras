@@ -31,6 +31,10 @@
                                             <input class="form-control" id="exampleFormControlInput1" name="nombre" type="text" value="{{$empresa->nombre}}">
                                         </div>
                                         <div class="form-group">
+                                            <label for="exampleFormControlInput1">Telefono</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="telefono" type="text" value="{{$empresa->telefono}}">
+                                        </div>
+                                        <div class="form-group">
                                             <label for="exampleFormControlTextarea1">Descripcion</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="descripcion" >{{$empresa->descripcion}}</textarea>
                                         </div>

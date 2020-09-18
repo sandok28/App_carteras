@@ -22,7 +22,7 @@
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/usuarios/create') }}">Registar usuario</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/usuarios/formulario_usuarios_crear') }}">Registar usuario</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -92,7 +92,7 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/usuarios/'.$usuario->id.'/edit') }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/usuarios/'.$usuario->id.'/formulario_usuarios_actualizar') }}"><i data-feather="edit"></i></a>
                                         
                                         @if ($usuario->estado === "A")
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuarios/desactivar/'.$usuario->id) }}"><i data-feather="user-x"></i></a>

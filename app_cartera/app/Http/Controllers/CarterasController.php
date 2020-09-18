@@ -5,41 +5,31 @@ namespace App\Http\Controllers;
 use App\Cartera;
 use Illuminate\Http\Request;
 use Auth;
+use App\User;
 
 class CarterasController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
 
-        $user = Auth::user();
-             
-        $carteras = $user->usuarios->get(0)->empresa->carteras;
-       
-        return view('carteras.index', compact('carteras'));
+
+{
+    
+    public function inicio()
+    {
+        $carteras = Cartera::all();
+        return view('carteras.index', compact('carteras')); 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
+
+
+    
+    public function formulario_carteras_crear()               
+    {             
         return view('carteras.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+
+
+    public function carteras_crear(Request $request)
     {
         $validatedData = $request->validate([
             'nombre' => 'required',
@@ -47,6 +37,7 @@ class CarterasController extends Controller
             'empresa_id' => 'required'
             
             ]);
+        $user = Auth::user();
         $cartera = new Cartera();
         $cartera->nombre = $request->input('nombre');
         $cartera->descripcion = $request->input('descripcion');
@@ -58,49 +49,27 @@ class CarterasController extends Controller
         return redirect('/carteras');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cartera $cartera)
+    public function formulario_carteras_actualizar( $cartera_id)
+    
     {
+        //dd($cartera_id);
+        $cartera = Cartera::find($cartera_id);
         return view('carteras.edit', compact('cartera'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Cartera $cartera)
+
+    public function carteras_actualizar(Request $request, $cartera_id)
     {
+        $cartera = Cartera::find($cartera_id);
         $cartera->fill($request->all());
         $cartera->save();
 
-        return redirect('/administrador/empresa/'.$cartera->empresa_id.'/cartera');
+        return redirect('/carteras');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Cartera  $cartera
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function desActivarCartera(Cartera $cartera)
     {
         $cartera->estado = "I";
@@ -109,12 +78,9 @@ class CarterasController extends Controller
         return redirect('/carteras');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Cartera  $cartera
-     * @return \Illuminate\Http\Response
-     */
+
+
+
     public function activarCartera(Cartera $cartera)
     {
         $cartera->estado = "A";
@@ -122,4 +88,5 @@ class CarterasController extends Controller
 
         return redirect('/carteras');
     }
-}
+
+ }

@@ -24,8 +24,9 @@
                                 <div class="card-header">Actualizar usuario</div>
                                 <div class="card-body">
                                     <form method="POST" action="/usuarios/{{$usuario->id}}" enctype="mutipart/form-data">
-                                    @method('PUT')
+                                    
                                     @csrf
+                                    @method('PUT')
                                         
                                         <div class="form-group">
                                             <label for="exampleFormControlInput1">Nombre</label>
