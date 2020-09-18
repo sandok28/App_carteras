@@ -7,7 +7,7 @@ use App\Producto;
 use Auth;
 use Illuminate\Http\Request;
 
-class EmpresaController extends Controller
+class EmpresasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,6 +16,62 @@ class EmpresaController extends Controller
      * 
      */
 
+    public function inicio()
+    {
+        //$user = Auth::user();
+        //$empresa_cartera = $user->usuarios->get(0)->empresa->carteras;
+        $empresas = Empresa::all();
+        return view('Empresas.index', compact('empresas'));
+        
+    }
+
+    public function formulario_empresas_crear()
+    {
+        return view('empresas.create');
+    }
+
+    public function empresas_crear(Request $request)
+    {
+        $validatedData = $request->validate([
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'telefono' => 'required'
+            
+            ]);
+        
+        $empresa = new Empresa();
+        $empresa->nombre = $request->input('nombre');
+        $empresa->descripcion = $request->input('descripcion');
+        $empresa->telefono = $request->input('telefono');
+        $empresa->save();
+
+        return redirect('/empresas');
+    }
+
+    public function formulario_empresas_actualizar($empresa_id)
+    {
+        //dd($producto_id);
+        $empresa = Empresa::find($empresa_id);
+        return view('empresas.edit', compact('empresa'));
+    }
+
+    public function empresas_actualizar(Request $request, $empresa_id)
+    {
+        $empresa = Empresa::find($empresa_id);
+        $empresa->fill($request->all());
+        $empresa->telefono = $request->input('telefono');
+        $empresa->save();
+        return redirect('/empresas');
+    }
+
+    public function vistacarterasempresa($empresa_id)//vista de las carteras de la empresa del usuario logueado
+    {
+        //
+         $user = Auth::user();
+         $empresa_cartera = $user->usuarios->get(0)->empresa->carteras;
+         return view('administradoresempresas.empresas_carteras')->with('empresa_carteras', $empresa_cartera);
+         //dd($empresa_cartera );
+    }
     public function vistaproductosempresa()
     {
         //
@@ -31,45 +87,25 @@ class EmpresaController extends Controller
          //dd($producto_empresa);
     }
 
-    public function index()
-    {
-        
-        $empresas = Empresa::all();
-        
-        return view('empresas.index', compact('empresas')); 
-    } 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('empresas.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $validatedData = $request->validate([
             'nombre' => 'required',
-            'descripcion' => 'required'
+            'descripcion' => 'required',
+            'telefono' => 'required'
             
             ]);
         
         $empresa = new Empresa();
         $empresa->nombre = $request->input('nombre');
         $empresa->descripcion = $request->input('descripcion');
+        $empresa->telefono = $request->input('telefono');
         $empresa->save();
 
         return redirect('/administrador/empresas');
     }
+
+   
 
 
     /**
@@ -93,7 +129,9 @@ class EmpresaController extends Controller
      */
     public function update(Request $request, Empresa $empresa)
     {
+        //dd($empresa,$request);
         $empresa->fill($request->all());
+        $empresa->telefono = $request->input('telefono');
         $empresa->save();
 
         return redirect('/administrador/empresas');
@@ -110,7 +148,7 @@ class EmpresaController extends Controller
         $empresa->estado = "I";
         $empresa->save();
 
-        return redirect('/administrador/empresas');
+        return redirect('/administrador');
     }
 
     /**
@@ -124,6 +162,9 @@ class EmpresaController extends Controller
         $empresa->estado = "A";
         $empresa->save();
 
-        return redirect('/administrador/empresas');
+        return redirect('/administrador');
     }
 }
+
+////////
+

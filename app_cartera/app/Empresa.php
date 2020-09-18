@@ -13,7 +13,7 @@ class Empresa extends Model
     ];
 
 
-    public $algo = "Algo propio";
+    
 
     /**
      * obtiene las carteras por empresa

@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 
@@ -18,7 +19,7 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion de empresas</div>
+                                <div class="card-header">Panel de administracion</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
@@ -63,7 +64,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($empresas as $empresa)
+                            @foreach($empresas_todas as $empresa)
                                 <tr>
                                     <td>{{$empresa->nombre}}</td>
                                     <td>{{$empresa->descripcion}}</td>
@@ -101,7 +102,77 @@
                         </table>
                     </div>
                 </div>
-            </div>        
+            </div>  
+            <div class="card mb-4">
+                <div class="card-header">Listado de administradores</div>
+                <div class="card-body">
+                    <div class="datatable">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>descripcion</th>
+                                    <th>telefono</th>
+                                    <th>direccion</th>
+                                    <th>Fecha creacion</th>
+                                    <th>Fecha actualizacion</th>                                    
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>descripcion</th>
+                                    <th>telefono</th>
+                                    <th>direccion</th>
+                                    <th>Fecha creacion</th>
+                                    <th>Fecha actualizacion</th>                                    
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach($usuarios_administradores as $usuario_administrador)
+                                <tr>
+                                    <td>{{$usuario_administrador->nombre}}</td>
+                                    <td>{{$usuario_administrador->cedula}}</td>
+                                    <td>{{$usuario_administrador->telefono}}</td>
+                                    <td>{{$usuario_administrador->direccion}}</td>
+                                    <td>{{$usuario_administrador->created_at}}</td>
+                                    <td>{{$usuario_administrador->updated_at}}</td>
+
+                                    <td>
+                                        @if ($empresa->estado === "A")
+                                            <div class="badge badge-success badge-pill">Activo</div>
+                                        @elseif ($empresa->estado === "I")
+                                            <div class="badge badge-danger badge-pill">Inactivo</div>
+                                        @endif
+                                       
+                                
+                                    </td>
+                                    <td>
+
+
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresas/'.$empresa->id.'/formulario_empresas_actualizar') }}"><i data-feather="edit"></i></a>
+                                        
+                                        @if ($empresa->estado === "A")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/desactivar/'.$empresa->id) }}"><i data-feather="user-x"></i></a>
+                                        @elseif ($empresa->estado === "I")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/activar/'.$empresa->id) }}"><i data-feather="user-check"></i></a>
+                                        @endif
+
+                                        
+                                    </td>
+                                </tr>
+                                
+                            @endforeach
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>       
         </div>
     </main>
 
@@ -114,3 +185,6 @@
    
     <script src="{{ asset('js/demo/datatables-demo.js') }}" defer></script>
 @endsection
+
+
+

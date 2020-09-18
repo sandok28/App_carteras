@@ -38,6 +38,10 @@
                                             <label for="exampleFormControlTextarea1">Descripcion</label>
                                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="descripcion"></textarea>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Telefono</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="telefono" type="text">
+                                        </div>
                                         <button type="submit" class="btn btn-success">
                                                 Guardar
                                         </button>
