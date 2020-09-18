@@ -13,13 +13,11 @@ class ProductosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function inicio()
     {
         //
         $productos = Producto::all();
-       
         return view('productos.index', compact('productos'));
-        
     }
 
     /**
@@ -27,9 +25,9 @@ class ProductosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    
+    public function formulario_productos_crear()
     {
-        //
         return view('productos.create');
     }
 
@@ -39,7 +37,7 @@ class ProductosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function productos_crear(Request $request)
     {
         //
         $validatedData = $request->validate([
@@ -60,18 +58,7 @@ class ProductosController extends Controller
 
         $producto->save();
 
-        return redirect('/empresas/productos');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect('/productos');
     }
 
     /**
@@ -80,8 +67,10 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Producto $producto)
+    public function formulario_productos_actualizar($producto_id)
     {
+        //dd($producto_id);
+        $producto = Producto::find($producto_id);
         return view('productos.edit', compact('producto'));
     }
 
@@ -92,12 +81,12 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function productos_actualizar(Request $request, $producto_id)
     {
+        $producto = Producto::find($producto_id);
         $producto->fill($request->all());
         $producto->save();
-
-        return redirect('/empresas/productos');
+        return redirect('/productos');
     }
 
     public function desActivarProducto(Producto $producto)
@@ -105,7 +94,7 @@ class ProductosController extends Controller
         $producto->estado = "I";
         $producto->save();
 
-        return redirect('/empresas/productos');
+        return redirect('/productos');
     }
 
     /**
@@ -119,7 +108,7 @@ class ProductosController extends Controller
         $producto->estado = "A";
         $producto->save();
 
-        return redirect('/empresas/productos');
+        return redirect('/productos');
     }
 }
 

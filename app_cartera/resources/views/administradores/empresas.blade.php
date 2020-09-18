@@ -44,6 +44,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>descripcion</th>
+                                    <th>telefono</th>
                                     <th>Fecha creacion</th>
                                     <th>Fecha actualizacion</th>                                    
                                     <th>Estado</th>
@@ -54,6 +55,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>descripcion</th>
+                                    <th>telefono</th>
                                     <th>Fecha creacion</th>
                                     <th>Fecha actualizacion</th>                                    
                                     <th>Estado</th>
@@ -65,6 +67,7 @@
                                 <tr>
                                     <td>{{$empresa->nombre}}</td>
                                     <td>{{$empresa->descripcion}}</td>
+                                    <td>{{$empresa->telefono}}</td>
                                     <td>{{$empresa->created_at}}</td>
                                     <td>{{$empresa->updated_at}}</td>
 
@@ -87,7 +90,7 @@
                                         @elseif ($empresa->estado === "I")
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/activar/'.$empresa->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/empresa/'.$empresa->id.'/cartera') }}"><i data-feather="archive"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/empresas/'.$empresa->id.'/carteras') }}"><i data-feather="archive"></i></a>
                                         
                                     </td>
                                 </tr>

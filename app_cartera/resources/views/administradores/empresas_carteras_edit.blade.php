@@ -24,9 +24,8 @@
                                 <div class="card-header">Actualizar cartera</div>
                                 <div class="card-body">
                                     <form method="POST" action="/carteras/{{$cartera->id}}" enctype="mutipart/form-data">
-                                    
-                                    @csrf
                                     @method('PUT')
+                                    @csrf
                                         <div class="form-group">
                                             <label for="exampleFormControlInput1">Nombre</label>
                                             <input class="form-control" id="exampleFormControlInput1" name="nombre" type="text" value="{{$cartera->nombre}}">
@@ -58,5 +57,3 @@
         </div>
 
 @endsection
-
-

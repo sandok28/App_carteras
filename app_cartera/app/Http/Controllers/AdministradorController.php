@@ -5,9 +5,36 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Empresa;
 use App\Cartera;
+use App\Usuario;
+use Auth;
+
 
 class AdministradorController extends Controller
 {
+
+
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function panel_central_administrador()
+    {
+
+        $empresas_todas = Empresa::all();
+
+        $usuarios_administradores = Usuario::where('tipo',1)->get(); // 1 - usuario tipo administrador
+
+
+        return view('administradores.panel_central_administrador')->with('empresas_todas', $empresas_todas)
+                                               ->with('usuarios_administradores', $usuarios_administradores); 
+    }
+
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -18,9 +45,12 @@ class AdministradorController extends Controller
         $empresas = Empresa::all(); 
 
         //dd($empresas);
+       
 
         return view('administradores.empresas')->with('empresas', $empresas); 
     }
+
+
 
 
     public function administradorEmpresaCartera($empresa_id)
@@ -32,7 +62,15 @@ class AdministradorController extends Controller
         
         //dd($admin_carteras);
 
-        return view('administradores.empresas_carteras')->with('admin_carteras', $admin_carteras); 
+        return view('administradores.empresas_carteras')->with('admin_carteras', $admin_carteras)
+                                                        ->with('id_empresa', $empresa_id); 
+    }
+
+    public function administradorEmpresaCarteraedit($empresa_id)
+    {
+        
+        return view('administradores.empresas_carteras_edit')->with('id_empresa', $empresa_id);
+                                                         
     }
 
     

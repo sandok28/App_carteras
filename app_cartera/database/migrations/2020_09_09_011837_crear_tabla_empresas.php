@@ -17,6 +17,8 @@ class CrearTablaEmpresas extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('descripcion');
+            $table->string('telefono');
+            
             $table->timestamps();
         });
 
