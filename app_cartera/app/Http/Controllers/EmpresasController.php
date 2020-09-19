@@ -45,7 +45,7 @@ class EmpresasController extends Controller
         $empresa->telefono = $request->input('telefono');
         $empresa->save();
 
-        return redirect('/empresas');
+        return redirect('/administrador');
     }
 
     public function formulario_empresas_actualizar($empresa_id)
@@ -61,7 +61,7 @@ class EmpresasController extends Controller
         $empresa->fill($request->all());
         $empresa->telefono = $request->input('telefono');
         $empresa->save();
-        return redirect('/empresas');
+        return redirect('/administrador');
     }
 
     public function vistacarterasempresa($empresa_id)//vista de las carteras de la empresa del usuario logueado
@@ -102,7 +102,7 @@ class EmpresasController extends Controller
         $empresa->telefono = $request->input('telefono');
         $empresa->save();
 
-        return redirect('/administrador/empresas');
+        return redirect('/administrador');
     }
 
    
@@ -134,7 +134,7 @@ class EmpresasController extends Controller
         $empresa->telefono = $request->input('telefono');
         $empresa->save();
 
-        return redirect('/administrador/empresas');
+        return redirect('/administrador');
     }
 
     /**

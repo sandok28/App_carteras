@@ -20,12 +20,23 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+//Vistas de las devoluciones////////////////
+
+Route::get('/devoluciones','DemoStivensController@inicio');
+Route::get('/devoluciones/formulario_devoluciones_crear','DemoStivensController@formulario_devoluciones_crear');
+Route::post('/devoluciones','DemoStivensController@devoluciones_crear');
 
 
-
-
-//Vistas del administrador
+//Vistas del administrador////////////////
 Route::get('/administrador', 'AdministradorController@panel_central_administrador');
+Route::get('/usuariosadmin/formulario_usuarios_crear','Usuarioscontroller@formulario_usuariosadmin_crear');
+Route::post('/usuariosadmin','Usuarioscontroller@usuarios_crear');
+Route::get('/usuariosadmin/{usuario_id}/formulario_usuariosadmin_actualizar','Usuarioscontroller@formulario_usuariosadmin_actualizar');
+Route::PUT('/usuariosadmin/{usuario_id}','Usuarioscontroller@usuariosadmin_actualizar');
+
+Route::get('/usuariosadmin/desactivar/{usuario}', 'UsuariosController@desActivarUsuarioAdministrador')->name('usuarios.desActivarUsuario');
+Route::get('/usuariosadmin/activar/{usuario}', 'UsuariosController@activarUsuarioAdministrador')->name('usuarios.activarUsuario');
+          
 //Empresas/////////////////////////
 
 //Route::resource('empresas','EmpresaController')->except(['show']);;

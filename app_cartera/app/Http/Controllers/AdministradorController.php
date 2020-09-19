@@ -35,6 +35,14 @@ class AdministradorController extends Controller
 
 
 
+
+
+
+
+
+
+
+
     /**
      * Display a listing of the resource.
      *
@@ -140,4 +148,6 @@ class AdministradorController extends Controller
     {
         //
     }
+
+ 
 }

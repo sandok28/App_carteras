@@ -19,7 +19,7 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion</div>
+                                <div class="card-header">Panel de administracion de empresas</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
@@ -103,7 +103,28 @@
                     </div>
                 </div>
             </div>  
+
+
+
+            <div class="card" style="margin-bottom: 50px;">
+
+                                <div class="card-header">Panel de administracion de administradores</div>
+                                <div class="row center-md card-body">
+                                
+                                    <div class="col-md-8"></div>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/usuariosadmin/formulario_usuarios_crear') }}">Registar usuario administrador</a>
+                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                
+                                </div>
+            </div>
+
+
+
             <div class="card mb-4">
+            
+
+                <div class="page-header-content pt-12">
+                
                 <div class="card-header">Listado de administradores</div>
                 <div class="card-body">
                     <div class="datatable">
@@ -143,9 +164,9 @@
                                     <td>{{$usuario_administrador->updated_at}}</td>
 
                                     <td>
-                                        @if ($empresa->estado === "A")
+                                        @if ($usuario_administrador->estado === "A")
                                             <div class="badge badge-success badge-pill">Activo</div>
-                                        @elseif ($empresa->estado === "I")
+                                        @elseif ($usuario_administrador->estado === "I")
                                             <div class="badge badge-danger badge-pill">Inactivo</div>
                                         @endif
                                        
@@ -154,12 +175,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresas/'.$empresa->id.'/formulario_empresas_actualizar') }}"><i data-feather="edit"></i></a>
-                                        
-                                        @if ($empresa->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/desactivar/'.$empresa->id) }}"><i data-feather="user-x"></i></a>
-                                        @elseif ($empresa->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/activar/'.$empresa->id) }}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/usuariosadmin/'.$usuario_administrador->id.'/formulario_usuariosadmin_actualizar') }}"><i data-feather="edit"></i></a>
+                                                                                                                        
+                                        @if ($usuario_administrador->estado === "A")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/desactivar/'.$usuario_administrador->id) }}"><i data-feather="user-x"></i></a>
+                                        @elseif ($usuario_administrador->estado === "I")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/activar/'.$usuario_administrador->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         
