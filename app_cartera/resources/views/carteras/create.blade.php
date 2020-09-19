@@ -21,7 +21,12 @@
                         <div class="col-xl-12">
                             <!-- Account details card-->
                             <div class="card mb-4">
-                                <div class="card-header">Registrar cartera</div>
+                            @if ($errors->any())
+                                @foreach($errors->all() as $error)
+                                 <p>{{$error}}</p>
+                                @endforeach
+                            @endif   
+                                <div class="card-header">Registrar cartera </div>
                                 <div class="card-body">
                                     <form method="POST" action="/carteras" enctype="mutipart/form-data">
                                     @csrf
@@ -36,8 +41,8 @@
                                             <input class="form-control" id="exampleFormControlInput1" name="usuario_id" type="text">
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleFormControlInput1">Empresa</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text">
+                                            <label for="exampleFormControlInput1">Empresa</label> 
+                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text" > 
                                         </div>
 
                                         <div class="form-group">

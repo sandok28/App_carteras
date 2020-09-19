@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 
@@ -63,7 +64,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($empresas as $empresa)
+                            @foreach($empresas_todas as $empresa)
                                 <tr>
                                     <td>{{$empresa->nombre}}</td>
                                     <td>{{$empresa->descripcion}}</td>
@@ -101,7 +102,98 @@
                         </table>
                     </div>
                 </div>
-            </div>        
+            </div>  
+
+
+
+            <div class="card" style="margin-bottom: 50px;">
+
+                                <div class="card-header">Panel de administracion de administradores</div>
+                                <div class="row center-md card-body">
+                                
+                                    <div class="col-md-8"></div>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/usuariosadmin/formulario_usuarios_crear') }}">Registar usuario administrador</a>
+                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                
+                                </div>
+            </div>
+
+
+
+            <div class="card mb-4">
+            
+
+                <div class="page-header-content pt-12">
+                
+                <div class="card-header">Listado de administradores</div>
+                <div class="card-body">
+                    <div class="datatable">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>descripcion</th>
+                                    <th>telefono</th>
+                                    <th>direccion</th>
+                                    <th>Fecha creacion</th>
+                                    <th>Fecha actualizacion</th>                                    
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>descripcion</th>
+                                    <th>telefono</th>
+                                    <th>direccion</th>
+                                    <th>Fecha creacion</th>
+                                    <th>Fecha actualizacion</th>                                    
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach($usuarios_administradores as $usuario_administrador)
+                                <tr>
+                                    <td>{{$usuario_administrador->nombre}}</td>
+                                    <td>{{$usuario_administrador->cedula}}</td>
+                                    <td>{{$usuario_administrador->telefono}}</td>
+                                    <td>{{$usuario_administrador->direccion}}</td>
+                                    <td>{{$usuario_administrador->created_at}}</td>
+                                    <td>{{$usuario_administrador->updated_at}}</td>
+
+                                    <td>
+                                        @if ($usuario_administrador->estado === "A")
+                                            <div class="badge badge-success badge-pill">Activo</div>
+                                        @elseif ($usuario_administrador->estado === "I")
+                                            <div class="badge badge-danger badge-pill">Inactivo</div>
+                                        @endif
+                                       
+                                
+                                    </td>
+                                    <td>
+
+
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/usuariosadmin/'.$usuario_administrador->id.'/formulario_usuariosadmin_actualizar') }}"><i data-feather="edit"></i></a>
+                                                                                                                        
+                                        @if ($usuario_administrador->estado === "A")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/desactivar/'.$usuario_administrador->id) }}"><i data-feather="user-x"></i></a>
+                                        @elseif ($usuario_administrador->estado === "I")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/activar/'.$usuario_administrador->id) }}"><i data-feather="user-check"></i></a>
+                                        @endif
+
+                                        
+                                    </td>
+                                </tr>
+                                
+                            @endforeach
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>       
         </div>
     </main>
 
@@ -114,3 +206,6 @@
    
     <script src="{{ asset('js/demo/datatables-demo.js') }}" defer></script>
 @endsection
+
+
+

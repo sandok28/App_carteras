@@ -22,7 +22,7 @@
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/carteras/formulario_carteras_crear') }}">Registar cartera</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/administrador/empresas/'.$id_empresa.'/carteras/create') }}">Registar cartera</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -44,8 +44,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>descripcion</th>
-                                    <th>Empresa</th>
-                                    <th>Usuario</th>
+                                    
                                     <th>Fecha creacion</th>
                                     <th>Fecha actualizacion</th>                                    
                                     <th>Estado</th>
@@ -56,8 +55,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>
-                                    <th>Empresa</th>
-                                    <th>Usuario</th>
+                                    
                                     <th>Fecha creacion</th>
                                     <th>Fecha actualizacion</th>                                    
                                     <th>Estado</th>
@@ -65,12 +63,11 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($carteras as $cartera)
+                            @foreach($admin_carteras as $cartera)
                                 <tr>
                                     <td>{{$cartera->nombre}}</td>
                                     <td>{{$cartera->descripcion}}</td>
-                                    <th>{{$cartera->empresa_id}}</th>
-                                    <th>{{$cartera->usuario_id}}</th>
+                                    
                                     <td>{{$cartera->created_at}}</td>
                                     <td>{{$cartera->updated_at}}</td>
 
@@ -86,8 +83,8 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/carteras/'.$cartera->id.'/formulario_carteras_actualizar') }}"><i data-feather="edit"></i></a>
-                                        
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/carteras/'.$cartera->id.'/edit') }}"><i data-feather="edit"></i></a>
+                                                                                                           
                                         @if ($cartera->estado === "A")
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>
                                         @elseif ($cartera->estado === "I")

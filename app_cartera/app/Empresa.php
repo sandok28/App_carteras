@@ -13,6 +13,8 @@ class Empresa extends Model
     ];
 
 
+    
+
     /**
      * obtiene las carteras por empresa
      *  
@@ -22,6 +24,16 @@ class Empresa extends Model
         return $this->hasMany('App\Cartera', 'empresa_id', 'id');
     }
 
+    /**
+     * obtiene los productos por empresa
+     *  
+     */
+    public function productos()
+    {
+        return $this->hasMany('App\Producto', 'empresa_id', 'id');
+    }
+
+   
     /**
      * obtiene las usuarios por empresa
      *  

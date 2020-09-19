@@ -22,7 +22,7 @@
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/carteras/formulario_carteras_crear') }}">Registar cartera</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/adminempresa/productos') }}">Ver productos</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -65,7 +65,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($carteras as $cartera)
+                            @foreach($empresa_carteras as $cartera)
                                 <tr>
                                     <td>{{$cartera->nombre}}</td>
                                     <td>{{$cartera->descripcion}}</td>
@@ -86,7 +86,7 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/carteras/'.$cartera->id.'/formulario_carteras_actualizar') }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/carteras/'.$cartera->id.'/edit') }}"><i data-feather="edit"></i></a>
                                         
                                         @if ($cartera->estado === "A")
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>

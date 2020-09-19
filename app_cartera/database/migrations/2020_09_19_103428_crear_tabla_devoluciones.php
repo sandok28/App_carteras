@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CrearTablaEmpresas extends Migration
+class CrearTablaDevoluciones extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CrearTablaEmpresas extends Migration
      */
     public function up()
     {
-        Schema::create('empresas', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
-            $table->string('descripcion');
-            $table->string('telefono');
+        //
+        Schema::create('devoluciones', function (Blueprint $table) {
             
-            $table->timestamps();
+            $table->id("devolucion_id");
+            $table->date("fecha");
+            $table->integer ("producto_id");
+            $table->integer("producto_cantidad");
+            
         });
-
-    
     }
 
     /**
@@ -32,6 +31,7 @@ class CrearTablaEmpresas extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('empresas');
+        //
+        Schema::dropIfExists('devoluciones');
     }
 }
