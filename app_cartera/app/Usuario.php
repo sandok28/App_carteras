@@ -36,6 +36,45 @@ class Usuario extends Model
         return $this->belongsTo('App\Empresa', 'empresa_id', 'id');
     }
 
+     /**
+     * obtiene la cartera asociada al usuario.
+     */
+    public function cartera()
+    {
+        return $this->hasOne('App\Cartera', 'usuario_id');
+    }
+
+     /**
+     * obtiene descripcion del tipo de usuario
+     */
+    public function descripcion_tipo_usuario()
+    {   
+        switch ($this->tipo) {
+            case 1:
+                return 'administrador';
+                break;
+            case 2:
+                return 'empresa';
+                break;
+            case 3:
+                return 'carterista';
+                break;
+        }
+    }
+
+    /**
+     * obtiene descripcion del tipo de usuario
+     */
+    public function correo_user()
+    {   
+        if(!is_null($this->user)){
+            return $this->user->email;
+        }
+        return '';
+    }
+
+
+
 
 
 
