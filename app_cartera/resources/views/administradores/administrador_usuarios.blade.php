@@ -19,15 +19,12 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion</div>
+                                <div class="card-header">Panel de administracion de administradores</div>
                                 <div class="row center-md card-body">
-                                
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/empresas/formulario_empresas_crear') }}">Registar empresa</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ route('administrador.administrador_usuarios.formulario_usuarios_crear') }}">Registar usuario administrador</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
-                                
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -36,74 +33,7 @@
         </header>
         <!-- Main page content-->
         <div class="container mt-n10">
-            <div class="card mb-4">
-                <div class="card-header">Listado de empresas</div>
-                <div class="card-body">
-                    <div class="datatable">
-                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>descripcion</th>
-                                    <th>telefono</th>
-                                    <th>Fecha creacion</th>
-                                    <th>Fecha actualizacion</th>                                    
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>descripcion</th>
-                                    <th>telefono</th>
-                                    <th>Fecha creacion</th>
-                                    <th>Fecha actualizacion</th>                                    
-                                    <th>Estado</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                            @foreach($empresas_todas as $empresa)
-                                <tr>
-                                    <td>{{$empresa->nombre}}</td>
-                                    <td>{{$empresa->descripcion}}</td>
-                                    <td>{{$empresa->telefono}}</td>
-                                    <td>{{$empresa->created_at}}</td>
-                                    <td>{{$empresa->updated_at}}</td>
-
-                                    <td>
-                                        @if ($empresa->estado === "A")
-                                            <div class="badge badge-success badge-pill">Activo</div>
-                                        @elseif ($empresa->estado === "I")
-                                            <div class="badge badge-danger badge-pill">Inactivo</div>
-                                        @endif
-                                       
-                                
-                                    </td>
-                                    <td>
-
-
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresas/'.$empresa->id.'/formulario_empresas_actualizar') }}"><i data-feather="edit"></i></a>
-                                        
-                                        @if ($empresa->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/desactivar/'.$empresa->id) }}"><i data-feather="user-x"></i></a>
-                                        @elseif ($empresa->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/activar/'.$empresa->id) }}"><i data-feather="user-check"></i></a>
-                                        @endif
-
-                                        
-                                    </td>
-                                </tr>
-                                
-                            @endforeach
-                                
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>  
-            <div class="card mb-4">
+            <div class="card mb-4">  
                 <div class="card-header">Listado de administradores</div>
                 <div class="card-body">
                     <div class="datatable">
@@ -154,12 +84,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/usuarios/'.$usuario_administrador->id.'/formulario_empresas_actualizar') }}"><i data-feather="edit"></i></a>
-                                        
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_usuarios.formulario_usuarios_actualizar',$usuario_administrador->id) }}"><i data-feather="edit"></i></a>
+                                                                                                                        
                                         @if ($usuario_administrador->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/desactivar/'.$usuario_administrador->id) }}"><i data-feather="user-x"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_usuarios.usuarios_desactivar',$usuario_administrador->id) }}"><i data-feather="user-x"></i></a>
                                         @elseif ($usuario_administrador->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/activar/'.$usuario_administrador->id) }}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_usuarios.usuarios_activar', $usuario_administrador->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         

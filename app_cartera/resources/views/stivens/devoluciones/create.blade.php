@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Crear empresa
+    Crear usuario
 @endsection
 
 
@@ -26,22 +26,50 @@
                                  <p>{{$error}}</p>
                                 @endforeach
                             @endif
-                                <div class="card-header">Registrar empresa</div>
+                                <div class="card-header">Registrar devolucion</div>
                                 <div class="card-body">
-                                    <form method="POST" action="/empresas" enctype="mutipart/form-data">
+                                    <form method="POST" action="/devoluciones" enctype="mutipart/form-data">
                                     @csrf
                                         <div class="form-group">
                                             <label for="exampleFormControlInput1">Nombre</label>
                                             <input class="form-control" id="exampleFormControlInput1" name="nombre" type="text">
                                         </div>
+                                        
                                         <div class="form-group">
-                                            <label for="exampleFormControlTextarea1">Descripcion</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="descripcion"></textarea>
+                                            <label for="exampleFormControlInput1">Cedula</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="cedula" type="text">
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Nit</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="nit" type="text">
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="exampleFormControlInput1">Telefono</label>
                                             <input class="form-control" id="exampleFormControlInput1" name="telefono" type="text">
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Direccion</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="direccion" type="text">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Tipo de usuario</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="tipo" type="text">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Empresa_id</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="exampleFormControlInput1">Correo</label>
+                                            <input class="form-control" id="exampleFormControlInput1" name="email" type="text">
+                                        </div>
+                                        
                                         <button type="submit" class="btn btn-success">
                                                 Guardar
                                         </button>

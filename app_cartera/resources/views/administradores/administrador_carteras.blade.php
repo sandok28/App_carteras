@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista usuarios
+    Lista carteras
 @endsection
 
 @section('content_css')
@@ -18,11 +18,11 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion de usuarios</div>
+                                <div class="card-header">Panel de administracion de carteras</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/usuarios/formulario_usuarios_crear') }}">Registar usuario</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ route('administrador.administrador_carteras.formulario_carteras_crear',$empresa_id) }}">Registar cartera</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -36,54 +36,42 @@
         <!-- Main page content-->
         <div class="container mt-n10">
             <div class="card mb-4">
-                <div class="card-header">Listado de usuarios</div>
+                <div class="card-header">Listado de carteras</div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>cedula</th>
-                                    <th>nit</th>
-                                    <th>telefono</th>
-                                    <th>direccion</th>
-                                    <th>Fecha creacion</th>
-                                    <th>Fecha actualizacion</th>   
-                                    <th>Estado</th> 
-                                    <th>Acciones</th>                                     
-                                                                
-                                    
+                                    <th>Descripcion</th>  
+                                    <th>Carterista</th>                                  
+                                    <th>Fecha creacion</th>                 
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>cedula</th>
-                                    <th>nit</th>
-                                    <th>telefono</th>
-                                    <th>direccion</th>
-                                    <th>Fecha creacion</th>
-                                    <th>Fecha actualizacion</th>
-                                    <th>Estado</th> 
-                                    <th>Acciones</th>                                     
-                                    
+                                    <th>Descripcion</th>  
+                                    <th>Carterista</th>                                  
+                                    <th>Fecha creacion</th>                 
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($usuarios as $usuario)
+                            @foreach($empresa_carteras as $cartera)
                                 <tr>
-                                    <td>{{$usuario->nombre}}</td>
-                                    <td>{{$usuario->cedula}}</td>
-                                    <td>{{$usuario->nit}}</td>
-                                    <td>{{$usuario->telefono}}</td>
-                                    <td>{{$usuario->direccion}}</td>
-                                    <td>{{$usuario->created_at}}</td>
-                                    <td>{{$usuario->updated_at}}</td>
+                                    <td>{{$cartera->nombre}}</td>
+                                    <td>{{$cartera->descripcion}}</td> 
+                                    <td>{{(is_null($cartera->usuario) ? '' : $cartera->usuario->nombre)}}</td>                                  
+                                    <td>{{$cartera->created_at}}</td>
 
                                     <td>
-                                        @if ($usuario->estado === "A")
+                                        @if ($cartera->estado === "A")
                                             <div class="badge badge-success badge-pill">Activo</div>
-                                        @elseif ($usuario->estado === "I")
+                                        @elseif ($cartera->estado === "I")
                                             <div class="badge badge-danger badge-pill">Inactivo</div>
                                         @endif
                                        
@@ -92,12 +80,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/usuarios/'.$usuario->id.'/formulario_usuarios_actualizar') }}"><i data-feather="edit"></i></a>
-                                        
-                                        @if ($usuario->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuarios/desactivar/'.$usuario->id) }}"><i data-feather="user-x"></i></a>
-                                        @elseif ($usuario->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuarios/activar/'.$usuario->id) }}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_carteras.formulario_carteras_actualizar',[$empresa_id, $cartera->id ]) }}"><i data-feather="edit"></i></a>
+                                                                                                           
+                                        @if ($cartera->estado === "A")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>
+                                        @elseif ($cartera->estado === "I")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/activar/'.$cartera->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         
@@ -113,8 +101,6 @@
             </div>        
         </div>
     </main>
-
-
 @endsection
 
 @section('content_js')
