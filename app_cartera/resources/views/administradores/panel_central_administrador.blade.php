@@ -143,9 +143,9 @@
                                     <td>{{$usuario_administrador->updated_at}}</td>
 
                                     <td>
-                                        @if ($empresa->estado === "A")
+                                        @if ($usuario_administrador->estado === "A")
                                             <div class="badge badge-success badge-pill">Activo</div>
-                                        @elseif ($empresa->estado === "I")
+                                        @elseif ($usuario_administrador->estado === "I")
                                             <div class="badge badge-danger badge-pill">Inactivo</div>
                                         @endif
                                        
@@ -154,12 +154,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresas/'.$empresa->id.'/formulario_empresas_actualizar') }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/usuarios/'.$usuario_administrador->id.'/formulario_empresas_actualizar') }}"><i data-feather="edit"></i></a>
                                         
-                                        @if ($empresa->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/desactivar/'.$empresa->id) }}"><i data-feather="user-x"></i></a>
-                                        @elseif ($empresa->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/empresas/activar/'.$empresa->id) }}"><i data-feather="user-check"></i></a>
+                                        @if ($usuario_administrador->estado === "A")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/desactivar/'.$usuario_administrador->id) }}"><i data-feather="user-x"></i></a>
+                                        @elseif ($usuario_administrador->estado === "I")
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/usuariosadmin/activar/'.$usuario_administrador->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         

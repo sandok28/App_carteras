@@ -120,7 +120,7 @@ class Usuarioscontroller extends Controller
         $usuario->estado = "I";
         $usuario->save(); 
 
-        return redirect('/usuarios');
+        return redirect('/administrador');
     }
 
     /**
@@ -136,6 +136,36 @@ class Usuarioscontroller extends Controller
         $usuario->estado = "A";
         $usuario->save();
 
-        return redirect('/usuarios');
+        return redirect('/administrador');
     }
+
+
+    public function desActivarUsuarioAdministrador($usuario_id)
+    {
+
+        //dd($usuario_id);
+        $usuario = Usuario::find($usuario_id);
+       // dd($usuario);
+        $usuario->estado = "I";
+        $usuario->save(); 
+
+        return redirect('/administrador');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Usuario  $usuario
+     * @return \Illuminate\Http\Response
+     */
+    public function activarUsuarioAdministrador(Usuario $usuario)
+    {
+
+
+        $usuario->estado = "A";
+        $usuario->save();
+
+        return redirect('/administrador');
+    }
+
 }
