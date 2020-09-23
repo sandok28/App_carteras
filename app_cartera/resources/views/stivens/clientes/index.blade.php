@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista carteras
+    Lista clientes
 @endsection
 
 @section('content_css')
@@ -18,11 +18,11 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion de carteras</div>
+                                <div class="card-header">Panel de clientes</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ route('administrador.administrador_carteras.formulario_carteras_crear',$empresa_id) }}">Registar cartera</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/clientes/formulario_cliente_crear') }}">Registar cliente</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -36,42 +36,49 @@
         <!-- Main page content-->
         <div class="container mt-n10">
             <div class="card mb-4">
-                <div class="card-header">Listado de carteras</div>
+                <div class="card-header">Listado de clientes</div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
+                                    <th>Posicion</th>
                                     <th>Nombre</th>
-                                    <th>Descripcion</th>  
-                                  
-                                    <th>Fecha creacion</th>                 
-                                    <th>Estado</th>
+                                    <th>Direccion</th>
+                                    <th>Telefono</th>
+                                    <th>Cedula</th>
+                                    <th>Cartera_id</th>                                    
+                                    <th>Fecha ultima visita</th>
+                                    <th>Deuda</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
+                                    <th>Posicion</th>
                                     <th>Nombre</th>
-                                    <th>Descripcion</th>  
-                                   
-                                    <th>Fecha creacion</th>                 
-                                    <th>Estado</th>
+                                    <th>Direccion</th>
+                                    <th>Telefono</th>
+                                    <th>Cedula</th>
+                                    <th>Cartera_id</th>                                    
+                                    <th>Fecha ultima visita</th>
+                                    <th>Deuda</th>
                                     <th>Acciones</th>
+                                    
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($empresa_carteras as $cartera)
+                            @foreach($clientes as $cliente)
                                 <tr>
-                                    <td>{{$cartera->nombre}}</td>
-                                    <td>{{$cartera->descripcion}}</td> 
-                                    
-                                    <td>{{$cartera->created_at}}</td>
+                                    <td>{{$cliente->nombre}}</td>
+                                    <td>{{$cliente->direccion}}</td>
+                                    <th>{{$cliente->telefono}}</th>
+                                    <th>{{$cliente->cedula}}</th>
 
                                     <td>
-                                        @if ($cartera->estado === "A")
+                                        @if ($cliente->estado === "A")
                                             <div class="badge badge-success badge-pill">Activo</div>
-                                        @elseif ($cartera->estado === "I")
+                                        @elseif ($cliente->estado === "I")
                                             <div class="badge badge-danger badge-pill">Inactivo</div>
                                         @endif
                                        
@@ -80,12 +87,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_carteras.formulario_carteras_actualizar',[$empresa_id, $cartera->id ]) }}"><i data-feather="edit"></i></a>
-                                                                                                           
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/clientes/'.$cliente->id.'/formulario_clientes_actualizar') }}"><i data-feather="edit"></i></a>
+                                        
                                         @if ($cartera->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/clientes/desactivar/'.$cliente->id) }}"><i data-feather="user-x"></i></a>
                                         @elseif ($cartera->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_activar/'.$cartera->id) }}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/clientes/activar/'.$cliente->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         
@@ -101,6 +108,8 @@
             </div>        
         </div>
     </main>
+
+
 @endsection
 
 @section('content_js')

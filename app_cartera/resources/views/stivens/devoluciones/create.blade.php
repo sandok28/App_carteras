@@ -21,55 +21,29 @@
                         <div class="col-xl-12">
                             <!-- Account details card-->
                             <div class="card mb-4">
-                            @if ($errors->any())
-                                @foreach($errors->all() as $error)
-                                 <p>{{$error}}</p>
-                                @endforeach
-                            @endif
+                            
                                 <div class="card-header">Registrar devolucion</div>
                                 <div class="card-body">
                                     <form method="POST" action="/devoluciones" enctype="mutipart/form-data">
                                     @csrf
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Nombre</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="nombre" type="text">
-                                        </div>
+                                    <?php
+                                     $i = 0
+                                    ?>
+                                         @foreach($productos as $producto) 
+
+                                            <div class="form-group">
+                                                <label for="exampleFormControlInput1">{{$producto->nombre}}</label>
+                                                <input class="form-control" id="exampleFormControlInput1" name="producto_{{$i}}_cantidad" type="text">
+                                                <input class="form-control" id="exampleFormControlInput1" name="producto_id_{{$i}}" value="{{$producto->id}}" type="hidden">
+                                            </div>
+                                            <?php
+                                            $i = $i+1
+                                            ?>
+                                        @endforeach
+
+                                        <input class="form-control" id="exampleFormControlInput1" name="cantidad" value="{{$cantidad_productos}}" type="hidden">
                                         
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Cedula</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="cedula" type="text">
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Nit</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="nit" type="text">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Telefono</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="telefono" type="text">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Direccion</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="direccion" type="text">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Tipo de usuario</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="tipo" type="text">
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Empresa_id</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="empresa_id" type="text">
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="exampleFormControlInput1">Correo</label>
-                                            <input class="form-control" id="exampleFormControlInput1" name="email" type="text">
-                                        </div>
-                                        
                                         <button type="submit" class="btn btn-success">
                                                 Guardar
                                         </button>

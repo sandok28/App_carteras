@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista devoluciones
+    Lista bonos
 @endsection
 
 @section('content_css')
@@ -18,11 +18,11 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel devoluciones de productos</div>
+                                <div class="card-header">Panel de administracion bonos</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/devoluciones/formulario_devoluciones_crear') }}">Registar devolucion de producto</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/bonos/formulario_bonos_crear') }}">Registar bono</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -36,31 +36,54 @@
         <!-- Main page content-->
         <div class="container mt-n10">
             <div class="card mb-4">
-                <div class="card-header">Listado de devoluciones</div>
+                <div class="card-header">Listado de bonos</div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Fecha</th>                                                        
+                                    
+                                    <th>Cartera</th>
+                                    <th>Descripcion</th>
+                                    <th>Fecha</th>
+                                    <th>valor</th>
+                                    <th>Editar</th>
+                                   
                                 </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Fecha</th>                                      
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                
+                                    <th>Cartera</th>
+                                    <th>Descripcion</th>
+                                    <th>Fecha</th>
+                                    <th>valor</th>
+                                    <th>Editar</th>
+                                   
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($devoluciones as $devolucion)
+                            @foreach($bonos as $bono)
                                 <tr>
-                                    <td>{{$devolucion->producto_id}}</td>
-                                    <td>{{$devolucion->producto_cantidad}}</td>
-                                    <td>{{$devolucion->fecha}}</td>
-                                </tr> 
+                                    
+                                    <td>{{$bono->cartera_id}}</td>
+                                    <td>{{$bono->descripcion}}</td>
+                                    <td>{{$bono->mi_fecha}}</td>
+                                    <td>{{$bono->valor}}</td>
+
+                                    
+
+                                  
+                                    <td>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/bonos/'.$bono->id.'/formulario_bonos_actualizar') }}"><i data-feather="edit"></i></a>
+                                    </td>
+
+                                    
+
+
+                                    
+                                </tr>
+                                
                             @endforeach
                                 
                             </tbody>

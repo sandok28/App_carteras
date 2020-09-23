@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CrearTablaDevoluciones extends Migration
+class CreateBonosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CrearTablaDevoluciones extends Migration
      */
     public function up()
     {
-        //
-        Schema::create('devoluciones', function (Blueprint $table) {
-            
-            $table->id("devolucion_id");
-            $table->date("fecha");
-            $table->integer ("producto_id");
-            $table->integer("producto_cantidad");
+        Schema::create('bonos', function (Blueprint $table) {
+            $table->id();
+            $table->integer("cartera_id");
+            $table->string("descripcion");
+            $table->date("mi_fecha");
+            $table->integer("valor");
             $table->timestamps();
-            
         });
     }
 
@@ -32,7 +30,6 @@ class CrearTablaDevoluciones extends Migration
      */
     public function down()
     {
-        //
-        Schema::dropIfExists('devoluciones');
+        Schema::dropIfExists('bonos');
     }
 }

@@ -8,11 +8,6 @@
     {!! Form::textarea('descripcion', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1', 'rows' => '3']) !!}
 </div>
 
-<div class="form-group">
-    {!! Form::label('email', 'Carterista', ['for' => 'exampleFormControlInput1']) !!}
-    {{ Form::select('usuario_id', $usuarios_empresa, null, array('class'=>'form-control', 'placeholder'=>'Seleccione...')) }}
-     
-</div>
 {{ Form::hidden('empresa_id', $empresa_id) }}
 
 

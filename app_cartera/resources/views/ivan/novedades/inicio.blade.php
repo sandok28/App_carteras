@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista devoluciones
+    Lista novedades
 @endsection
 
 @section('content_css')
@@ -18,11 +18,11 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel devoluciones de productos</div>
+                                <div class="card-header">Panel de administracion novedades</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/devoluciones/formulario_devoluciones_crear') }}">Registar devolucion de producto</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/novedades/formulario_novedades_crear') }}">Registar novedad</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -36,31 +36,53 @@
         <!-- Main page content-->
         <div class="container mt-n10">
             <div class="card mb-4">
-                <div class="card-header">Listado de devoluciones</div>
+                <div class="card-header">Listado de novedades</div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Fecha</th>                                                        
+                                    
+                                    <th>Cartera</th>
+                                    <th>Novedad</th>
+                                    <th>Nombre_carterista</th>
+                                    <th>Fecha</th>
+                                    <th>Editar</th>
+                                   
                                 </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                    <th>Producto</th>
-                                    <th>Cantidad</th>
-                                    <th>Fecha</th>                                      
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                
+                                    <th>Cartera</th>
+                                    <th>Novedad</th>
+                                    <th>Nombre_carterista</th>
+                                    <th>Fecha</th>
+                                    <th>Editar</th>
+                                   
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($devoluciones as $devolucion)
+                            @foreach($novedades as $novedad)
                                 <tr>
-                                    <td>{{$devolucion->producto_id}}</td>
-                                    <td>{{$devolucion->producto_cantidad}}</td>
-                                    <td>{{$devolucion->fecha}}</td>
-                                </tr> 
+                                    
+                                    <td>{{$novedad->cartera_id}}</td>
+                                    <td>{{$novedad->novedad}}</td>
+                                    <td>{{$novedad->usuario_nombre}}</td>
+                                    <td>{{$novedad->mi_fecha}}</td>
+                                    
+
+                                  
+                                    <td>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/novedades/'.$novedad->id.'/formulario_novedades_actualizar') }}"><i data-feather="edit"></i></a>
+                                    </td>
+
+                                    
+
+
+                                    
+                                </tr>
+                                
                             @endforeach
                                 
                             </tbody>

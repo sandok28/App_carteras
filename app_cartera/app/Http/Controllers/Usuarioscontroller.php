@@ -120,7 +120,7 @@ class Usuarioscontroller extends Controller
         $usuario->estado = "I";
         $usuario->save(); 
 
-        return redirect('/usuarios');
+        return redirect('/administrador');
     }
 
     /**
@@ -136,7 +136,7 @@ class Usuarioscontroller extends Controller
         $usuario->estado = "A";
         $usuario->save();
 
-        return redirect('/usuarios');
+        return redirect('/administrador');
     }
 ///////////////Vista Administrador///////////////
 
@@ -156,7 +156,7 @@ class Usuarioscontroller extends Controller
                 
                 ]);
             $usuario = new Usuario();
-            $usuario->nombre = $request->input('nombre');
+            $usuario->nombre = $request->input('producto_'.i.'_cantidad');
             $usuario->cedula = $request->input('cedula');
             $usuario->nit = $request->input('nit');
             $usuario->telefono = $request->input('telefono');
