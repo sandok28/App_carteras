@@ -66,6 +66,8 @@ Route::post('/administrador/administrador_carteras/carteras_crear','Administrado
 Route::get('/administrador/administrador_carteras/{empresa_id}/{cartera_id}/formulario_carteras_actualizar','AdministradorController@formulario_carteras_actualizar')->name('administrador.administrador_carteras.formulario_carteras_actualizar');
 Route::put('/administrador/administrador_carteras/{cartera}','AdministradorController@carteras_actualizar')->name('administrador.administrador_carteras.carteras_actualizar');
 
+Route::get('/administrador/administrador_carteras/carteras_desactivar/{cartera_id}', 'AdministradorController@carteras_desactivar')->name('administrador.administrador_carteras.carteras_desactivar');
+Route::get('/administrador/administrador_carteras/carteras_activar/{cartera_id}', 'AdministradorController@carteras_activar')->name('administrador.administrador_carteras.carteras_activar');
 
 
 

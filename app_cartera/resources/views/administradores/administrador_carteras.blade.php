@@ -44,7 +44,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>  
-                                    <th>Carterista</th>                                  
+                                  
                                     <th>Fecha creacion</th>                 
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -54,7 +54,7 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>  
-                                    <th>Carterista</th>                                  
+                                   
                                     <th>Fecha creacion</th>                 
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -65,7 +65,7 @@
                                 <tr>
                                     <td>{{$cartera->nombre}}</td>
                                     <td>{{$cartera->descripcion}}</td> 
-                                    <td>{{(is_null($cartera->usuario) ? '' : $cartera->usuario->nombre)}}</td>                                  
+                                    
                                     <td>{{$cartera->created_at}}</td>
 
                                     <td>
@@ -83,9 +83,9 @@
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_carteras.formulario_carteras_actualizar',[$empresa_id, $cartera->id ]) }}"><i data-feather="edit"></i></a>
                                                                                                            
                                         @if ($cartera->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>
                                         @elseif ($cartera->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/activar/'.$cartera->id) }}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_activar/'.$cartera->id) }}"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         
