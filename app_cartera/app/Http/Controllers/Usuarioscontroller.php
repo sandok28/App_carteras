@@ -120,7 +120,7 @@ class Usuarioscontroller extends Controller
         $usuario->estado = "I";
         $usuario->save(); 
 
-        return redirect('/usuarios');
+        return redirect('/administrador');
     }
 
     /**
@@ -136,7 +136,7 @@ class Usuarioscontroller extends Controller
         $usuario->estado = "A";
         $usuario->save();
 
-        return redirect('/usuarios');
+        return redirect('/administrador');
     }
 ///////////////Vista Administrador///////////////
 
