@@ -37,8 +37,39 @@ Route::get('/cliente/desactivar/{cliente}', 'DemoStivensController@desActivarUsu
 Route::get('/cliente/activar/{cliente}', 'DemoStivensController@activarUsuarioAdministrador')->name('usuarios.activarUsuario');
 
 
-//Vistas del administrador////////////////
-Route::get('/administrador', 'AdministradorController@panel_central_administrador');
+//-> Administrador
+Route::get('/administrador/administrador_empresas', 'AdministradorController@administrador_empresas')->name('administrador.administrador_empresas');
+Route::get('/administrador/administrador_usuarios', 'AdministradorController@administrador_usuarios')->name('administrador.administrador_usuarios');
+
+//-->Arministrador - empresas
+Route::get('/administrador/administrador_empresas/formulario_empresas_crear','Empresascontroller@formulario_empresas_crear')->name('administrador.administrador_empresas.formulario_empresas_crear');
+Route::post('/administrador/administrador_empresas/empresas_crear','Empresascontroller@empresas_crear')->name('administrador.administrador_empresas.empresas_crear');
+Route::get('/administrador/administrador_empresas/{empresa_id}/formulario_empresas_actualizar','Empresascontroller@formulario_empresas_actualizar')->name('administrador.administrador_empresas.formulario_empresas_actualizar');
+Route::PUT('/administrador/administrador_empresas/{empresa_id}','Empresascontroller@empresas_actualizar')->name('administrador.administrador_empresas.empresas_actualizar');
+
+Route::get('/administrador/administrador_empresas/empresas_desactivar/{empresa}', 'EmpresasController@empresas_desactivar')->name('administrador.administrador_empresas.empresas_desactivar');
+Route::get('/administrador/administrador_empresas/empresas_activar/{empresa}', 'EmpresasController@empresas_activar')->name('administrador.administrador_empresas.empresas_activar');
+
+//--> Administrador - usurarios administradores
+Route::get('/administrador/administrador_usuarios/formulario_usuarios_crear','AdministradorController@formulario_usuarios_crear')->name('administrador.administrador_usuarios.formulario_usuarios_crear');
+Route::post('/administrador/administrador_usuarios/usuarios_crear','AdministradorController@usuarios_crear')->name('administrador.administrador_usuarios.usuarios_crear');
+Route::get('/administrador/administrador_usuarios/{usuario_id}/formulario_usuarios_actualizar','AdministradorController@formulario_usuarios_actualizar')->name('administrador.administrador_usuarios.formulario_usuarios_actualizar');
+Route::put('/administrador/administrador_usuarios/{usuario}','AdministradorController@usuarios_actualizar')->name('administrador.administrador_usuarios.usuarios_actualizar');
+
+Route::get('/administrador/administrador_usuarios/usuarios_desactivar/{usuario}', 'AdministradorController@usuarios_desactivar')->name('administrador.administrador_usuarios.usuarios_desactivar');
+Route::get('/administrador/administrador_usuarios/usuarios_activar/{usuario}', 'AdministradorController@usuarios_activar')->name('administrador.administrador_usuarios.usuarios_activar');
+
+//---> Administradpr - empresas - carteras
+Route::get('/administrador/administrador_carteras/{empresa_id}', 'AdministradorController@administrador_carteras')->name('administrador.administrador_carteras');
+Route::get('/administrador/administrador_carteras/{empresa_id}/formulario_carteras_crear','AdministradorController@formulario_carteras_crear')->name('administrador.administrador_carteras.formulario_carteras_crear');
+Route::post('/administrador/administrador_carteras/carteras_crear','AdministradorController@carteras_crear')->name('administrador.administrador_carteras.carteras_crear');
+Route::get('/administrador/administrador_carteras/{empresa_id}/{cartera_id}/formulario_carteras_actualizar','AdministradorController@formulario_carteras_actualizar')->name('administrador.administrador_carteras.formulario_carteras_actualizar');
+Route::put('/administrador/administrador_carteras/{cartera}','AdministradorController@carteras_actualizar')->name('administrador.administrador_carteras.carteras_actualizar');
+
+
+
+
+////
 Route::get('/usuariosadmin/formulario_usuarios_crear','Usuarioscontroller@formulario_usuariosadmin_crear');
 Route::post('/usuariosadmin','Usuarioscontroller@usuarios_crear');
 Route::get('/usuariosadmin/{usuario_id}/formulario_usuariosadmin_actualizar','Usuarioscontroller@formulario_usuariosadmin_actualizar');
@@ -51,14 +82,8 @@ Route::get('/usuariosadmin/activar/{usuario}', 'UsuariosController@activarUsuari
 
 //Route::resource('empresas','EmpresaController')->except(['show']);;
 
-Route::get('/empresas','Empresascontroller@inicio');
-Route::get('/empresas/formulario_empresas_crear','Empresascontroller@formulario_empresas_crear');
-Route::post('/empresas','Empresascontroller@empresas_crear');
-Route::get('/empresas/{empresa_id}/formulario_empresas_actualizar','Empresascontroller@formulario_empresas_actualizar');
-Route::PUT('/empresas/{empresa_id}','Empresascontroller@empresas_actualizar');
+//Route::get('/empresas','Empresascontroller@inicio');
 
-Route::get('/empresas/desactivar/{empresa}', 'EmpresasController@desActivarEmpresa')->name('empresas.desActivarEmpresa');
-Route::get('/empresas/activar/{empresa}', 'EmpresasController@activarEmpresa')->name('empresas.activarEmpresa');
 //Carteras/////////////////////////
 
 Route::get('/carteras','Carterascontroller@inicio');
@@ -71,17 +96,7 @@ Route::get('/carteras/desactivar/{cartera}', 'CarterasController@desActivarCarte
 Route::get('/carteras/activar/{cartera}', 'CarterasController@activarCartera')->name('carteras.activarCartera');
 
 
-// Usuarios////////////////////////
-
-Route::get('/usuarios','Usuarioscontroller@inicio');
-Route::get('/usuarios/formulario_usuarios_crear','Usuarioscontroller@formulario_usuarios_crear');
-Route::post('/usuarios','Usuarioscontroller@usuarios_crear');
-Route::get('/usuarios/{usuario_id}/formulario_usuarios_actualizar','Usuarioscontroller@formulario_usuarios_actualizar');
-Route::PUT('/usuarios/{usuario_id}','Usuarioscontroller@usuarios_actualizar');
-
-Route::get('/usuarios/desactivar/{usuario}', 'UsuariosController@desActivarUsuario')->name('usuarios.desActivarUsuario');
-Route::get('/usuarios/activar/{usuario}', 'UsuariosController@activarUsuario')->name('usuarios.activarUsuario');
-          
+  
 // Productos////////////////////////
 //Route::resource('productos','ProductosController');
 Route::get('/productos','ProductosController@inicio');
