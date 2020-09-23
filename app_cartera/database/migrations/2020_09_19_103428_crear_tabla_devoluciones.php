@@ -20,6 +20,7 @@ class CrearTablaDevoluciones extends Migration
             $table->date("fecha");
             $table->integer ("producto_id");
             $table->integer("producto_cantidad");
+            $table->timestamps();
             
         });
     }

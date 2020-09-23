@@ -26,6 +26,16 @@ Route::get('/devoluciones','DemoStivensController@inicio');
 Route::get('/devoluciones/formulario_devoluciones_crear','DemoStivensController@formulario_devoluciones_crear');
 Route::post('/devoluciones','DemoStivensController@devoluciones_crear');
 
+//Vistas del cliente////////////////  
+
+Route::get('/clientes', 'DemoStivensController@inicio_cliente');
+Route::get('/clientes/formulario_cliente_crear','DemoStivensController@formulario_clientes_crear');
+Route::get('/clientes/{cliente_id}/formulario_cliente_actualizar','DemoStivensController@formulario_cliente_actualizar');
+Route::PUT('/clientes/{cliente_id}','DemoStivensController@cliente_actualizar');
+
+Route::get('/cliente/desactivar/{cliente}', 'DemoStivensController@desActivarUsuarioAdministrador')->name('usuarios.desActivarUsuario');
+Route::get('/cliente/activar/{cliente}', 'DemoStivensController@activarUsuarioAdministrador')->name('usuarios.activarUsuario');
+
 
 //Vistas del administrador
 Route::get('/administrador', 'AdministradorController@panel_central_administrador');
@@ -64,6 +74,8 @@ Route::post('/administrador/administrador_carteras/carteras_crear','Administrado
 Route::get('/administrador/administrador_carteras/{empresa_id}/{cartera_id}/formulario_carteras_actualizar','AdministradorController@formulario_carteras_actualizar')->name('administrador.administrador_carteras.formulario_carteras_actualizar');
 Route::put('/administrador/administrador_carteras/{cartera}','AdministradorController@carteras_actualizar')->name('administrador.administrador_carteras.carteras_actualizar');
 
+Route::get('/administrador/administrador_carteras/carteras_desactivar/{cartera_id}', 'AdministradorController@carteras_desactivar')->name('administrador.administrador_carteras.carteras_desactivar');
+Route::get('/administrador/administrador_carteras/carteras_activar/{cartera_id}', 'AdministradorController@carteras_activar')->name('administrador.administrador_carteras.carteras_activar');
 
 
 

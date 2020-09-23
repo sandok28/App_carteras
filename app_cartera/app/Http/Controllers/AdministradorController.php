@@ -207,7 +207,8 @@ class AdministradorController extends Controller
         $cartera->descripcion = $request->input('descripcion');
         $cartera->estado = 'A'; // A - Activo
         $cartera->empresa_id = $request->input('empresa_id');
-        $cartera->usuario_id = $request->input('usuario_id');
+        $cartera->usuario_id ='0';
+        //$cartera->usuario_id = $request->input('usuario_id');
     
         
         
@@ -270,24 +271,27 @@ class AdministradorController extends Controller
 
     public function carteras_desactivar($cartera_id)
     {
+        
+        $cartera = Cartera::find($cartera_id);
+        //dd($cartera);
+        $empresa_id=$cartera->empresa_id;
+        $cartera->estado = "I";
+        $cartera->save(); 
 
-        /* $usuario = Usuario::find($usuario_id);
-      
-        $usuario->estado = "I";
-        $usuario->save(); 
-
-        return redirect()->route('administrador.administrador_usuarios'); */
+        return redirect()->route('administrador.administrador_carteras',$empresa_id);
     }
 
    
-    public function carteras_activar(Cartera $cartera)
+    public function carteras_activar($cartera_id)
     {
 
+        
+        $cartera = Cartera::find($cartera_id);
+        //dd($cartera);
+        $cartera->estado = "A";
+        $cartera->save();
 
-        /* $usuario->estado = "A";
-        $usuario->save();
-
-        return redirect()->route('administrador.administrador_usuarios'); */
+        return redirect()->route('administrador.administrador_carteras',1);
     }
 
 
