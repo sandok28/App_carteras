@@ -8,7 +8,7 @@ class Devolucion extends Model
 {
     //
     protected $table = 'devoluciones';
-    
+
     protected $fillable = [
         'devolucion_id',
         'fecha',
@@ -16,4 +16,9 @@ class Devolucion extends Model
         'producto_cantidad'
         
 ];
+
+    public function productos()
+        {
+            return $this->belongsTo('App\Producto', 'producto_id', 'id');
+        }
 }
