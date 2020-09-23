@@ -59,7 +59,7 @@
                                 <tr>
                                     <td>{{$devolucion->producto_id}}</td>
                                     <td>{{$devolucion->producto_cantidad}}</td>
-                                    <td>{{$devolucion->fechat}}</td>
+                                    <td>{{$devolucion->fecha}}</td>
                                 </tr> 
                             @endforeach
                                 
