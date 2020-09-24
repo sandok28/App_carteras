@@ -8,8 +8,6 @@ use Auth;
 use App\User;
 use App\ListaNegra;
 class DemoIvanController extends Controller
-
-
 {
     
     public function inicio()

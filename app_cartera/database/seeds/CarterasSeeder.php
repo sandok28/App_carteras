@@ -55,7 +55,7 @@ class CarterasSeeder extends Seeder
             'descripcion' => 'Descripcion cartera 4',
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
-            'usuario_id' => '1',
+            'usuario_id' => '15',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
