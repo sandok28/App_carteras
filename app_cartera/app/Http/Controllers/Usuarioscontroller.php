@@ -131,8 +131,6 @@ class Usuarioscontroller extends Controller
      */
     public function activarUsuario(Usuario $usuario)
     {
-
-
         $usuario->estado = "A";
         $usuario->save();
 

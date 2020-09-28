@@ -51,7 +51,7 @@ class AdministradorController extends Controller
     }
    
 
-    public function formulario_usuarios_crear(Request $request)
+    public function formulario_usuarios_crear()
     {
 
         

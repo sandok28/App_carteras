@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
          $this->call(NovedadesSeeder::class);
          $this->call(BonosSeeder::class);
          $this->call(ListaNegraSeeder::class);
+         $this->call(ClienteSeeder::class);
 
          
     }

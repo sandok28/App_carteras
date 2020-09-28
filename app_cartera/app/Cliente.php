@@ -20,4 +20,15 @@ class Cliente extends Model
             'posicion',
             'deuda'
         ];
+
+    /**
+     * obtiene la cartera a la cual pertenecen la cartera
+     */
+    public function cartera()
+    {
+        return $this->belongsTo('App\Cartera', 'cartera_id', 'id');
+    }
+
+ 
+
 }
