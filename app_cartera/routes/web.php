@@ -49,7 +49,7 @@ Route::get('/usuariosadmin/activar/{usuario}', 'UsuariosController@activarUsuari
 Route::get('/administrador/administrador_empresas', 'AdministradorController@administrador_empresas')->name('administrador.administrador_empresas');
 Route::get('/administrador/administrador_usuarios', 'AdministradorController@administrador_usuarios')->name('administrador.administrador_usuarios');
 
-//-->Arministrador - empresas
+//-->Administrador - empresas
 Route::get('/administrador/administrador_empresas/formulario_empresas_crear','Empresascontroller@formulario_empresas_crear')->name('administrador.administrador_empresas.formulario_empresas_crear');
 Route::post('/administrador/administrador_empresas/empresas_crear','Empresascontroller@empresas_crear')->name('administrador.administrador_empresas.empresas_crear');
 Route::get('/administrador/administrador_empresas/{empresa_id}/formulario_empresas_actualizar','Empresascontroller@formulario_empresas_actualizar')->name('administrador.administrador_empresas.formulario_empresas_actualizar');
@@ -77,6 +77,13 @@ Route::put('/administrador/administrador_carteras/{cartera}','AdministradorContr
 Route::get('/administrador/administrador_carteras/carteras_desactivar/{cartera_id}', 'AdministradorController@carteras_desactivar')->name('administrador.administrador_carteras.carteras_desactivar');
 Route::get('/administrador/administrador_carteras/carteras_activar/{cartera_id}', 'AdministradorController@carteras_activar')->name('administrador.administrador_carteras.carteras_activar');
 
+
+//Vistas del carteristas
+Route::get('/carterista', 'CarteristasController@panel_central_carteristas')->name('carterista');
+
+//-->carteristas - clientes
+Route::get('/carterista/clientes/formulario_clientes_crear', 'CarteristasController@formulario_clientes_crear')->name('carterista.clientes.formulario_clientes_crear');
+Route::post('/carterista/clientes/clientes_crear','CarteristasController@clientes_crear')->name('carterista.clientes.clientes_crear');
 
 
 ////
@@ -160,19 +167,11 @@ Route::get('/listanegras/desactivar/{cliente}', 'DemoIvanController@desActivarLi
 Route::get('/listanegras/activar/{cliente}', 'DemoIvanController@activarLista')->name('listanegras.desActivarLista');
 
 
-//rutas de las vistas del administrador de la aplicacion
-//Route::get('/administrador/empresas', 'AdministradorController@empresas')->name('administrador.empresas.vista');
-//Route::get('/administrador/empresas/{empresa_id}/carteras', 'AdministradorController@administradorEmpresaCartera')->name('administrador.empresas.carteras.vista');
-//Route::get('/administrador/empresas/{empresa_id}/carteras/create', 'CarterasController@create')->name('administrador.empresas.carteras.crear');
-
-//Route::get('/administrador/empresas/{empresa_id}/carteras/edit', 'AdministradorController@administradorEmpresaCarteraedit')->name('administrador.empresas.carteras.editar');
-
-//rutas de las vistas del administrador de la empresa
-//Route::get('/adminempresa/carteras', 'EmpresaController@vistacarterasempresa')->name('empresas.carteras');
-
-//Route::get('/adminempresa/productos', 'EmpresaController@vistaproductosempresa')->name('empresas.productos');
 
 
 
-//Route::put('/empresas/{empresa_id}/carteras', 'EmpresaController@guardar')->name('guardar.empresas.carteras');
+
+
+
+
 

@@ -31,4 +31,15 @@ class Cartera extends Model
         return $this->belongsTo('App\Usuario', 'usuario_id', 'id');
     }
 
+    /**
+     * obtiene los clientes de la cartera
+     * 
+     */
+    public function clientes()
+    {
+        return $this->hasMany('App\Cliente', 'cartera_id', 'id');
+    }
+
+
+
 }
