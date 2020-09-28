@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'HomeController@index');
 
 Auth::routes();
 
@@ -40,16 +38,51 @@ Route::get('/cliente/activar/{cliente}', 'DemoStivensController@activarUsuarioAd
 //Vistas del administrador
 Route::get('/administrador', 'AdministradorController@panel_central_administrador');
 
-
 Route::get('/usuariosadmin/desactivar/{usuario}', 'UsuariosController@desActivarUsuarioAdministrador')->name('usuarios.desActivarUsuario');
 Route::get('/usuariosadmin/activar/{usuario}', 'UsuariosController@activarUsuarioAdministrador')->name('usuarios.activarUsuario');
+
+/////->Gestionempresa
+
+Route::get('/empresa/empresa_carteras', 'GestionEmpresasController@empresa_carteras')->name('empresa.empresa_carteras');
+
+/////->Gestionempresa - carteras
+
+Route::get('/empresa/empresa_carteras/{cartera_id}/formulario_cartera_actualizar','GestionEmpresasController@formulario_carteras_actualizar')->name('empresa.empresa_carteras.formulario_cartera_actualizar');
+Route::PUT('/empresa/empresa_carteras/{cartera_id}','GestionEmpresasController@carteras_actualizar')->name('empresa.empresa_cartera.empresa_cartera_actualizar');
+
+/////->Gestionempresa - productos
+
+Route::get('/empresa/carteristas','GestionEmpresasController@lista_carteristas')->name('empresa.empresa_carteristas');
+Route::get('/empresa/carteristas/formulario_carteristas_crear','GestionEmpresasController@formulario_carteristas_crear')->name('empresa.empresa_carteristas.formulario_carteristas_crear');
+Route::post('/empresa/carteristas/carteristas_crear','GestionEmpresasController@carteristas_crear')->name('empresa.empresa_carteristas.empresa_carteristas_crear');
+Route::get('/empresa/carteristas/{usuario_id}/formulario_carteristas_actualizar','GestionEmpresasController@formulario_carteristas_actualizar')->name('empresa.empresa_carteristas.formulario.carteristas_actualizar');
+Route::PUT('/empresa/carteristas/{usuario_id}','GestionEmpresasController@carteristas_actualizar')->name('empresa.empresa_carteristas.empresa.carteristas_actualizar');
+
+Route::get('/empresa/empresa_carterista/carterista_desactivar/{usuario}', 'GestionEmpresasController@usuarios_desactivar')->name('empresa.empresa_usuarios.usuarios_desactivar');
+Route::get('/empresa/empresa_carterista/carterista_activar/{usuario}', 'GestionEmpresasController@usuarios_activar')->name('administrador.empresa_usuarios.usuarios_activar');
+
+Route::get('/empresa/carteristas/{usuario_id}/formulario_correo_carterista_actualizar','GestionEmpresasController@formulario_correo_carterista_actualizar')->name('empresa.carterista.formulario_correo_carterista_actualizar');
+Route::PUT('/empresa/carteristas/{usuario_id}/correo_carterista_actualizar','GestionEmpresasController@correo_carterista_actualizar')->name('empresa.carterista.correo_carterista_actualizar');
+
+/////->Gestionempresa - carteristas
+
+Route::get('/empresa/productos','GestionEmpresasController@lista_productos')->name('empresa.empresa_productos');
+Route::get('/empresa/productos/formulario_productos_crear','GestionEmpresasController@formulario_productos_crear')->name('empresa.empresa_productos.formulario_productos_crear');
+Route::post('/empresa/productos/productos_crear','GestionEmpresasController@productos_crear')->name('empresa.empresa_productos.empresa_productos_crear');
+Route::get('/empresa/productos/{producto_id}/formulario_productos_actualizar','GestionEmpresasController@formulario_productos_actualizar')->name('empresa.empresa_productos.formulario.productos_actualizar');
+Route::PUT('/empresa/productos/{producto_id}','GestionEmpresasController@productos_actualizar')->name('empresa.empresa_productos.empresa.productos_actualizar');
 
 
 //-> Administrador
 Route::get('/administrador/administrador_empresas', 'AdministradorController@administrador_empresas')->name('administrador.administrador_empresas');
 Route::get('/administrador/administrador_usuarios', 'AdministradorController@administrador_usuarios')->name('administrador.administrador_usuarios');
 
+<<<<<<< Updated upstream
 //-->Administrador - empresas
+=======
+
+//-->Arministrador - empresas
+>>>>>>> Stashed changes
 Route::get('/administrador/administrador_empresas/formulario_empresas_crear','Empresascontroller@formulario_empresas_crear')->name('administrador.administrador_empresas.formulario_empresas_crear');
 Route::post('/administrador/administrador_empresas/empresas_crear','Empresascontroller@empresas_crear')->name('administrador.administrador_empresas.empresas_crear');
 Route::get('/administrador/administrador_empresas/{empresa_id}/formulario_empresas_actualizar','Empresascontroller@formulario_empresas_actualizar')->name('administrador.administrador_empresas.formulario_empresas_actualizar');
@@ -67,7 +100,7 @@ Route::put('/administrador/administrador_usuarios/{usuario}','AdministradorContr
 Route::get('/administrador/administrador_usuarios/usuarios_desactivar/{usuario}', 'AdministradorController@usuarios_desactivar')->name('administrador.administrador_usuarios.usuarios_desactivar');
 Route::get('/administrador/administrador_usuarios/usuarios_activar/{usuario}', 'AdministradorController@usuarios_activar')->name('administrador.administrador_usuarios.usuarios_activar');
 
-//---> Administradpr - empresas - carteras
+//---> Administrador - empresas - carteras
 Route::get('/administrador/administrador_carteras/{empresa_id}', 'AdministradorController@administrador_carteras')->name('administrador.administrador_carteras');
 Route::get('/administrador/administrador_carteras/{empresa_id}/formulario_carteras_crear','AdministradorController@formulario_carteras_crear')->name('administrador.administrador_carteras.formulario_carteras_crear');
 Route::post('/administrador/administrador_carteras/carteras_crear','AdministradorController@carteras_crear')->name('administrador.administrador_carteras.carteras_crear');

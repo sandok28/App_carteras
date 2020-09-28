@@ -21,7 +21,7 @@ class CarterasSeeder extends Seeder
             'descripcion' => 'Descripcion cartera 1',
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
-            'usuario_id' => '1',
+            'usuario_id' => '5',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -33,7 +33,7 @@ class CarterasSeeder extends Seeder
             'descripcion' => 'Descripcion cartera 2',
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
-            'usuario_id' => '1',
+            'usuario_id' => '6',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -44,7 +44,7 @@ class CarterasSeeder extends Seeder
             'descripcion' => 'Descripcion cartera 3',
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
-            'usuario_id' => '1',
+            'usuario_id' => '7',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -54,8 +54,13 @@ class CarterasSeeder extends Seeder
             'nombre' => 'Comuna 4',
             'descripcion' => 'Descripcion cartera 4',
             'estado' => 'A', // A de activo
+<<<<<<< Updated upstream
             'empresa_id' => '1',
             'usuario_id' => '15',
+=======
+            'empresa_id' => '2',
+            'usuario_id' => '8',
+>>>>>>> Stashed changes
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -65,8 +70,8 @@ class CarterasSeeder extends Seeder
             'nombre' => 'Comuna 5',
             'descripcion' => 'Descripcion cartera 5',
             'estado' => 'A', // A de activo
-            'empresa_id' => '1',
-            'usuario_id' => '1',
+            'empresa_id' => '2',
+            'usuario_id' => '9',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -76,8 +81,8 @@ class CarterasSeeder extends Seeder
             'nombre' => 'Comuna 6',
             'descripcion' => 'Descripcion cartera 6',
             'estado' => 'A', // A de activo
-            'empresa_id' => '1',
-            'usuario_id' => '1',
+            'empresa_id' => '2',
+            'usuario_id' => '10',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
