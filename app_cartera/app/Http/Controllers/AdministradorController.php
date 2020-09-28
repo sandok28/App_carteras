@@ -49,7 +49,6 @@ class AdministradorController extends Controller
     
         return view('administradores.administrador_usuarios')->with('usuarios_administradores', $usuarios_administradores); 
     }
-   
 
     public function formulario_usuarios_crear()
     {
@@ -79,7 +78,7 @@ class AdministradorController extends Controller
         $usuario->estado = 'A'; // A - Activo
 
         
-        //Vincular correo a uno user registrado en el sistema
+        //Vincular correo a un user registrado en el sistema
         $user = User::Where('email',$request->input('email'))->get()->get(0);
        
         $usuario->user_id = $user->id;

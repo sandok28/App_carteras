@@ -22,7 +22,6 @@
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/administrador/empresas/'.$id_empresa.'/carteras/create') }}">Registar cartera</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -43,53 +42,30 @@
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>descripcion</th>
-                                    
-                                    <th>Fecha creacion</th>
-                                    <th>Fecha actualizacion</th>                                    
-                                    <th>Estado</th>
+                                    <th>carterista</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Descripcion</th>
-                                    
-                                    <th>Fecha creacion</th>
-                                    <th>Fecha actualizacion</th>                                    
-                                    <th>Estado</th>
+                                    <th>carterista</th>                                   
                                     <th>Acciones</th>
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($admin_carteras as $cartera)
+                            @foreach($empresa_carteras as $cartera)
                                 <tr>
                                     <td>{{$cartera->nombre}}</td>
-                                    <td>{{$cartera->descripcion}}</td>
+                                    <td>{{$cartera->usuario->nombre}}</td>
                                     
-                                    <td>{{$cartera->created_at}}</td>
-                                    <td>{{$cartera->updated_at}}</td>
-
-                                    <td>
-                                        @if ($cartera->estado === "A")
-                                            <div class="badge badge-success badge-pill">Activo</div>
-                                        @elseif ($cartera->estado === "I")
-                                            <div class="badge badge-danger badge-pill">Inactivo</div>
-                                        @endif
-                                       
-                                
-                                    </td>
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/carteras/'.$cartera->id.'/edit') }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/empresa_carteras/'.$cartera->id.'/formulario_cartera_actualizar')}}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/carteras/'.$cartera->id.'/edit') }}"><i data-feather ="users"></i></a>
                                                                                                            
-                                        @if ($cartera->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>
-                                        @elseif ($cartera->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/carteras/activar/'.$cartera->id) }}"><i data-feather="user-check"></i></a>
-                                        @endif
+                                        
 
                                         
                                     </td>
