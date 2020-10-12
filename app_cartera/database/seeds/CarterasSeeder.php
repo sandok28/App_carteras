@@ -22,6 +22,7 @@ class CarterasSeeder extends Seeder
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
             'usuario_id' => '5',
+            'tipo' => '1',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -34,6 +35,7 @@ class CarterasSeeder extends Seeder
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
             'usuario_id' => '6',
+            'tipo' => '1',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -45,6 +47,7 @@ class CarterasSeeder extends Seeder
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
             'usuario_id' => '7',
+            'tipo' => '1',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -54,9 +57,9 @@ class CarterasSeeder extends Seeder
             'nombre' => 'Comuna 4',
             'descripcion' => 'Descripcion cartera 4',
             'estado' => 'A', // A de activo
-<<<<<<< Updated upstream
             'empresa_id' => '1',
             'usuario_id' => '15',
+            'tipo' => '1',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -68,6 +71,7 @@ class CarterasSeeder extends Seeder
             'estado' => 'A', // A de activo
             'empresa_id' => '2',
             'usuario_id' => '9',
+            'tipo' => '1',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -79,6 +83,55 @@ class CarterasSeeder extends Seeder
             'estado' => 'A', // A de activo
             'empresa_id' => '2',
             'usuario_id' => '10',
+            'tipo' => '1',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Cartera::create([
+            'id'=>'7',
+            'nombre' => 'lista negra',
+            'descripcion' => 'lista negra',
+            'estado' => 'A', // A de activo
+            'empresa_id' => '1',
+            'usuario_id' => '10',
+            'tipo' => '2',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Cartera::create([
+            'id'=>'8',
+            'nombre' => 'inactivos',
+            'descripcion' => 'Descripcion inactivos',
+            'estado' => 'A', // A de activo
+            'empresa_id' => '1',
+            'usuario_id' => '10',
+            'tipo' => '2',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Cartera::create([
+            'id'=>'9',
+            'nombre' => 'lista negra',
+            'descripcion' => 'lista negra',
+            'estado' => 'A', // A de activo
+            'empresa_id' => '2',
+            'usuario_id' => '10',
+            'tipo' => '3',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Cartera::create([
+            'id'=>'10',
+            'nombre' => 'inactivos',
+            'descripcion' => 'Descripcion inactivos',
+            'estado' => 'A', // A de activo
+            'empresa_id' => '2',
+            'usuario_id' => '10',
+            'tipo' => '3',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);

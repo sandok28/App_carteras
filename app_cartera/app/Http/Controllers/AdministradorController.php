@@ -155,9 +155,6 @@ class AdministradorController extends Controller
 
         return redirect()->route('administrador.administrador_usuarios');
     }
-
-
-
     /**
      * Display a listing of the resource.
      *
@@ -165,10 +162,18 @@ class AdministradorController extends Controller
      */
     public function administrador_carteras($empresa_id)
     {
-        $empresa_carteras = Cartera::where('empresa_id',$empresa_id)->get();
+        
+        //$empresa_carteras = Cartera::where('empresa_id',$empresa_id)->get();
+        $carteras = Cartera::where('empresa_id',$empresa_id);
+
+        $empresa_carteras=$carteras->where('tipo',1)->get();
+        //dd($empresa_carteras);
+
+        
 
         return view('administradores.administrador_carteras')->with('empresa_carteras', $empresa_carteras)
-                                                             ->with('empresa_id', $empresa_id); 
+                                                             ->with('empresa_id', $empresa_id);
+                                                             
     }
 
     public function formulario_carteras_crear($empresa_id)
@@ -199,7 +204,6 @@ class AdministradorController extends Controller
                                             'nombre' => 'required',
                                             'descripcion' => 'required',
                                             'usuario_id' => new UsuariosTipo3Rule
-            
                                             ]);
         $cartera = new Cartera();
         $cartera->nombre = $request->input('nombre');
@@ -207,6 +211,7 @@ class AdministradorController extends Controller
         $cartera->estado = 'A'; // A - Activo
         $cartera->empresa_id = $request->input('empresa_id');
         $cartera->usuario_id ='0';
+        $cartera->tipo ='1';
         //$cartera->usuario_id = $request->input('usuario_id');
     
         
@@ -240,7 +245,7 @@ class AdministradorController extends Controller
 
        $usuarios_empresa = $usuarios_empresa->all();
 
-        dd($usuarios_empresa,$usuario_actual_cartera); 
+        //dd($usuarios_empresa,$usuario_actual_cartera); 
         $cartera = Cartera::find($cartera_id);
         return view('administradores.administrador_carteras.formulario_carteras_actualizar' )->with('cartera',$cartera)
                                                                                             ->with('empresa_id',$empresa_id)
@@ -287,10 +292,11 @@ class AdministradorController extends Controller
         
         $cartera = Cartera::find($cartera_id);
         //dd($cartera);
+        $empresa_id=$cartera->empresa_id;
         $cartera->estado = "A";
         $cartera->save();
 
-        return redirect()->route('administrador.administrador_carteras',1);
+        return redirect()->route('administrador.administrador_carteras',$empresa_id);
     }
 
 

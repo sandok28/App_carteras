@@ -13,7 +13,7 @@ class ClienteSeeder extends Seeder
      */
     public function run()
     {
-        $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+        $current_date_time = (Carbon::now()->subDays(1))->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
         //
 
         $cont_id = 1;
@@ -31,7 +31,8 @@ class ClienteSeeder extends Seeder
                     'fecha_ultima_visita'=>$current_date_time,
                     'posicion' => $j,
                     'deuda' => $i*$j*1000,
-                    'intentos_sin_ventas'=> 0,
+                    'intentos_sin_ventas' => 0,
+                    'estado' => 'A',
                     'created_at'=> $current_date_time,
                     'updated_at'=> $current_date_time
                 ]);

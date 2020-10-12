@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Actualizar empresa
+    Actualizar cliente
 @endsection
 
 
@@ -20,15 +20,16 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Actualizar empresa</div>
+                        <div class="card-header">Actualizar cliente</div>
                         <div class="card-body">
                             @include('partials.formularios.alerta_validaciones')
                             
-                            {!! Form::model($empresa, ['route' => ['administrador.administrador_empresas.empresas_actualizar', $empresa], 'method' => 'PUT']) !!}
+                            {!! Form::model($cliente, ['route' => ['cliente_listanegra.actualizar', $cliente], 'method' => 'PUT']) !!}
                                 
-                                @include('administradores.administrador_empresas.formulario')
+                                @include('adminempresa.listanegra.formulario')
+                                
                                 {!! Form::submit('Actualizar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url('/administrador/empresas')}}">Volver</a>
+                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
                             
                             {!! Form::close() !!}
                         </div>

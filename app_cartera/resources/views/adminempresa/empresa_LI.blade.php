@@ -1,9 +1,10 @@
+
 @extends('layouts.app')
 
 
 
 @section('titulo_pigina')
-    Lista carteras
+    Lista clientes
 @endsection
 
 @section('content_css')
@@ -18,14 +19,11 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion de carteras</div>
+                                <div class="card-header">Panel de administracion de clientes inactivos de la cartera</div>
                                 <div class="row center-md card-body">
-                                
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
-                                
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -34,40 +32,52 @@
         </header>
         <!-- Main page content-->
         <div class="container mt-n10">
-            <div class="card mb-4">
-                <div class="card-header">Listado de carteras</div>
+            <div class="card mb-4">  
+                <div class="card-header">Listado de clientes</div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Carterista</th>
+                                    <th>direccion</th>
+                                    <th>telefono</th>
+                                    <th>cedula</th>
+                                    
+                                    <th>intentos sin ventas</th>
+                                                                       
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>Nombre</th>
-                                    <th>Carterista</th>                                   
+                                    <th>direccion</th>
+                                    <th>telefono</th>
+                                    <th>cedula</th>
+                                    
+                                    <th>intentos sin ventas</th>
+                                                                       
                                     <th>Acciones</th>
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($empresa_carteras as $cartera)
+                            @foreach($clientesI as $cliente)
                                 <tr>
-                                    <td>{{$cartera->nombre}}</td>
-                                    <td>{{$cartera->usuario->nombre}}</td>
+                                    <td>{{$cliente->nombre}}</td>
+                                    <td>{{$cliente->direccion}}</td>
+                                    <td>{{$cliente->telefono}}</td>
+                                    <td>{{$cliente->cedula}}</td>
+                                    
+                                    <td>{{$cliente->intentos_sin_ventas}}</td>
+                                    
+
+                                
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/carteras/'.$cartera->id.'/formulario_cartera_actualizar')}}"><i data-feather="edit"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/carteras/'.$cartera->id.'/clientes') }}" title="clientes de la cartera"><i data-feather ="users"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/bonos/'.$cartera->id)}}" title="bonos de la cartera"><i data-feather ="dollar-sign"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/novedades/'.$cartera->id)}}" title="novedades de la cartera"><i data-feather ="eye"></i></a>
-                                                                                                           
-                                        
-
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/listainactivos/'.$cliente->id.'/formulario_cliente_listainactivos_actualizar')}}"><i data-feather="edit"></i></a>
+                                      
                                         
                                     </td>
                                 </tr>
@@ -78,7 +88,7 @@
                         </table>
                     </div>
                 </div>
-            </div>        
+            </div>       
         </div>
     </main>
 
@@ -90,6 +100,5 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
    
     <script src="{{ asset('js/demo/datatables-demo.js') }}" defer></script>
-
-
 @endsection
+

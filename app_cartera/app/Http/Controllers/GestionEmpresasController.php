@@ -8,6 +8,10 @@ use App\Producto;
 use App\Empresa;
 use App\Cartera;
 use App\Usuario;
+use App\Cliente;
+use App\ListaNegraCliente;
+use App\Bono;
+use App\Novedad;
 use App\User;
 use Auth;
 use App\Rules\CarteristasEmailRule;
@@ -23,8 +27,11 @@ class GestionEmpresasController extends Controller
     {
         
         $user = Auth::user();
-        $empresa_cartera = $user->usuarios->get(0)->empresa->carteras;
-        //dd($empresa_cartera );
+        //$empresa_cartera = $user->usuarios->get(0)->empresa->carteras;
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $carteras = Cartera::where('empresa_id',$empresa_id);////// carteras de la empresa del usuario logueado
+        $empresa_cartera=$carteras->where('tipo',1)->get();////// filtro de las carteras tipo 1
+        //dd($empresa_cartera);
         return view('adminempresa.empresa_carteras')->with('empresa_carteras', $empresa_cartera);
                                                 
     }
@@ -35,9 +42,14 @@ class GestionEmpresasController extends Controller
         
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $empresa_id_cartera=Cartera::find($cartera_cliente)->empresa_id;//////empresa a la cual pertenece la cartera
         //dd($empresa_id);
 
-        $usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->pluck('usuario_id')->toArray();
+
+
+        if($empresa_id == $empresa_id_cartera)
+            {
+                $usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->pluck('usuario_id')->toArray();
 
         $usuarios_empresa_sin_asignados = Usuario::all()
                                             ->where('empresa_id','=',$empresa_id)
@@ -46,18 +58,9 @@ class GestionEmpresasController extends Controller
                                             ->whereNotIn('id',$usuarios_empresa_asignados)
                                             ->pluck('nombre', 'id');
 
-
-
        // dd($usuarios_empresa_sin_asignados);
 
         $usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->select('usuario_id')->get();
-
-
-
-
-
-
-
 
         //dd($usuario_actual_cartera);
 
@@ -76,13 +79,15 @@ class GestionEmpresasController extends Controller
                                                                                             ->with('empresa_id',$empresa_id)
                                                                                             ->with('usuarios_empresa',$usuarios_empresa_sin_asignados);
     }
+            
 
+            else {
+                return redirect('xxx');
+            }
 
+        }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
-
-        
-       
 
         $cartera = Cartera::find($cartera_id);
 
@@ -323,5 +328,228 @@ public function lista_carteristas()
 
         return redirect('/empresa/carteristas');
         }
-    
+
+
+//////////////////// CLIENTES DE LA EMPRESA //////////////////// 
+
+    public function lista_clientes($cartera_id)
+        {
+            //dd($cartera_id);
+            $user = Auth::user();
+            $empresa_id = $user->usuarios->get(0)->empresa_id;/////// empresa a la que pertenece el usuario logueado
+
+
+            $cartera_empresa_id= Cartera::find($cartera_id)->empresa_id;
+            //dd($cartera_empresa_id, $empresa_id);
+
+            if($empresa_id == $cartera_empresa_id)
+            {
+                $clientes = Cliente::all()->where('cartera_id','=',$cartera_id);
+            }
+
+            else {
+                return("error");
+            }
+            
+            //dd($clientes);
+            return view('adminempresa.empresa_clientes', compact('clientes'));
+        }
+
+    public function formulario_cliente_actualizar( $cliente_id)
+        {
+
+            $user = Auth::user();
+            $empresa_id = $user->usuarios->get(0)->empresa_id; /////// empresa a la que pertenece el usuario logueado
+
+            $cliente = Cliente::find($cliente_id);////// datos del cliente que se va a modificar
+            //dd($cliente);
+            $cartera_cliente=$cliente->cartera_id;//////cartera a la cual pertenece el cliente
+            //dd($cliente_cartera);
+            $empresa_id_cartera=Cartera::find($cartera_cliente)->empresa_id;//////empresa a la cual pertenece la cartera
+            //dd($empresa_id_cartera);
+            
+            //dd($producto);
+            if($empresa_id == $empresa_id_cartera)
+            {
+                return view('adminempresa.clientes.formulario_clientes_actualizar', compact('cliente'));
+            }
+
+            else {
+                return redirect('xxx');
+            }
+            //return view('adminempresa.clientes.formulario_clientes_actualizar', compact('cliente'));
+    } 
+
+    public function cliente_actualizar(Request $request,$cliente_id)
+        {
+            //dd($request,$cliente_id);
+
+
+            $validatedData = $request->validate([
+                                                'nombre' => 'required',
+                                                'cedula' => 'required',
+                                                'telefono' => 'required',
+                                                'direccion' => 'required',          
+                                                ]);
+
+            $cliente = Cliente::find($cliente_id);
+
+            //dd($cliente);
+            $cliente->fill($request->all());
+            //dd($cliente);
+            //$user = User::Where('email',$request->input('email'))->get()->get(0);
+            //dd($user,$request->input('email'));
+            //$usuario->user_id = $user->id;
+
+            $cliente->save();
+
+            return redirect('/empresa/empresa_carteras');
+        }
+//////Lista negra de la empresa////////////////////
+
+    public function lista_negra_clientes()
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
+
+
+        $lista_negra= Cartera::all()->where('tipo',2)->where('empresa_id',$empresa_id);//////cartera lista negra de la empresa
+        //dd($lista_negra);
+        foreach ($lista_negra as $id){
+        $lista_negra_id=$id->id;
+        }
+
+        $clientesP = Cliente::all()->where('cartera_id','=',$lista_negra_id)
+                                  ->where('estado','=','LNP');
+
+        $clientesC = Cliente::all()->where('cartera_id','=',$lista_negra_id)
+                                   ->where('estado','=','LNC');
+
+
+        return view('adminempresa.empresa_LN', compact('clientesP','clientesC'));
+    }
+
+    public function formulario_cliente_listanegra_actualizar($cliente_id)
+        {
+            $user = Auth::user();
+            $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
+
+            $empresa_carteras= Cartera::where('empresa_id',$empresa_id)->where('tipo',1)->pluck('nombre','id');////// nombre de las carteras de la empresa
+            //dd($empresa_carteras);
+            $cliente = Cliente::find($cliente_id);
+            //dd($cliente);
+            return view('adminempresa.listanegra.formulario_clientes_listanegra_actualizar', compact('cliente','empresa_carteras'));
+        }
+
+        public function cliente_listanegra_actualizar(Request $request,$cliente_id)
+        {
+            //dd($request,$cliente_id);
+            $validatedData = $request->validate([                        
+                                                'cartera_id' => 'required',
+                                                ]);
+
+            $cliente = Cliente::find($cliente_id);
+
+            //dd($cliente);
+            $cliente->fill($request->all());
+            $cliente->estado='A';
+            //dd($cliente);
+
+            $cliente->save();
+
+            return redirect('/empresa/listanegra');
+        }
+
+        public function cliente_listanegraP_confirmar($cliente_id)//////pasar el cliente de la lista negra de pendiente a confirmado
+        {
+            //dd($cliente_id);
+            //dd($request,$cliente_id);
+            $user = Auth::user();
+            $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
+
+            $cliente = Cliente::find($cliente_id);
+            $cliente->estado='LNC';
+            //dd($cliente);
+           
+            
+            //dd($cliente);
+
+            $cliente->save();
+
+            return redirect('/empresa/listanegra');
+        }
+
+
+    //////Lista inactivos de la empresa////////////////////
+
+    public function lista_inactivos_clientes()
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
+
+
+        $lista_inactivos= Cartera::all()->where('tipo',3)->where('empresa_id',$empresa_id);//////cartera lista inactivos de la empresa
+        //dd($lista_inactivos);
+        foreach ($lista_inactivos as $id){
+        $lista_inactivos_id=$id->id;
+        }
+
+        $clientesI = Cliente::all()->where('cartera_id','=',$lista_inactivos_id)
+                                  ->where('estado','=','LI');
+
+
+        return view('adminempresa.empresa_LI', compact('clientesI'));
+    }
+
+    public function formulario_cliente_listainactivos_actualizar($cliente_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
+
+        $empresa_carteras= Cartera::where('empresa_id',$empresa_id)->where('tipo',1)->pluck('nombre','id');////// nombre de las carteras de la empresa
+        //dd($empresa_carteras);
+        $cliente = Cliente::find($cliente_id);
+        //dd($cliente);
+        return view('adminempresa.lista_inactivos.formulario_clientes_listainactivos_actualizar', compact('cliente','empresa_carteras'));
+    }
+
+    public function cliente_listainactivos_actualizar(Request $request,$cliente_id)
+        {
+            //dd($request,$cliente_id);
+            $validatedData = $request->validate([                        
+                                                'cartera_id' => 'required',
+                                                ]);
+
+            $cliente = Cliente::find($cliente_id);
+
+            //dd($cliente);
+            $cliente->fill($request->all());
+            $cliente->estado='A';
+            //dd($cliente);
+
+            $cliente->save();
+
+            return redirect('/empresa/listainactivos');
+        }
+
+        public function bonos($cartera_id) 
+        {
+            
+            $user = Auth::user();
+            $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+            $bonos = Bono::where('cartera_id',$cartera_id)->get();////// bonos de la cartera
+            //dd($carteras);
+            
+            return view('adminempresa.empresa_bonos')->with('bonos', $bonos);
+                                                    
+        }
+
+        public function novedades($cartera_id) 
+        {
+            $novedades = Novedad::where('cartera_id',$cartera_id)->get();////// bonos de la cartera
+            //dd($carteras);
+            
+            return view('adminempresa.empresa_novedades')->with('novedades', $novedades);
+                                                    
+        }
 }

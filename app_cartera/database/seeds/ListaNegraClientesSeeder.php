@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
-class ListaNegraSeeder extends Seeder
+class ListaNegraClientesSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class ListaNegraSeeder extends Seeder
         $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
 
 
-        App\ListaNegra::create([
+        App\ListaNegraCliente::create([
             
             'cliente_id' => '1',
             'fecha_ingreso' => $current_date_time,
@@ -28,7 +28,7 @@ class ListaNegraSeeder extends Seeder
 
 
 
-        App\ListaNegra::create([
+        App\ListaNegraCliente::create([
             
             'cliente_id' => '2',
             'fecha_ingreso' => $current_date_time,
@@ -40,7 +40,7 @@ class ListaNegraSeeder extends Seeder
 
 
 
-        App\ListaNegra::create([
+        App\ListaNegraCliente::create([
             
             'cliente_id' => '3',
             'fecha_ingreso' => $current_date_time,
@@ -53,7 +53,7 @@ class ListaNegraSeeder extends Seeder
 
 
 
-        App\ListaNegra::create([
+        App\ListaNegraCliente::create([
             
             'cliente_id' => '4',
             'fecha_ingreso' => $current_date_time,
@@ -67,7 +67,7 @@ class ListaNegraSeeder extends Seeder
 
 
 
-        App\ListaNegra::create([
+        App\ListaNegraCliente::create([
             
             'cliente_id' => '5',
             'fecha_ingreso' => $current_date_time,

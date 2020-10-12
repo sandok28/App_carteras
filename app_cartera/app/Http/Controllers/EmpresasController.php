@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Empresa;
 use App\Producto;
+use App\Cartera;
+use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -27,12 +29,55 @@ class EmpresasController extends Controller
             'descripcion' => 'required',
             'telefono' => 'required'
             ]);
+        try{
+            DB::beginTransaction();
+            //dd($request);
+            Empresa::create([
+                'nombre'=>$request->nombre,
+                'descripcion'=>$request->descripcion,
+                'telefono'=>$request->telefono
         
-        $empresa = new Empresa();
-        $empresa->nombre = $request->input('nombre');
-        $empresa->descripcion = $request->input('descripcion');
-        $empresa->telefono = $request->input('telefono');
-        $empresa->save();
+            ]);
+
+            $ultima_empresa = DB::table('empresas')
+                ->select('id','nombre')
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+                
+            Cartera::create([
+                'nombre'=>'lista negra',
+                'descripcion'=>'lista de las personas que le deben a la empresa '.$ultima_empresa->nombre,
+                'estado'=>'A',
+                'empresa_id'=>$ultima_empresa->id,
+                'usuario_id'=>'0',
+                'tipo'=>'2'       
+            ]);
+            
+            $listanegra = DB::table('carteras')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            Cartera::create([
+                'nombre'=>'lista clientes inactivos',
+                'descripcion'=>'lista de las personas sin deudas que no volvieron a comprar a la empresa '.$ultima_empresa->nombre,
+                'estado'=>'A',
+                'empresa_id'=>$ultima_empresa->id,
+                'usuario_id'=>'0',
+                'tipo'=>'3'       
+            ]);
+            
+            $listainactivos = DB::table('carteras')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            //dd($listainactivos);
+            DB::commit(); //////->SAVE
+        }
+        catch (\Exception $ex){xfgndfjg;
+            DB::rollback();
+
+        }
 
         return redirect()->route('administrador.administrador_empresas');
     }

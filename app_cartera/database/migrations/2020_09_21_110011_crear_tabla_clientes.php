@@ -21,6 +21,7 @@ class CrearTablaClientes extends Migration
             $table->string ("direccion");
             $table->string ("telefono");
             $table->string ("cedula");
+            $table->string ("estado");
             $table->integer ("cartera_id");
             $table->date("fecha_ultima_visita");
             $table->integer ("posicion");

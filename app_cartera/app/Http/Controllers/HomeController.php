@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -26,6 +27,11 @@ class HomeController extends Controller
         //dd('jjj');
 
         $user = Auth::user();
+
+        if(is_null($user->usuarios->get(0)))
+        {
+            return "No esta asociado a ningun usuario del sistema";
+        }
         $usuario_tipo = $user->usuarios->get(0)->tipo;
 
 
