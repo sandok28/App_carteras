@@ -28,7 +28,7 @@
                                 
                                 @include('administradores.administrador_empresas.formulario')
                                 {!! Form::submit('Actualizar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
+                                <a class="btn btn-primary " type="button" href="{{ url('/administrador/empresas')}}">Volver</a>
                             
                             {!! Form::close() !!}
                         </div>

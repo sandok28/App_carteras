@@ -11,7 +11,9 @@ class Cartera extends Model
             'descripcion',
             'estado',
             'usuario_id',
-            'empresa_id'
+            'empresa_id',
+            'tipo',
+            'cargue'
     ];
 
 

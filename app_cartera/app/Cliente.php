@@ -18,7 +18,8 @@ class Cliente extends Model
             'cartera_id',
             'fecha_ultima_visita',
             'posicion',
-            'deuda'
+            'deuda',
+            'estado'
         ];
 
     /**

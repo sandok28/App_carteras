@@ -30,9 +30,9 @@ class UsuariosSeeder extends Seeder
 
     App\User::create([
         'id'=>'16',
-        'name' => 'edwinsandoval.428',
-        'email' => 'edwinsandoval.428@gmail.com',
-        'password'=> '$2y$10$puZuA/o9UC9z4/r9OaQUa.Jvkakj/SyuymMD7HyvZMeMzmzebfjNW',
+        'name' => 'STIVENS RINCON MORENO',
+        'email' => 'stivensrinconmoreno@gmail.com',
+        'password'=> '$2y$10$kW7VhFgnaJIs/O7ubjl4MOj/I1aqPYf7nP3YozCO6nNgUgzN8OKUC',
         'email_verified_at'=> null,
         'remember_token'=>null,
         'created_at'=>$current_date_time,
@@ -48,10 +48,15 @@ class UsuariosSeeder extends Seeder
             'telefono'=> '3213145208',
             'direccion'=>'CL 22 KR 15',
             'tipo'=>'1',
+            'nombre' => 'PEDRO1',
+            'cedula' => '111111',
+            'nit'=> '111111',
+            'telefono'=> '111111',
+            'direccion'=>'111111',
+            'tipo'=>'3',
             'estado'=>'A',
             'user_id'=>'1',
             'empresa_id'=>'1',
-
             'created_at'=>$current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -64,8 +69,14 @@ class UsuariosSeeder extends Seeder
             'telefono'=> '3213145588',
             'direccion'=>'CL 5b KR 8',
             'tipo'=>'1',
+            'nombre' => 'PEDRO2',
+            'cedula' => '222222',
+            'nit'=> '222222',
+            'telefono'=> '222222',
+            'direccion'=>'222222',
+            'tipo'=>'3',
             'estado'=>'A',
-            'user_id'=>'1',
+            'user_id'=>'2',
             'empresa_id'=>'1',
             'created_at'=>$current_date_time,
             'updated_at'=> $current_date_time
@@ -73,12 +84,12 @@ class UsuariosSeeder extends Seeder
 
         App\Usuario::create([
             'id'=>'3',
-            'nombre' => 'edwuin3',
+            'nombre' => 'PEDRO3',
             'cedula' => '334536',
             'nit'=> '2222222',
             'telefono'=> '22222222',
             'direccion'=>'1',
-            'tipo'=>'1',
+            'tipo'=>'3',
             'estado'=>'A',
             'user_id'=>'1',
             'empresa_id'=>'1',
@@ -88,12 +99,12 @@ class UsuariosSeeder extends Seeder
 
         App\Usuario::create([
             'id'=>'4',
-            'nombre' => 'esteban4',
+            'nombre' => 'PEDRO4',
             'cedula' => '334536',
             'nit'=> '2222222',
             'telefono'=> '22222222',
             'direccion'=>'1',
-            'tipo'=>'1',
+            'tipo'=>'3',
             'estado'=>'A',
             'user_id'=>'1',
             'empresa_id'=>'1',
@@ -103,18 +114,61 @@ class UsuariosSeeder extends Seeder
 
         App\Usuario::create([
             'id'=>'5',
-            'nombre' => 'carlos5',
+            'nombre' => 'PEDRO5',
             'cedula' => '334536',
             'nit'=> '2222222',
             'telefono'=> '22222222',
             'direccion'=>'1',
-            'tipo'=>'1',
+            'tipo'=>'3',
             'estado'=>'A',
             'user_id'=>'1',
-            'empresa_id'=>'1',
+            'empresa_id'=>'2',
             'created_at'=>$current_date_time,
             'updated_at'=> $current_date_time
         ]);
+        App\Usuario::create([
+            'id'=>'6',
+            'nombre' => 'PEDRO6',
+            'cedula' => '334536',
+            'nit'=> '2222222',
+            'telefono'=> '22222222',
+            'direccion'=>'1',
+            'tipo'=>'3',
+            'estado'=>'A',
+            'user_id'=>'1',
+            'empresa_id'=>'2',
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+        App\Usuario::create([
+            'id'=>'7',
+            'nombre' => 'PEDRO7',
+            'cedula' => '334536',
+            'nit'=> '2222222',
+            'telefono'=> '22222222',
+            'direccion'=>'1',
+            'tipo'=>'3',
+            'estado'=>'A',
+            'user_id'=>'1',
+            'empresa_id'=>'2',
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+        App\Usuario::create([
+            'id'=>'8',
+            'nombre' => 'PEDRO8',
+            'cedula' => '334536',
+            'nit'=> '2222222',
+            'telefono'=> '22222222',
+            'direccion'=>'1',
+            'tipo'=>'3',
+            'estado'=>'A',
+            'user_id'=>'1',
+            'empresa_id'=>'2',
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+        
 
         App\Usuario::create([
             'id'=>'16',
@@ -131,6 +185,8 @@ class UsuariosSeeder extends Seeder
             'created_at'=>$current_date_time,
             'updated_at'=> $current_date_time
         ]);
+
+       
 
         App\Usuario::create([
             'id'=>'15',

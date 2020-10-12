@@ -20,7 +20,7 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Actualizar empresa</div>
+                        <div class="card-header">Actualizar cartera</div>
                         <div class="card-body">
                             @include('partials.formularios.alerta_validaciones')
                             

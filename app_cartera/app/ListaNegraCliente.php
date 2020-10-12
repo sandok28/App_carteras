@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ListaNegra extends Model
+class ListaNegraCliente extends Model
 {
-    protected $table='listanegras';
+    protected $table='listanegraclientes';
      protected $fillable = [
                 'cliente_id',
                 'monto_ingreso',
