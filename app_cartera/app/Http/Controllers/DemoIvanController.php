@@ -17,9 +17,6 @@ class DemoIvanController extends Controller
        return view('ivan.novedades.inicio', compact('novedades')); 
     }
 
-
-
-
     public function inicio2()
     {
         $bonos = Bono::all();
@@ -27,15 +24,7 @@ class DemoIvanController extends Controller
         
        return view('ivan.bonos.inicio', compact('bonos')); 
     }
-
-
-    public function inicio3()
-    {
-        $listanegras = ListaNegra::all();
     
-        
-       return view('ivan.listanegras.inicio', compact('listanegras')); 
-    }
 
     
     public function formulario_novedades_crear()               
@@ -50,13 +39,6 @@ class DemoIvanController extends Controller
         return view('ivan.bonos.crear',);
     }
 
-
-
-
-    public function formulario_listanegras_crear()               
-    {             
-        return view('ivan.listanegras.crear',);
-    }
 
 //////////////////////// * Muestre el formulario para crear un nuevo recurso.///////////
 
@@ -76,11 +58,6 @@ class DemoIvanController extends Controller
         return redirect('/novedades');
     }
 
-
-
-
-
-
     public function bonos_crear(Request $request)
     {
         
@@ -97,27 +74,6 @@ class DemoIvanController extends Controller
         return redirect('/bonos');
     }
 
-
-
-
-
-    public function listanegras_crear(Request $request)
-    {
-        //dd('holaaaa');
-        $user = Auth::user();
-        $listanegras = new ListaNegra();
-        $listanegras->cliente_id = $request->input('cliente_id');
-        $listanegras->fecha_ingreso = '2020-09-21';
-        $listanegras->monto_ingreso = $request->input('monto_ingreso');
-        $listanegras->estado = $request->input('estado');
-        $listanegras->save();
-
-        return redirect('/listanegras');
-    }
-
-
-
-
     ////////////////////// * Mostrar el formulario para editar el recurso especificado
 
     public function formulario_novedades_actualizar($novedad_id)
@@ -128,11 +84,6 @@ class DemoIvanController extends Controller
         return view('ivan.novedades.editar', compact('novedad'));
     }
 
-
-
-
-
-
     public function formulario_bonos_actualizar($bono_id)
     
     {
@@ -140,21 +91,6 @@ class DemoIvanController extends Controller
         $bono = Bono::find($bono_id);
         return view('ivan.bonos.editar', compact('bono'));
     }
-
-
-
-
-
-
-    public function formulario_listanegras_actualizar($listanegras_id)
-    
-    {
-        //dd($novedad_id);
-        $listanegras = ListaNegra::find($listanegras_id);
-        return view('ivan.listanegras.editar', compact('listanegras'));
-    }
-
-
 
 
 //////////////// * Actualizar el recurso especificado en el almacenamiento./////////////////////
@@ -168,10 +104,6 @@ class DemoIvanController extends Controller
 
         return redirect('/novedades');
     }
-
-
-
-
 
 
     public function bonos_actualizar(Request $request, $bono_id)

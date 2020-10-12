@@ -20,7 +20,8 @@ class CreateCarterasTable extends Migration
             $table->string("estado");
             $table->integer('empresa_id');
             $table->integer('usuario_id');
-
+            $table->integer('tipo');
+            $table->string("cargue")->default('D');
             $table->timestamps();
         });
     }

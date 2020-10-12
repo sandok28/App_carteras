@@ -24,7 +24,7 @@
                                 
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-success col-md-2" type="button" href="{{ route('administrador.administrador_empresas.formulario_empresas_crear') }}">Registar empresa</a>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    
                                 
                                 </div>
                                 

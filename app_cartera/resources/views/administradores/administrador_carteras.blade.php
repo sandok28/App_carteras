@@ -23,7 +23,7 @@
                                 
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-success col-md-2" type="button" href="{{ route('administrador.administrador_carteras.formulario_carteras_crear',$empresa_id) }}">Registar cartera</a>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url('/administrador/empresas')}}">Volver</a>
                                 
                                 </div>
                                 
@@ -44,7 +44,6 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>  
-                                  
                                     <th>Fecha creacion</th>                 
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -54,7 +53,6 @@
                                 <tr>
                                     <th>Nombre</th>
                                     <th>Descripcion</th>  
-                                   
                                     <th>Fecha creacion</th>                 
                                     <th>Estado</th>
                                     <th>Acciones</th>

@@ -15,7 +15,7 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Actualizar usuario  aaaa</div>
+                        <div class="card-header">Actualizar usuario</div>
                         <div class="card-body">
                             @include('partials.formularios.alerta_validaciones')
                             

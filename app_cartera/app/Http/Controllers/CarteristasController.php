@@ -30,9 +30,11 @@ class CarteristasController extends Controller
         $usuario = $user->usuarios->get(0);
         $cartera = $usuario->cartera;
         $clientes_por_atender = $cartera->clientes;
+        
 
-        $clientes_por_atender = $cartera->clientes->where('fecha_ultima_visita','!=','2020-09-23');
-        $clientes_atendidos = $cartera->clientes->where('fecha_ultima_visita','=','2020-09-23');
+        $clientes_por_atender = $cartera->clientes->where('fecha_ultima_visita','!=','2020-10-05');
+        
+        $clientes_atendidos = $cartera->clientes->where('fecha_ultima_visita','=','2020-10-05');
         
 
         return view('carteristas.panel_central_carteristas')->with('cartera',$cartera)
