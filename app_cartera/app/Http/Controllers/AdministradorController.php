@@ -98,23 +98,15 @@ class AdministradorController extends Controller
         //dd($usuario->user->email);
         return view('administradores.administrador_usuarios.formulario_usuarios_actualizar', compact('usuario'));
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     
     public function usuarios_actualizar(Request $request,$usuario_id)
     {
         $validatedData = $request->validate([
                                             'nombre' => 'required',
                                             'cedula' => 'required',
-                                            'telefono' => 'required',
-                                            'direccion' => 'required',
-                                            'email' => new UsuariosEmailRule          
+                                            'telefono' => 'required'
+                                            //'direccion' => 'required',
+                                                      
                                             ]);
 
         $usuario = Usuario::find($usuario_id);
@@ -122,16 +114,91 @@ class AdministradorController extends Controller
         $usuario->fill($request->all());
         
         
-        //Vincular correo a uno user registrado en el sistema
-        $user = User::Where('email',$request->input('email'))->get()->get(0);
+        // //Vincular correo a uno user registrado en el sistema
+        // $user = User::Where('email',$request->input('email'))->get()->get(0);
        
-        $usuario->user_id = $user->id;
+        // $usuario->user_id = $user->id;
 
         $usuario->save();
 
         return redirect()->route('administrador.administrador_usuarios');
     
     }
+
+
+    public function formulario_correo_usuarios_actualizar( $usuario_id)
+{
+    
+    $usuario = Usuario::find($usuario_id);
+    
+  
+    return view('administradores.administrador_usuarios.formulario_correo_editar', compact('usuario'));
+}
+
+
+
+
+
+
+public function correo_usuarios_actualizar(Request $request, $usuario_id)
+{
+    $usuario = Usuario::find($usuario_id);
+
+    $correo_nuevo = $request->input('email');
+    $coreo_actual = $usuario->correo_user();
+
+    //dd($coreo_actual,$correo_nuevo);
+    $mensaje = 'Correo actualizado.';
+
+   if( $correo_nuevo == $coreo_actual)
+   {
+        
+       return redirect()->route('administrador.administrador_usuarios.formulario_usuarios_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+   }
+   else if($correo_nuevo != $coreo_actual)
+   {
+            $user = User::Where('email',$correo_nuevo)->get()->get(0);
+          
+            if($correo_nuevo == ''){
+                $mensaje = 'Ingrese un Correo Electronico '.$correo_nuevo;
+                
+            }
+            else if(is_null($user))
+            {
+                $mensaje = 'No existe usuario registrado con el correo '.$correo_nuevo;
+                
+            }                
+            else if(!is_null($user->usuarios->get(0)))
+            {   
+                $usuario_nombre = $user->usuarios->get(0)->nombre;
+                $descripcion_tipo_usuario = $user->usuarios->get(0)->descripcion_tipo_usuario();
+                $mensaje = 'El correo '.$correo_nuevo.' se encuentra asociado al usuario '.$usuario_nombre.', dicho usuario es tipo '.$descripcion_tipo_usuario;
+            }
+            else if(is_null($user->usuarios->get(0)))
+            {
+                //Vincular correo a un user registrado en el sistema
+                  
+                $usuario->user_id = $user->id;
+                $usuario->save();
+                return redirect()->route('administrador.administrador_usuarios.formulario_usuarios_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+            }
+            
+            //dd($mensaje);
+            return redirect()->route('empresa.usuarios.formulario_correo_bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'error']);
+   }
+
+
+   //dd("aaaaa");
+    return view('adminempresa.bodeguistas.formulario_correo_editar', compact('usuario'));
+}
+
+
+
+
+
+
+
+
 
 
     public function usuarios_desactivar($usuario_id)

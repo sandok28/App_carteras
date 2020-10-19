@@ -56,7 +56,8 @@ class GestionBodegaController extends Controller
     }
 
     public function cargar_cartera(Request $request,$cartera_id)
-    {            
+    {   
+        //dd($request);         
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
         $productos=Producto::where('empresa_id',$empresa_id)->get();
@@ -72,16 +73,30 @@ class GestionBodegaController extends Controller
                 foreach($productos as $producto){
 
                     $var_aux = 'cantidad_producto_'.$producto->id;
+                    dd($var_aux);
                     $productoid=$producto->id;
                     $producto_empresa = DB::select('select cantidad from productos where id = :id', ['id' => $producto->id]);//cantidad del producto en la bodega
                     //dd($producto_empresa);
+                    //dd($request->input($var_aux));
 
-                    Nevera::create([
-                        'cantidad'=>$request->input($var_aux),
-                        'producto_id'=>$producto->id,
-                        'cartera_id'=>$cartera_id
-                
-                    ]);
+                    
+
+                        if(is_null($request->input($var_aux))) {
+                            //dd('no existe');
+                            Nevera::create([
+                                'cantidad'=>0,
+                                'producto_id'=>$producto->id,
+                                'cartera_id'=>$cartera_id
+                                ]);
+                        } else {
+                            //dd('existe');
+                            Nevera::create([
+                                'cantidad'=>$request->input($var_aux),
+                                'producto_id'=>$producto->id,
+                                'cartera_id'=>$cartera_id
+                                ]);
+                        }
+                        
 
                     $producto = DB::table('neveras')
                     ->select('id')
@@ -100,7 +115,7 @@ class GestionBodegaController extends Controller
                         //dd($productoid);
 
                         $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact,$productoid]);
-                        $affected = DB::update('update carteras set cargue = ? where id = ?', ['C',$cartera_id]);
+                        $affected = DB::update('update carteras set cargue = ? where id = ?', ['C',$cartera_id]);//actualizar el estado de la cartera a C (cargada)
                         //$z=1/$contador;
                         //$contador=$contador-1;                  
             }
@@ -137,47 +152,134 @@ class GestionBodegaController extends Controller
 
     }
 
-    public function formulario_recargar_cartera($cartera_id)
+    public function formulario_recargar_cartera($nevera_id)
     {
-        
+        $producto_nevera=Nevera::where('id',$nevera_id)->get();
+        //dd($producto_nevera);
+        return view('bodega.cargar.formulario_cartera_recargar')->with('producto_nevera',$producto_nevera)
+                                                                ->with('nevera_id',$nevera_id);
     }
 
-    public function recargar_cartera($cartera_id)
+    public function recargar_cartera(Request $request,$nevera_id)
     {
-        
+
+        $validatedData = $request->validate([
+            'cantidad' => 'required'
+            ]);
+        //dd($request->cantidad, $nevera_id);
+
+        $producto_nevera=Nevera::Find($nevera_id);//cartera a la cual pertenece el producto que esta en la nevera
+        //dd($producto_nevera->producto_id);
+
+                                    try{
+                                        DB::beginTransaction();
+                                        //$contador=3;
+                                                          
+                                        
+                                        $cantproductoact=(($producto_nevera->producto->cantidad)-($request->cantidad));
+
+                                        $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact,$producto_nevera->producto_id]);
+                                        $affected = DB::update('update neveras set cantidad = ? where id = ?', [($producto_nevera->cantidad)+($request->cantidad),$nevera_id]);
+                                        // $z=1/$contador;
+                                        // $contador=$contador-1;
+                                        DB::commit();
+                                    }
+                                    catch (\Exception $ex){dd($ex);
+                                                            DB::rollback();
+                                                            }
+
+                                        return redirect()->route('bodega');
+                                                        
+
     }
 
-    public function formulario_descargar_cartera($cartera_id)
+    public function formulario_descargar_cartera($nevera_id)
     {
-        
+        //dd('hola');
+        $producto_nevera=Nevera::where('id',$nevera_id)->get();
+        //dd($producto_nevera);
+        return view('bodega.cargar.formulario_cartera_descargar')->with('producto_nevera',$producto_nevera)
+                                                                ->with('nevera_id',$nevera_id);
     }
 
-    public function descargar_cartera($cartera_id)
+    public function descargar_cartera(Request $request,$nevera_id)
     {
-        
+        //dd('descargar');
+        $validatedData = $request->validate([
+            'cantidad' => 'required'
+            ]);
+        //dd($request->cantidad, $nevera_id);
+
+        $producto_nevera=Nevera::Find($nevera_id);//cartera a la cual pertenece el producto que esta en la nevera
+        //dd($producto_nevera->producto_id);
+
+            try{
+                DB::beginTransaction();
+                //$contador=3;
+                                    
+                
+                $cantproductoact=(($producto_nevera->producto->cantidad)+($request->cantidad));
+
+                $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact,$producto_nevera->producto_id]);
+                $affected = DB::update('update neveras set cantidad = ? where id = ?', [($producto_nevera->cantidad)-($request->cantidad),$nevera_id]);
+                // $z=1/$contador;
+                // $contador=$contador-1;
+                DB::commit();
+            }
+            catch (\Exception $ex){dd($ex);
+                                    DB::rollback();
+                                    }
+
+                return redirect()->route('bodega');
+                                                        
+ 
     }
     
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    
+    public function cierre_dia_cartera($cartera_id)
     {
-        //
+        
+        try{
+            DB::beginTransaction();
+            //$contador=3;
+
+            $productos_nevera=Nevera::where('cartera_id',$cartera_id)->get();
+            //dd($productos_nevera);
+
+            foreach($productos_nevera as $producto){
+                $var_aux1 =$producto;
+                //dd($var_aux1);
+                $produnev_id=$var_aux1->producto_id;
+                $produnev_cant=$var_aux1->cantidad;
+                $produbod_cant=$var_aux1->producto->cantidad;
+                //dd($produnev_id, $produnev_cant, $produbod_cant);
+                //dd();
+                
+
+
+
+                $cantproductoact=(($produnev_cant)+($produbod_cant));
+                $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact,$produnev_id]);
+                        //$affected = DB::update('update neveras set cantidad = ? where id = ?', [($producto_nevera->cantidad)-($request->cantidad),$nevera_id]);
+
+                
+            }
+
+            DB::table('neveras')->where('cartera_id', '=', $cartera_id)->delete();
+            $affected = DB::update('update carteras set cargue = ? where id = ?', ['D',$cartera_id]);//actualizar el estado de la cartera a D (descargada)
+            DB::commit();
+        }
+        catch (\Exception $ex){dd($ex);
+                                DB::rollback();
+                                }
+
+            return redirect()->route('bodega');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    
+    // public function destroy($id)
+    // {
+    //     //
+    // }
 }

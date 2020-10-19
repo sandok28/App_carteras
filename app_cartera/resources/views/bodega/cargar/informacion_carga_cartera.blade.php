@@ -24,23 +24,39 @@
                         <div class="card-header">Productos en la nevera de la cartera</div>
                         <div class="card-body">
                             @include('partials.formularios.alerta_validaciones')
-                            
-                            {!! Form::model($productos, ['route' => ['bodega.cargar_cartera',$cartera_id], 'method' => 'POST']) !!}
+                                                           
+                                <table class="datatable">
+                                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                    <thead >
+                                        <tr>
+                                        <th scope="col">Producto</th>
+                                        <th scope="col">Cantidad</th>
+                                        <th scope="col">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                    <tr>
+                                        <th scope="col">Producto</th>
+                                        <th scope="col">Cantidad</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    @foreach($neveras as $nevera)
+                                        <tr>
+                                        <td>{{$nevera->producto->nombre}}</td>
+                                        <td>{{$nevera->cantidad}}</td>
+                                        <td>
+                                        <a class="btn btn-success " type="button" href="{{route('bodega.formulario_recargar_cartera',$nevera->id)}}">Recargar</a>
+                                        <a class="btn btn-warning " type="button" href="{{route('bodega.formulario_descargar_cartera',$nevera->id)}}">Descargar</a>
+                                        </td>
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                    
+                                </table>
                                 
-
-                                @foreach($productos as $producto)
-
-                                    <div class="form-group">
-                                    {!! Form::label('nombre',$producto->nombre.' - (Cantidad en bodega '.$producto->cantidad.')', ['for' => 'exampleFormControlInput1']) !!}
-                                    {!! Form::selectRange('cantidad',0,$producto->cantidad, null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1', 'name' => 'cantidad_producto_'.$producto->id]) !!}
-                                        
-                                    </div>
-                                @endforeach
-                        
-                                {!! Form::submit('Actualizar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
-                            
-                            {!! Form::close() !!}
+                                <a class="btn btn-danger btn-lg btn-block" type="button" href="{{route('bodega.cierre_cartera',$cartera_id)}}">Cierre del dia</a>
                         </div>
                     </div>
                 </div>
@@ -49,3 +65,4 @@
     </main>
  
 @endsection
+
