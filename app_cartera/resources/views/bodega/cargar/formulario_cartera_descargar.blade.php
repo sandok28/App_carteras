@@ -6,7 +6,7 @@
     Bodega
 @endsection
 
-
+                                                            
 
 @section('content')
 
@@ -21,18 +21,18 @@
                     <!-- Account details card-->
                     <div class="card mb-4">
                     
-                        <div class="card-header">Cargar productos a la cartera</div>
+                        <div class="card-header">Descargar productos a la cartera</div>
                         <div class="card-body">
                             @include('partials.formularios.alerta_validaciones')
                             
-                            {!! Form::model($productos, ['route' => ['bodega.cargar_cartera',$cartera_id], 'method' => 'POST']) !!}
+                            {!! Form::model($producto_nevera, ['route' => ['bodega.descargar_cartera',$nevera_id], 'method' => 'POST']) !!}
                                 
 
-                                @foreach($productos as $producto)
+                                @foreach($producto_nevera as $nevera)
 
                                     <div class="form-group">
-                                    {!! Form::label('nombre',$producto->nombre.' - (Cantidad en bodega '.$producto->cantidad.')', ['for' => 'exampleFormControlInput1']) !!}
-                                    {!! Form::selectRange('cantidad',0,$producto->cantidad, null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1', 'name' => 'cantidad_producto_'.$producto->id]) !!}
+                                    {!! Form::label('nombre',$nevera->producto->nombre.' --> Cantidad en nevera ('.$nevera->cantidad.')'.' --> Cantidad en bodega ('.$nevera->producto->cantidad.')', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::selectRange('cantidad',0,$nevera->producto->cantidad, null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
                                         
                                     </div>
                                 @endforeach
