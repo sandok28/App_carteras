@@ -68,6 +68,59 @@ class CarteristasController extends Controller
 
             return redirect('/clientes');
     }
+//////////Vista venta del Cliente
 
+    public function formulario_cliente_venta($cliente_id)
+    {
+        //dd($cliente_id);
+        $user = Auth::user();
+        $productos = $user->usuarios->get(0)->cartera->neveras; //neveras de la cartera a la cual pertenece el usuario logueado
+        //dd($productos);
+        //dd($productos->get(0)->producto->precio);
+        // //dd($usuarios);
+
+        // foreach($usuarios as $usuario){
+        //     $var_aux1 =$usuario;
+        //     //dd($var_aux1);
+        //     $nom=$var_aux1->producto;
+        //     dd($nom->nombre);}
+
+        return view('carteristas.clientes.formulario_cliente_venta')->with('productos',$productos)
+                                                                    ->with('cliente_id',$cliente_id);
     
+    }
+
+    public function formulario_cliente_pagar(Request $request, $cliente_id)
+    {
+        
+        //dd($request);
+        //dd($request->input('cantidad_producto_132'));
+        $user = Auth::user();
+        //$productos=Producto::where('empresa_id',$empresa_id)->get();
+        $neveras = $user->usuarios->get(0)->cartera->neveras; //neveras de la cartera a la cual pertenece el usuario logueado
+        $deuda_cliente=Cliente::find($cliente_id)->deuda;
+        //dd($deuda_cliente->deuda);
+        //dd($productos->get(0)->producto->precio);
+        // dd($usuarios);
+        $total=0;
+        foreach($neveras as $nevera){
+            $var_aux ='cantidad_producto_'.$nevera->id;
+            //dd($producto->producto->precio);
+            //dd($precio);
+
+            if(!is_null($request->input($var_aux))) {
+                //dd('no existe');
+               
+                $total=$total+($nevera->producto->precio)*$request->input($var_aux);
+            } else {
+                //dd('existe');
+                
+            }
+
+        }
+        
+        return view('carteristas.clientes.confirmar_compra')->with('total',$total)->with('deuda_cliente',$deuda_cliente);
+    
+    }
+
 }

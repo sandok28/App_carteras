@@ -12,10 +12,6 @@ class Empresa extends Model
                             'telefono',
                             'estado'
     ];
-
-
-    
-
     /**
      * obtiene las carteras por empresa
      *  
@@ -33,7 +29,6 @@ class Empresa extends Model
     {
         return $this->hasMany('App\Producto', 'empresa_id', 'id');
     }
-
    
     /**
      * obtiene las usuarios por empresa

@@ -73,28 +73,25 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sidenav shadow-right sidenav-light">
-                    <div class="sidenav-menu">
-                        <div class="nav accordion" id="accordionSidenav">
-                            <div class="sidenav-menu-heading">Administracion</div>
-                            <a class="nav-link" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseDashboards" aria-expanded="true" aria-controls="collapseDashboards">
-                                <div class="nav-link-icon"><i data-feather="activity"></i></div>
-                                Modulos
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse show" id="collapseDashboards" data-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                    <a class="nav-link" href="{{route('administrador.administrador_empresas')}}">
-                                        Empresas
-                                    </a>
-                                    <a class="nav-link" href="{{route('administrador.administrador_usuarios')}}">
-                                        Usuarios Administradores
-                                    </a>
-                                    
-                                </nav>
-                            </div>
-                           
-                        </div>
-                    </div>
+                    
+                    
+                    @if( Auth::user()->usuarios->get(0)->tipo == "1" )
+
+                        @include('Partials.general.panel_lateral_administrador')
+                   
+                    @elseif( Auth::user()->usuarios->get(0)->tipo == "2" )
+
+                        @include('Partials.general.panel_lateral_empresa')
+
+                    @elseif( Auth::user()->usuarios->get(0)->tipo == "4" )
+
+                        @include('Partials.general.panel_lateral_bodega')
+
+                    @elseif( Auth::user()->usuarios->get(0)->tipo == "3" )
+
+
+                    @endif
+
                     <div class="sidenav-footer">
                         <div class="sidenav-footer-content">
                             <div class="sidenav-footer-subtitle">Usuario en sesion</div>

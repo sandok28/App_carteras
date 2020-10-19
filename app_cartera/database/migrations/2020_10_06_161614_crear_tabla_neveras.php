@@ -12,7 +12,7 @@ class CrearTablaNeveras extends Migration
             
             $table->id();
             $table->integer("producto_id");
-            $table->integer("cantidad");
+            $table->integer("cantidad")->default('0');
             $table->integer("cartera_id");
             $table->timestamps();
         });

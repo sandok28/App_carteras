@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Actualizar empresa
+    Bodega
 @endsection
 
 
@@ -32,7 +32,7 @@
 
                                     <div class="form-group">
                                     {!! Form::label('nombre',$producto->nombre.' - (Cantidad en bodega '.$producto->cantidad.')', ['for' => 'exampleFormControlInput1']) !!}
-                                    {!! Form::selectRange('cantidad',0,$producto->cantidad, null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1', 'name' => 'cantidad_producto_'.$producto->id]) !!}
+                                    {!! Form::number('cantidad', null, ['min' => '0', 'max' => $producto->cantidad,'class' => 'form-control', 'id' => 'exampleFormControlInput1', 'name' => 'cantidad_producto_'.$producto->id]) !!}
                                         
                                     </div>
                                 @endforeach

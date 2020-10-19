@@ -18,7 +18,3 @@
     {!! Form::text('direccion', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
 </div>
 
-<div class="form-group">
-    {!! Form::label('email', 'Vinculado al correo', ['for' => 'exampleFormControlInput1']) !!}
-        {!! Form::text('email',( empty($usuario) ? '' : $usuario->correo_user()), ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
-</div>

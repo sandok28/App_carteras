@@ -42,6 +42,14 @@ class Cartera extends Model
         return $this->hasMany('App\Cliente', 'cartera_id', 'id');
     }
 
+    /**
+     * obtiene las neveras de la cartera
+     * 
+     */
+    public function neveras()
+    {
+        return $this->hasMany('App\Nevera', 'cartera_id', 'id');
+    }
 
 
 }

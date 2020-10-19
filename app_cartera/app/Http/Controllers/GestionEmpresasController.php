@@ -42,7 +42,7 @@ class GestionEmpresasController extends Controller
         
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
-        $empresa_id_cartera=Cartera::find($cartera_cliente)->empresa_id;//////empresa a la cual pertenece la cartera
+        $empresa_id_cartera=Cartera::find($cartera_id)->empresa_id;//////empresa a la cual pertenece la cartera
         //dd($empresa_id);
 
 
@@ -552,4 +552,175 @@ public function lista_carteristas()
             return view('adminempresa.empresa_novedades')->with('novedades', $novedades);
                                                     
         }
+
+
+
+
+//////////////////// CARTERISTAS DE LA EMPRESA //////////////////// 
+
+
+public function lista_bodeguistas()
+{
+    $user = Auth::user();
+    $empresa_id = $user->usuarios->get(0)->empresa_id;
+    //dd($user);
+    //
+    $usuarios = Usuario::all()->where('empresa_id','=',$empresa_id)
+                              ->where('tipo','=',4);//  filtra los carteristas de la empresa
+    
+    //dd($empresa_id);
+    //dd($usuarios);
+    return view('adminempresa.empresa_bodeguistas', compact('usuarios'));
+}
+
+public function formulario_bodeguistas_crear()
+{
+    return view('adminempresa.bodeguistas.formulario_bodeguistas_crear');
+}
+
+public function bodeguistas_crear(Request $request)
+{
+    //
+    $validatedData = $request->validate([
+                                        'nombre' => 'required',
+                                        'cedula' => 'required',
+                                        'telefono' => 'required',
+                                        'direccion' => 'required',
+                                        'email' => new CarteristasEmailRule
+                                        ]);
+                                        
+    $user = Auth::user();
+    $usuario = new Usuario();
+
+    $usuario->nombre = $request->input('nombre');
+    $usuario->cedula = $request->input('cedula');
+    $usuario->telefono = $request->input('telefono');
+    $usuario->direccion = $request->input('direccion');
+    $usuario->empresa_id = $user->usuarios->get(0)->empresa_id;
+    $usuario->nit = '0';
+    $usuario->user_id = '0';
+    $usuario->tipo= '4';
+    $usuario->estado ='A';
+
+    //Vincular correo a un user registrado en el sistema
+    $user = User::Where('email',$request->input('email'))->get()->get(0);     
+    $usuario->user_id = $user->id;
+    $usuario->save();
+
+    
+    return redirect()->route('empresa.bodeguistas');
+}
+
+public function formulario_bodeguistas_actualizar($usuario_id)
+{
+    //dd($producto_id);
+    $usuario = Usuario::find($usuario_id);
+    //dd($producto);
+    return view('adminempresa.bodeguistas.formulario_bodeguistas_actualizar', compact('usuario'));
+}   
+
+
+public function bodeguistas_actualizar(Request $request,$usuario_id)
+    {
+
+        $validatedData = $request->validate([
+                                            'nombre' => 'required',
+                                            'cedula' => 'required',
+                                            'telefono' => 'required',
+                                            'direccion' => 'required',          
+                                            ]);
+
+        $usuario = Usuario::find($usuario_id);
+        //dd($usuario);
+        $usuario->fill($request->all());
+        //$user = User::Where('email',$request->input('email'))->get()->get(0);
+        //dd($user,$request->input('email'));
+        //$usuario->user_id = $user->id;
+
+        $usuario->save();
+
+        return redirect('/empresa/bodeguistas');
+    
+    }
+
+    public function formulario_correo_bodeguistas_actualizar( $usuario_id)
+{
+    
+    $usuario = Usuario::find($usuario_id);
+    
+  
+    return view('adminempresa.bodeguistas.formulario_correo_editar', compact('usuario'));
+}
+
+public function correo_bodeguistas_actualizar(Request $request, $usuario_id)
+{
+    $usuario = Usuario::find($usuario_id);
+
+    $correo_nuevo = $request->input('email');
+    $coreo_actual = $usuario->correo_user();
+
+    //dd($coreo_actual,$correo_nuevo);
+    $mensaje = 'Correo actualizado.';
+
+   if( $correo_nuevo == $coreo_actual)
+   {
+        
+       return redirect()->route('empresa.bodeguistas.formulario.bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+   }
+   else if($correo_nuevo != $coreo_actual)
+   {
+            $user = User::Where('email',$correo_nuevo)->get()->get(0);
+          
+            if($correo_nuevo == ''){
+                $mensaje = 'Ingrese un Correo Electronico '.$correo_nuevo;
+                
+            }
+            else if(is_null($user))
+            {
+                $mensaje = 'No existe usuario registrado con el correo '.$correo_nuevo;
+                
+            }                
+            else if(!is_null($user->usuarios->get(0)))
+            {   
+                $usuario_nombre = $user->usuarios->get(0)->nombre;
+                $descripcion_tipo_usuario = $user->usuarios->get(0)->descripcion_tipo_usuario();
+                $mensaje = 'El correo '.$correo_nuevo.' se encuentra asociado al usuario '.$usuario_nombre.', dicho usuario es tipo '.$descripcion_tipo_usuario;
+            }
+            else if(is_null($user->usuarios->get(0)))
+            {
+                //Vincular correo a un user registrado en el sistema
+                  
+                $usuario->user_id = $user->id;
+                $usuario->save();
+                return redirect()->route('empresa.bodeguistas.formulario.bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+            }
+            
+            //dd($mensaje);
+            return redirect()->route('empresa.bodeguistas.formulario_correo_bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'error']);
+   }
+
+
+   //dd("aaaaa");
+    return view('adminempresa.bodeguistas.formulario_correo_editar', compact('usuario'));
+}
+
+
+public function usuarios4_desactivar($usuario_id)
+    {
+
+    //dd($usuario_id);
+    $usuario = Usuario::find($usuario_id);
+   // dd($usuario);
+    $usuario->estado = "I";
+    $usuario->save(); 
+
+    return redirect('/empresa/bodeguistas');
+    }
+public function usuarios4_activar(Usuario $usuario)
+    {
+    $usuario->estado = "A";
+    $usuario->save();
+
+    return redirect('/empresa/bodeguistas');
+    }
 }

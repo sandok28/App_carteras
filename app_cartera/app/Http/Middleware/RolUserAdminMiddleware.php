@@ -37,7 +37,7 @@ class RolUserAdminMiddleware
                 return redirect()->to('/home');
             }
 
-            if($usuario->tipo <= 1) // Es tipo 1 - Admninistrador
+            if($usuario->tipo == 1) // Es tipo 1 - Admninistrador
             {
                 return $next($request);
             }
