@@ -23,7 +23,7 @@
                     
                         <div class="card-header">Cargar productos a la cartera</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
                             
                             {!! Form::model($productos, ['route' => ['bodega.cargar_cartera',$cartera_id], 'method' => 'POST']) !!}
                                 

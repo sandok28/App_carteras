@@ -22,7 +22,7 @@
                     <div class="card mb-4">
                         <div class="card-header">Actualizar cartera</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
                             
                             {!! Form::model($cartera, ['route' => ['administrador.administrador_carteras.carteras_actualizar', $cartera], 'method' => 'PUT']) !!}
                                 
