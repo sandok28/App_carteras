@@ -23,7 +23,7 @@
                     
                         <div class="card-header">Productos en la nevera de la cartera</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
                                                            
                                 <table class="datatable">
                                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">

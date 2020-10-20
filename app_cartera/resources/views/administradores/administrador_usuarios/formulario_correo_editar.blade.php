@@ -17,7 +17,7 @@
                     <div class="card mb-4"> 
                         <div class="card-header">Registrar usuarios </div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
 
                             {!! Form::model($usuario, ['route' => ['empresa.usuarios.correo_usuarios_actualizar', $usuario], 'method' => 'PUT']) !!}
       

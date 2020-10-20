@@ -22,7 +22,7 @@
                     <div class="card mb-4">
                         <div class="card-header">Actualizar carterista</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
                             
                             {!! Form::model($usuario, ['route' => ['empresa.empresa_carteristas.empresa.carteristas_actualizar', $usuario], 'method' => 'PUT']) !!}
                                 

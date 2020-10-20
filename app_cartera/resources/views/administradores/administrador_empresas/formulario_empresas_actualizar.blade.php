@@ -22,7 +22,7 @@
                     <div class="card mb-4">
                         <div class="card-header">Actualizar empresa</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
                             
                             {!! Form::model($empresa, ['route' => ['administrador.administrador_empresas.empresas_actualizar', $empresa], 'method' => 'PUT']) !!}
                                 

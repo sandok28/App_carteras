@@ -17,7 +17,7 @@
                     <div class="card mb-4"> 
                         <div class="card-header">Registrar cartera </div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
 
                             {!! Form::open(['route' => 'administrador.administrador_carteras.carteras_crear', 'method' => 'POST']) !!}
                          

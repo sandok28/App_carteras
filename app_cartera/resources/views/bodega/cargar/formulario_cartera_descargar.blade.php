@@ -23,7 +23,7 @@
                     
                         <div class="card-header">Descargar productos a la cartera</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
                             
                             {!! Form::model($producto_nevera, ['route' => ['bodega.descargar_cartera',$nevera_id], 'method' => 'POST']) !!}
                                 
