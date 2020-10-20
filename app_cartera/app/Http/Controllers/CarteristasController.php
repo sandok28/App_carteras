@@ -123,4 +123,4 @@ class CarteristasController extends Controller
     
     }
 
-}
+ }

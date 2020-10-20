@@ -22,7 +22,7 @@
                     
                         <div class="card-header">Registrar usuario administrador</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
 
                             {!! Form::open(['route' => 'administrador.administrador_usuarios.usuarios_crear', 'method' => 'POST']) !!}
                                 

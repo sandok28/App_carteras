@@ -23,7 +23,7 @@
                     
                         <div class="card-header">Venta de productos</div>
                         <div class="card-body">
-                            @include('partials.formularios.alerta_validaciones')
+                            @include('Partials.formularios.alerta_validaciones')
 
                             {!! Form::model($productos, ['route' => ['carterista.cliente.formulario_cliente_pagar',$cliente_id], 'method' => 'POST']) !!}
                             
