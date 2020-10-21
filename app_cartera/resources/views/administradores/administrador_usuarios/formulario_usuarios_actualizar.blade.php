@@ -23,12 +23,7 @@
                             
                                 @include('administradores.administrador_usuarios.formulario')
 
-                                <div class="form-group">
-                                {!! Form::label('email', 'Email', ['for' => 'exampleFormControlInput1','style'=>'width:100%']) !!}
-                                {!! Form::text('email', ( empty($usuario) ? '' : $usuario->correo_user()), ['class' => 'form-control','disabled' => 'true', 'id' => 'exampleFormControlInput1','style'=>'width:87%;display:inline']) !!}
-                                <a class="btn btn-primary " type="button" href="{{ route('administrador.usuarios.formulario_correo_usuarios_actualizar',$usuario->id)}}">Editar Email</a>
-                                </div>
-
+                                
                                 {!! Form::submit('Guardar', ['class' => 'btn btn-success'] ) !!}
                                 <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
                             

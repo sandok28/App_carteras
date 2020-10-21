@@ -14,7 +14,9 @@ use App\Bono;
 use App\Novedad;
 use App\User;
 use Auth;
-use App\Rules\CarteristasEmailRule;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use App\Rules\UsuariosEmailRule;
 use Illuminate\Support\Facades\DB;
 
 class GestionEmpresasController extends Controller
@@ -191,8 +193,28 @@ public function lista_carteristas()
                                             'cedula' => 'required',
                                             'telefono' => 'required',
                                             'direccion' => 'required',
-                                            'email' => new CarteristasEmailRule
+                                            'contrasena' => 'required',
+                                            'email' => 'required', 
+                                            'email' => new UsuariosEmailRule
                                             ]);
+
+
+        $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+
+
+        User::create([
+            
+            'name' => $request->input('nombre'),
+            'email' =>$request->input('email'),
+            'password'=> Hash::make($request->input('contrasena')),
+            'email_verified_at'=> null,
+            'remember_token'=>null,
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+
+
                                             
         $user = Auth::user();
         $usuario = new Usuario();
@@ -221,6 +243,8 @@ public function lista_carteristas()
         //dd($producto_id);
         $usuario = Usuario::find($usuario_id);
         //dd($producto);
+        $usuario->email= $usuario->user->email;
+
         return view('adminempresa.carteristas.formulario_carteristas_actualizar', compact('usuario'));
     }   
 
@@ -232,7 +256,8 @@ public function lista_carteristas()
                                                 'nombre' => 'required',
                                                 'cedula' => 'required',
                                                 'telefono' => 'required',
-                                                'direccion' => 'required',          
+                                                'direccion' => 'required',
+                                                'email' => 'required',           
                                                 ]);
 
             $usuario = Usuario::find($usuario_id);
@@ -241,6 +266,17 @@ public function lista_carteristas()
             //$user = User::Where('email',$request->input('email'))->get()->get(0);
             //dd($user,$request->input('email'));
             //$usuario->user_id = $user->id;
+            $user = User::Find($usuario->user_id);
+
+            $user->name = $request->input('nombre');
+            $user->email = $request->input('email');
+            if(!is_null($request->input('contrasena'))){
+                $user->password = Hash::make($request->input('contrasena'));
+            }
+            
+            $user->save();
+
+
 
             $usuario->save();
 
@@ -556,7 +592,7 @@ public function lista_carteristas()
 
 
 
-//////////////////// CARTERISTAS DE LA EMPRESA //////////////////// 
+//////////////////// BODEGUISTAS DE LA EMPRESA //////////////////// 
 
 
 public function lista_bodeguistas()
@@ -586,9 +622,27 @@ public function bodeguistas_crear(Request $request)
                                         'cedula' => 'required',
                                         'telefono' => 'required',
                                         'direccion' => 'required',
-                                        'email' => new CarteristasEmailRule
+                                        'contrasena' => 'required',
+                                        'email' => 'required',
+                                        'email' => new UsuariosEmailRule 
                                         ]);
-                                        
+
+    $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+
+
+    User::create([
+        
+        'name' => $request->input('nombre'),
+        'email' =>$request->input('email'),
+        'password'=> Hash::make($request->input('contrasena')),
+        'email_verified_at'=> null,
+        'remember_token'=>null,
+        'created_at'=>$current_date_time,
+        'updated_at'=> $current_date_time
+    ]);
+
+
+                                  
     $user = Auth::user();
     $usuario = new Usuario();
 
@@ -616,6 +670,8 @@ public function formulario_bodeguistas_actualizar($usuario_id)
     //dd($producto_id);
     $usuario = Usuario::find($usuario_id);
     //dd($producto);
+    $usuario->email= $usuario->user->email;
+
     return view('adminempresa.bodeguistas.formulario_bodeguistas_actualizar', compact('usuario'));
 }   
 
@@ -627,7 +683,8 @@ public function bodeguistas_actualizar(Request $request,$usuario_id)
                                             'nombre' => 'required',
                                             'cedula' => 'required',
                                             'telefono' => 'required',
-                                            'direccion' => 'required',          
+                                            'direccion' => 'required', 
+                                            'email' => 'required',           
                                             ]);
 
         $usuario = Usuario::find($usuario_id);
@@ -636,6 +693,15 @@ public function bodeguistas_actualizar(Request $request,$usuario_id)
         //$user = User::Where('email',$request->input('email'))->get()->get(0);
         //dd($user,$request->input('email'));
         //$usuario->user_id = $user->id;
+        $user = User::Find($usuario->user_id);
+
+        $user->name = $request->input('nombre');
+        $user->email = $request->input('email');
+        if(!is_null($request->input('contrasena'))){
+            $user->password = Hash::make($request->input('contrasena'));
+        }
+        
+        $user->save();
 
         $usuario->save();
 

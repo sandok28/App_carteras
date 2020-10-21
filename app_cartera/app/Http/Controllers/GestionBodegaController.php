@@ -7,6 +7,7 @@ use App\Cartera;
 use App\Producto;
 use App\Nevera;
 use App\Cliente;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -258,6 +259,10 @@ class GestionBodegaController extends Controller
     
     public function cierre_dia_cartera($cartera_id)
     {
+        //dd($cartera_id);
+        $cartera=Cartera::Find($cartera_id);//datos de la cartera
+        //dd($cartera->credito_del_dia);
+        $current_date = Carbon::now()->toDateString();
         
         try{
             DB::beginTransaction();
@@ -287,7 +292,25 @@ class GestionBodegaController extends Controller
             $affected = DB::update('update carteras set credito_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total de la deuda de todos los clientes en la cartera
             DB::table('neveras')->where('cartera_id', '=', $cartera_id)->delete();
             $affected = DB::update('update carteras set cargue = ? where id = ?', ['D',$cartera_id]);//actualizar el estado de la cartera a D (descargada)
+           
+            //dd($cartera->salida_del_dia);
+            $credito=$cartera->credito_del_dia;
+            //dd($credito);
+            $saldo=$cartera->saldo_del_dia;
+            //dd($saldo);
+            $abono=$cartera->abono_del_dia;
+            //dd($abono);
+            $venta=$cartera->venta_del_dia;
+            //dd($venta);
+            DB::insert('insert into historial_venta_carteras (cartera_id, fecha, venta, deuda, saldo, abono) values (?, ?, ?, ?, ?, ?)', [$cartera_id, $current_date, $venta, $credito, $saldo, $abono]);
+           
+           
             DB::commit();
+           
+            
+
+
+
         }
         catch (\Exception $ex){dd($ex);
                                 DB::rollback();

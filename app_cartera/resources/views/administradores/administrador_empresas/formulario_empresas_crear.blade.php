@@ -27,6 +27,27 @@
                             {!! Form::open(['route' => 'administrador.administrador_empresas.empresas_crear', 'method' => 'POST']) !!}
                             
                                 @include('administradores.administrador_empresas.formulario')
+
+                                <div class="form-group">
+                                    {!! Form::label('cedula', 'Cedula', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::number('cedula', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                </div>
+
+                                <div class="form-group">
+                                    {!! Form::label('direccion', 'Direccion', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::text('direccion', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                </div>
+
+                                <div class="form-group">
+                                    {!! Form::label('correo', 'Correo electronico', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::text('email', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                </div>
+
+                                <div class="form-group">
+                                    {!! Form::label('contraseña', 'Password', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::text('contrasena', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                </div>
+                                
                                 {!! Form::submit('Guardar', ['class' => 'btn btn-success'] ) !!}
                                 <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
                                 
