@@ -10,6 +10,6 @@
 
 <div class="form-group">
     {!! Form::label('telefono', 'Telefono', ['for' => 'exampleFormControlInput1']) !!}
-    {!! Form::text('telefono', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+    {!! Form::number('telefono', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
 </div>
  
