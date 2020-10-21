@@ -53,7 +53,7 @@ class UsuariosSeeder extends Seeder
             'nit'=> '111111',
             'telefono'=> '111111',
             'direccion'=>'111111',
-            'tipo'=>'3',
+            'tipo'=>'4',
             'estado'=>'A',
             'user_id'=>'1',
             'empresa_id'=>'1',
