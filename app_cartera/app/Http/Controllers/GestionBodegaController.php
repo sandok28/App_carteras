@@ -6,6 +6,7 @@ use Auth;
 use App\Cartera;
 use App\Producto;
 use App\Nevera;
+use App\Cliente;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -61,6 +62,8 @@ class GestionBodegaController extends Controller
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
         $productos=Producto::where('empresa_id',$empresa_id)->get();
+        $clientes_cartera=Cliente::where('cartera_id',$cartera_id)->get()->all();
+        //dd($clientes_cartera);
 
         try{
             DB::beginTransaction();
@@ -69,11 +72,12 @@ class GestionBodegaController extends Controller
             $user = Auth::user();
             $empresa_id = $user->usuarios->get(0)->empresa_id;
             $productos=Producto::where('empresa_id',$empresa_id)->get();
+            
 
                 foreach($productos as $producto){
 
                     $var_aux = 'cantidad_producto_'.$producto->id;
-                    dd($var_aux);
+                    //dd($var_aux);
                     $productoid=$producto->id;
                     $producto_empresa = DB::select('select cantidad from productos where id = :id', ['id' => $producto->id]);//cantidad del producto en la bodega
                     //dd($producto_empresa);
@@ -116,6 +120,21 @@ class GestionBodegaController extends Controller
 
                         $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact,$productoid]);
                         $affected = DB::update('update carteras set cargue = ? where id = ?', ['C',$cartera_id]);//actualizar el estado de la cartera a C (cargada)
+                        
+                        $total_deuda=0;
+                        foreach($clientes_cartera as $cliente_cartera){
+                            $var_aux1 =$cliente_cartera;
+                            //dd($var_aux1);
+                            $deuda=$var_aux1->deuda;
+                            //dd($deuda);
+                            $total_deuda=$total_deuda+$deuda;
+                            
+                        }
+                        //dd($total_deuda);
+                        $affected = DB::update('update carteras set credito_del_dia = ? where id = ?', [$total_deuda,$cartera_id]);//actualiza el total de la deuda de todos los clientes en la cartera
+
+                        
+                        
                         //$z=1/$contador;
                         //$contador=$contador-1;                  
             }
@@ -265,7 +284,7 @@ class GestionBodegaController extends Controller
 
                 
             }
-
+            $affected = DB::update('update carteras set credito_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total de la deuda de todos los clientes en la cartera
             DB::table('neveras')->where('cartera_id', '=', $cartera_id)->delete();
             $affected = DB::update('update carteras set cargue = ? where id = ?', ['D',$cartera_id]);//actualizar el estado de la cartera a D (descargada)
             DB::commit();
