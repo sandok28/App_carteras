@@ -83,7 +83,6 @@ class CarteristasController extends Controller
             $cliente->deuda = 0;
             $cliente->intentos_sin_ventas = 0;
             $cliente->save();
-
             
             DB::commit(); //////->SAVE
         }
@@ -147,6 +146,11 @@ class CarteristasController extends Controller
               ->where('id',  $cliente_id)->update(['fecha_ultima_visita' => $current_date]);
             $resumen_venta->total_venta = $total_venta;
 
+            DB::table('carteras')
+                ->where('id', $cliente->cartera->id)->increment('venta_del_dia',$total_venta);
+            DB::table('carteras')
+                ->where('id', $cliente->cartera->id)->increment('saldo_del_dia',$total_venta);
+
             $cliente = Cliente::find($cliente_id);
             $resumen_venta->deuda_cliente = $cliente->deuda;
             $resumen_venta->cliente_id = $cliente->id;
@@ -182,16 +186,30 @@ class CarteristasController extends Controller
     }
     public function recaudo(Request $request, $cliente_id)
     {      
-       
-        $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
-     
-        DB::table('clientes')
-              ->where('id', $cliente_id)->decrement('deuda',$request->pago);
-        
-        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
-        DB::table('clientes')
-            ->where('id',  $cliente_id)->update(['fecha_ultima_visita' => $current_date]);
+        try{
+            DB::beginTransaction();
 
+            $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
+        
+            DB::table('clientes')
+                ->where('id', $cliente_id)->decrement('deuda',$request->pago);
+            
+            $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+            DB::table('clientes')
+                ->where('id',  $cliente_id)->update(['fecha_ultima_visita' => $current_date]);
+                
+            DB::table('carteras')
+                ->where('id', $cliente->cartera->id)->increment('abono_del_dia',$request->pago);
+            DB::table('carteras')
+                ->where('id', $cliente->cartera->id)->decrement('saldo_del_dia',$request->pago);
+            DB::commit(); //////->SAVE
+        }
+        catch (\Exception $ex){
+            DB::rollback();
+            dd($ex);
+            
+
+        }
         return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);
     }
     public function formulario_reportar_lista_negra($cliente_id)
