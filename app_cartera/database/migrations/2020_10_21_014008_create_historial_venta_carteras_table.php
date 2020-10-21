@@ -16,6 +16,7 @@ class CreateHistorialVentaCarterasTable extends Migration
         Schema::create('historial_venta_carteras', function (Blueprint $table) {
             $table->id();
             $table->integer('cartera_id');
+            $table->date("fecha");
             $table->integer('venta')->default('0');
             $table->integer('deuda')->default('0');
             $table->integer('abono')->default('0');
