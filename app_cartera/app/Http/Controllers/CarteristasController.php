@@ -7,6 +7,7 @@ use App\Devolucion;
 use App\Empresa;
 use App\Producto;
 use App\Cartera;
+use App\HistorialVentaCliente;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -95,7 +96,41 @@ class CarteristasController extends Controller
 
         return redirect()->route('carterista');
     }
-//////////Vista venta del Cliente
+    //Vista venta del Cliente
+    public function regHistorialCliente($cliente_id, $venta, $abono)
+    {      
+        $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
+     
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $reg_historial_cliente = DB::table('historial_venta_clientes')
+                                    ->where('cliente_id',$cliente_id)
+                                    ->where('fecha',$current_date)->get();
+                  
+                                    
+        if($reg_historial_cliente->isEmpty()){           
+            $historial_cliente = new HistorialVentaCliente();
+            $historial_cliente->cliente_id = $cliente_id;
+            $historial_cliente->fecha = $current_date;
+            $historial_cliente->venta = $venta;
+            $historial_cliente->deuda = $cliente->deuda;
+            $historial_cliente->abono = $abono;
+            $historial_cliente->saldo = $cliente->deuda + $venta - $abono;
+            $historial_cliente->save();
+        }else{
+
+           DB::table('historial_venta_clientes')
+                ->where('cliente_id',$cliente_id)->where('fecha',$current_date)
+                ->increment('venta',$venta);
+           DB::table('historial_venta_clientes')
+                ->where('cliente_id',$cliente_id)->where('fecha',$current_date)
+                ->increment('abono',$abono);
+            DB::table('historial_venta_clientes')
+                ->where('cliente_id',$cliente_id)->where('fecha',$current_date)
+                ->decrement('saldo',($abono - $venta));
+        }                         
+   
+    }
+
 
     public function formulario_cliente_venta($cliente_id)
     {      
@@ -137,6 +172,8 @@ class CarteristasController extends Controller
                 }
 
             }
+            $this->regHistorialCliente( $cliente_id, $total_venta, 0);
+            
             DB::table('clientes')
               ->where('id', $cliente_id)->increment('deuda',$total_venta);
            
@@ -146,14 +183,16 @@ class CarteristasController extends Controller
               ->where('id',  $cliente_id)->update(['fecha_ultima_visita' => $current_date]);
             $resumen_venta->total_venta = $total_venta;
 
+            
+            $cliente = Cliente::find($cliente_id);
+            $resumen_venta->deuda_cliente = $cliente->deuda;
+            $resumen_venta->cliente_id = $cliente->id;
+            
             DB::table('carteras')
                 ->where('id', $cliente->cartera->id)->increment('venta_del_dia',$total_venta);
             DB::table('carteras')
                 ->where('id', $cliente->cartera->id)->increment('saldo_del_dia',$total_venta);
 
-            $cliente = Cliente::find($cliente_id);
-            $resumen_venta->deuda_cliente = $cliente->deuda;
-            $resumen_venta->cliente_id = $cliente->id;
             
             DB::commit(); //////->SAVE
         }
@@ -180,7 +219,7 @@ class CarteristasController extends Controller
     {      
        
         $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
-     
+        
         return view('carteristas.clientes.formulario_pagar')->with('cliente',$cliente);
     
     }
@@ -202,6 +241,9 @@ class CarteristasController extends Controller
                 ->where('id', $cliente->cartera->id)->increment('abono_del_dia',$request->pago);
             DB::table('carteras')
                 ->where('id', $cliente->cartera->id)->decrement('saldo_del_dia',$request->pago);
+            
+            $this->regHistorialCliente($cliente_id, 0, $request->pago);
+            
             DB::commit(); //////->SAVE
         }
         catch (\Exception $ex){
@@ -237,4 +279,6 @@ class CarteristasController extends Controller
         return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);    
     }
 
+
+    
  }

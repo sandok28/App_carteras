@@ -4,15 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Historial_venta_cliente extends Model
+class HistorialVentaCartera extends Model
 {
-    //
+    protected $table='historial_venta_carteras';
+    
     protected $fillable = [
-        'cliente_id',
+        'cartera_id',
         'venta',
         'deuda',
         'abono',
         'saldo'
 
     ];
+    
 }
