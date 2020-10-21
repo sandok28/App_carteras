@@ -13,7 +13,11 @@ class Cartera extends Model
             'usuario_id',
             'empresa_id',
             'tipo',
-            'cargue'
+            'cargue',
+            'credito_del_dia',
+            'saldo_del_dia',
+            'abono_del_dia',
+            'venta_del_dia'
     ];
 
 
