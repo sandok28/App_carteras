@@ -16,6 +16,7 @@ class CreateHistorialVentaClientesTable extends Migration
         Schema::create('historial_venta_clientes', function (Blueprint $table) {
             $table->id();
             $table->integer('cliente_id');
+            $table->date("fecha");
             $table->integer('venta')->default('0');
             $table->integer('deuda')->default('0');
             $table->integer('abono')->default('0');
