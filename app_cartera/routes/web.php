@@ -170,9 +170,18 @@ Route::get('/carterista/clientes/formulario_clientes_crear', 'CarteristasControl
 Route::post('/carterista/clientes/clientes_crear','CarteristasController@clientes_crear')->name('carterista.clientes.clientes_crear');
 
 //-->carteristas - Venta a clientes
+Route::get('/carterista/gestion_cliente_cartera/{cliente_id}','CarteristasController@gestion_cliente_cartera')->name('carterista.gestion_cliente_cartera');
 
 Route::get('/carterista/cliente/{cliente_id}/venta', 'CarteristasController@formulario_cliente_venta')->name('carterista.cliente.formulario_cliente_venta');
 Route::post('/carterista/cliente/{cliente_id}/pagar', 'CarteristasController@formulario_cliente_pagar')->name('carterista.cliente.formulario_cliente_pagar');
+Route::get('/carterista/cliente/{cliente_id}/formulario_pagar', 'CarteristasController@formulario_pagar')->name('carterista.cliente.formulario_pagar');
+Route::post('/carterista/cliente/{cliente_id}/recaudo', 'CarteristasController@recaudo')->name('carterista.cliente.recaudo');
+
+//Carterista - cliente - reportar lista negra
+Route::get('/carterista/cliente/{cliente_id}/formulario_reportar_lista_negra', 'CarteristasController@formulario_reportar_lista_negra')->name('carterista.cliente.formulario_reportar_lista_negra');
+Route::post('/carterista/cliente/{cliente_id}/reportar_lista_negra', 'CarteristasController@reportar_lista_negra')->name('carterista.cliente.reportar_lista_negra');
+
+
 
 ////
 Route::get('/usuariosadmin/formulario_usuarios_crear','Usuarioscontroller@formulario_usuariosadmin_crear');

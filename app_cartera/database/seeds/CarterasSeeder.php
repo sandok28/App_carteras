@@ -107,7 +107,7 @@ class CarterasSeeder extends Seeder
             'estado' => 'A', // A de activo
             'empresa_id' => '1',
             'usuario_id' => '10',
-            'tipo' => '2',
+            'tipo' => '3',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
@@ -119,7 +119,7 @@ class CarterasSeeder extends Seeder
             'estado' => 'A', // A de activo
             'empresa_id' => '2',
             'usuario_id' => '10',
-            'tipo' => '3',
+            'tipo' => '2',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);

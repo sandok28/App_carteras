@@ -43,7 +43,7 @@ class HomeController extends Controller
                 return redirect()->route('empresa.empresa_carteras');
                 break;
             case '3':
-                
+                return redirect()->route('carterista');
                 break;
         }
 
