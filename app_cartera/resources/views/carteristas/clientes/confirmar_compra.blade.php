@@ -26,10 +26,12 @@
                                 {!! Form::label('nombre','Deuda anterior', ['for' => 'exampleFormControlInput1']) !!}
                                 {!! Form::label('deuda',$deuda_cliente, ['for' => 'exampleFormControlInput1']) !!}
 
-                                
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
+                                {!! Form::number('cantidad', null, ['min' => '0', 'max' => $producto->cantidad,'class' => 'form-control', 'id' => 'exampleFormControlInput1', 'name' => 'cantidad_producto_'.$producto->id]) !!}
                                 
                             {!! Form::close() !!}
+
+                            {!! Form::submit('Aceptar', ['class' => 'btn btn-success'] ) !!}
+                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
                         </div>
                     </div>
                 </div>

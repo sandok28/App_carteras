@@ -22,6 +22,10 @@ class CreateCarterasTable extends Migration
             $table->integer('usuario_id');
             $table->integer('tipo');
             $table->string("cargue")->default('D');
+            $table->integer('credito_del_dia')->default('0');
+            $table->integer('saldo_del_dia')->default('0');
+            $table->integer('abono_del_dia')->default('0');
+            $table->integer('venta_del_dia')->default('0');
             $table->timestamps();
         });
     }

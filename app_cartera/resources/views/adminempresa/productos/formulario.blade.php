@@ -5,7 +5,7 @@
 
 <div class="form-group">
     {!! Form::label('precio', 'Precio', ['for' => 'exampleFormControlInput1']) !!}
-    {!! Form::text('precio', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+    {!! Form::number('precio', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
 </div>
 
 <div class="form-group">
@@ -15,7 +15,7 @@
 
 <div class="form-group">
     {!! Form::label('cantidad', 'Cantidad', ['for' => 'exampleFormControlInput1']) !!}
-    {!! Form::text('cantidad', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+    {!! Form::number('cantidad', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
 </div>
 
 

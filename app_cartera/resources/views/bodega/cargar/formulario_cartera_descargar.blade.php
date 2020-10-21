@@ -32,8 +32,8 @@
 
                                     <div class="form-group">
                                     {!! Form::label('nombre',$nevera->producto->nombre.' --> Cantidad en nevera ('.$nevera->cantidad.')'.' --> Cantidad en bodega ('.$nevera->producto->cantidad.')', ['for' => 'exampleFormControlInput1']) !!}
-                                    {!! Form::selectRange('cantidad',0,$nevera->producto->cantidad, null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
-                                        
+                                    {!! Form::number('cantidad', null, ['min' => '0','max' => $nevera->cantidad,'class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                    
                                     </div>
                                 @endforeach
                         
