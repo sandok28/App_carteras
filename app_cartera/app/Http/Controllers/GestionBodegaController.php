@@ -261,7 +261,7 @@ class GestionBodegaController extends Controller
     {
         //dd($cartera_id);
         $cartera=Cartera::Find($cartera_id);//datos de la cartera
-        //dd($cartera->salida_del_dia);
+        //dd($cartera->credito_del_dia);
         $current_date = Carbon::now()->toDateString();
         
         try{

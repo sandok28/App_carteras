@@ -10,7 +10,9 @@ use App\User;
 use App\Rules\UsuariosEmailRule;
 use App\Rules\UsuariosTipo3Rule;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Auth;
+use Carbon\Carbon;
 
 
 class AdministradorController extends Controller
@@ -60,14 +62,33 @@ class AdministradorController extends Controller
 
     public function usuarios_crear(Request $request)
     {
-       
+
         $validatedData = $request->validate([
                                             'nombre' => 'required',
                                             'cedula' => 'required',
                                             'telefono' => 'required',
                                             'direccion' => 'required',
+                                            'contrasena' => 'required',
+                                            'email' => 'required',                                            
                                             'email' => new UsuariosEmailRule            
                                             ]);
+
+        //usar transaccion
+        $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+
+
+        User::create([
+            
+            'name' => $request->input('nombre'),
+            'email' =>$request->input('email'),
+            'password'=> Hash::make($request->input('contrasena')),
+            'email_verified_at'=> null,
+            'remember_token'=>null,
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+
         $usuario = new Usuario();
         $usuario->nombre = $request->input('nombre');
         $usuario->cedula = $request->input('cedula');
@@ -83,18 +104,19 @@ class AdministradorController extends Controller
        
         $usuario->user_id = $user->id;
 
-        $usuario->empresa_id = $request->input('empresa_id');
+        $usuario->empresa_id = 0;
         $usuario->save();
-
+//hasta aqui
         return redirect()->route('administrador.administrador_usuarios');
     }
 
     
     public function formulario_usuarios_actualizar($usuario_id)
     {
-        //dd($usuario);
         $usuario = Usuario::find($usuario_id);
        
+        $usuario->email= $usuario->user->email;
+
         //dd($usuario->user->email);
         return view('administradores.administrador_usuarios.formulario_usuarios_actualizar', compact('usuario'));
     }
@@ -102,16 +124,33 @@ class AdministradorController extends Controller
     public function usuarios_actualizar(Request $request,$usuario_id)
     {
         $validatedData = $request->validate([
-                                            'nombre' => 'required',
-                                            'cedula' => 'required',
-                                            'telefono' => 'required'
-                                            //'direccion' => 'required',
-                                                      
+                                                'nombre' => 'required',
+                                                'cedula' => 'required',
+                                                'telefono' => 'required',
+                                                'direccion' => 'required',
+                                                
+                                                'email' => 'required',                                            
+                                                //'email' => new UsuariosEmailRule        
                                             ]);
 
         $usuario = Usuario::find($usuario_id);
 
         $usuario->fill($request->all());
+
+        $user = User::Find($usuario->user_id);
+
+        $user->name = $request->input('nombre');
+        $user->email = $request->input('email');
+        if(!is_null($request->input('contrasena'))){
+            $user->password = Hash::make($request->input('contrasena'));
+        }
+        
+        $user->save();
+
+
+
+
+
         
         
         // //Vincular correo a uno user registrado en el sistema
@@ -191,13 +230,6 @@ public function correo_usuarios_actualizar(Request $request, $usuario_id)
    //dd("aaaaa");
     return view('adminempresa.bodeguistas.formulario_correo_editar', compact('usuario'));
 }
-
-
-
-
-
-
-
 
 
 

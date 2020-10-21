@@ -37,8 +37,7 @@ class UsuariosEmailRule implements Rule
         }
         else if(is_null($user))
         {
-            $this->message = 'No existe usuario registrado con el correo '.$value;
-            return false;
+            return true;
         }else if(!is_null($user->usuarios->get(0)))
         {   
             $usuario_nombre = $user->usuarios->get(0)->nombre;

@@ -27,12 +27,6 @@
                             {!! Form::model($usuario, ['route' => ['empresa.empresa_carteristas.empresa.carteristas_actualizar', $usuario], 'method' => 'PUT']) !!}
                                 
                                 @include('adminempresa.carteristas.formulario')
-
-                                <div class="form-group">
-                                {!! Form::label('email', 'Email', ['for' => 'exampleFormControlInput1']) !!}
-                                {!! Form::text('email', ( empty($usuario) ? '' : $usuario->correo_user()), ['class' => 'form-control','disabled' => 'true', 'id' => 'exampleFormControlInput1']) !!}
-                                <a class="btn btn-primary " type="button" href="{{ route('empresa.carterista.formulario_correo_carterista_actualizar',$usuario->id)}}">Editar Email</a>
-                                </div>
                                 
                                 {!! Form::submit('Actualizar', ['class' => 'btn btn-success'] ) !!}
                                 <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>

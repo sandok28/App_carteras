@@ -23,10 +23,6 @@
                          
                                 @include('adminempresa.carteristas.formulario')
 
-                                <div class="form-group">
-                                {!! Form::label('email', 'Email', ['for' => 'exampleFormControlInput1']) !!}
-                                {!! Form::text('email', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
-                                </div>
 
                                 {!! Form::submit('Guardar', ['class' => 'btn btn-success'] ) !!}
                                 <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>

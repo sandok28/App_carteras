@@ -8,6 +8,11 @@ use App\Cartera;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Rules\UsuariosEmailRule;
+use Illuminate\Support\Facades\Hash;
+use App\User;
+use App\Usuario;
 
 class EmpresasController extends Controller
 {
@@ -71,6 +76,58 @@ class EmpresasController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->first();
 
+
+
+                $validatedData = $request->validate([
+                    'nombre' => 'required',
+                    'cedula' => 'required',
+                    'telefono' => 'required',
+                    'direccion' => 'required',
+                    'contrasena' => 'required',
+                    'email' => 'required',
+                    'email' => new UsuariosEmailRule 
+                    ]);
+
+                $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+
+
+                User::create([
+
+                'name' => $request->input('nombre'),
+                'email' =>$request->input('email'),
+                'password'=> Hash::make($request->input('contrasena')),
+                'email_verified_at'=> null,
+                'remember_token'=>null,
+                'created_at'=>$current_date_time,
+                'updated_at'=> $current_date_time
+                ]);
+
+
+                            
+                $user = Auth::user();
+                $usuario = new Usuario();
+
+                $usuario->nombre = $request->input('nombre');
+                $usuario->cedula = $request->input('cedula');
+                $usuario->telefono = $request->input('telefono');
+                $usuario->direccion = $request->input('direccion');
+                $usuario->empresa_id = $user->usuarios->get(0)->empresa_id;
+                $usuario->nit = '0';
+                $usuario->user_id = '0';
+                $usuario->tipo= '2';
+                $usuario->estado ='A';
+
+                //Vincular correo a un user registrado en el sistema
+                $user = User::Where('email',$request->input('email'))->get()->get(0);     
+                $usuario->user_id = $user->id;
+                $usuario->save();    
+
+
+
+
+
+
+
             //dd($listainactivos);
             DB::commit(); //////->SAVE
         }
@@ -87,6 +144,7 @@ class EmpresasController extends Controller
         
        
         $empresa = Empresa::find($empresa_id);
+        
         return view('administradores.administrador_empresas.formulario_empresas_actualizar', compact('empresa'));
     }
 
@@ -102,6 +160,7 @@ class EmpresasController extends Controller
         $empresa->fill($request->all());
         $empresa->telefono = $request->input('telefono');
         $empresa->save();
+
         return redirect()->route('administrador.administrador_empresas');
     }
 
