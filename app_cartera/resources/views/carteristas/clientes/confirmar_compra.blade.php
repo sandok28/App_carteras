@@ -15,21 +15,34 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4"> 
-                        <div class="card-header">Transaccion </div>
+                        <div class="card-header">Resumen de la venta </div>
                         <div class="card-body">
                             
 
-                            {!! Form::open(['route' => 'carterista.clientes.clientes_crear', 'method' => 'POST']) !!}
+                            @foreach($resumen_venta->detalles_venta as $detalle_venta)
+                                <div class="form-group">
+                                    {!! Form::label('nombre','Producto: '.$detalle_venta->producto_nombre, ['for' => 'exampleFormControlInput1']) !!}
+                                    </br>
+                                    {!! Form::label('nombre','Cantidad: '.$detalle_venta->cantidad_vendida, ['for' => 'exampleFormControlInput1']) !!}
+                                    </br>
+                                    {!! Form::label('nombre','Subtotal: '.$detalle_venta->subtotal_vendido, ['for' => 'exampleFormControlInput1']) !!}
+                                    </br>
+                                    </br>
+                                </div>
+                            @endforeach
+                            <div class="form-group">    
+                                {!! Form::label('Total','Total de la venta: $'.$resumen_venta->total_venta, ['for' => 'exampleFormControlInput1']) !!}
+                            </div>
+                            <div class="form-group">
+                                {!! Form::label('nombre','Deuda del cliente: $'.$resumen_venta->deuda_cliente, ['for' => 'exampleFormControlInput1']) !!}
+                            </div>
 
-                                {!! Form::label('nombre','El total de la compra fue:', ['for' => 'exampleFormControlInput1']) !!}
-                                {!! Form::label('total',$total, ['for' => 'exampleFormControlInput1']) !!}
-                                {!! Form::label('nombre','Deuda anterior', ['for' => 'exampleFormControlInput1']) !!}
-                                {!! Form::label('deuda',$deuda_cliente, ['for' => 'exampleFormControlInput1']) !!}
-
-                                
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
-                                
-                            {!! Form::close() !!}
+                            <div class="form-group">                                 
+                                <a class="btn btn-primary col-md-10" type="button" href="{{ route('carterista.cliente.formulario_pagar', $resumen_venta->cliente_id) }}">Recaudar</a>
+                            </div>
+                            <div class="form-group"> 
+                                <a class="btn btn-danger col-md-10" type="button" href="{{ route('carterista.gestion_cliente_cartera', $resumen_venta->cliente_id) }}">Finalizar</a>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -19,9 +19,9 @@ class UsuariosSeeder extends Seeder
     
     App\User::create([
         'id'=>'15',
-        'name' => 'sandokk.28',
+        'name' => 'Carterista prueba',
         'email' => 'sandokk.28@gmail.com',
-        'password'=> '$2y$10$sgqJ.0Pog0RyAzLw.C0B7.8SYr//hyGbtHOi.pSoQ3nX/D6s9IqOS',
+        'password'=> '$2y$10$kW7VhFgnaJIs/O7ubjl4MOj/I1aqPYf7nP3YozCO6nNgUgzN8OKUC',
         'email_verified_at'=> null,
         'remember_token'=>null,
         'created_at'=>$current_date_time,
