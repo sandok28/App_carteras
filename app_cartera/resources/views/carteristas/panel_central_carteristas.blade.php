@@ -23,10 +23,7 @@
                                 <div class="row center-md card-body">
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-success col-md-2" type="button" href="{{ route('carterista.clientes.formulario_clientes_crear') }}">Registar cliente</a>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
-                                
-                                </div>
-                                
+                                </div>                                
                             </div>
                         </div>
                     </div>
@@ -36,37 +33,33 @@
         <!-- Main page content-->
         <div class="container mt-n10"><!-- Styled timeline component example -->
             <div class="timeline">
-                @foreach($clientes_por_atender as $cliente)
-                    <div class="timeline-item">
-                        <div class="timeline-item-marker">
-                        <div class="timeline-item-marker-text">{{$cliente->posicion}}</div>
-                            <div class="timeline-item-marker-indicator bg-warning-soft text-primary"><i data-feather="frown"></i></div>
-                        </div>
+                @foreach($clientes_por_atender as $cliente)                    
+                    <div class="timeline-item">                        
                         <div class="timeline-item-content pt-0">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <h5 class="text-primary">{{$cliente->nombre}}</h5>
-                                    Direccion:{{$cliente->direccion}}
+                                    <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->nombre}} </a><span class="badge badge-warning">Pendiente</span></h5>
+                                    {{$cliente->direccion}}
+                                    </br>
+                                    Deuda: ${{$cliente->deuda}}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                   
                 @endforeach
                 @foreach($clientes_atendidos as $cliente)
-                    <div class="timeline-item">
-                        <div class="timeline-item-marker">
-                        <div class="timeline-item-marker-text">{{$cliente->posicion}}</div>
-                            <div class="timeline-item-marker-indicator bg-success-soft text-primary"><i data-feather="smile"></i></div>
-                        </div>
+                    <div class="timeline-item">                        
                         <div class="timeline-item-content pt-0">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <h5 class="text-primary">{{$cliente->nombre}}</h5>
-                                    Direccion:{{$cliente->direccion}}
+                                    <h5 class="text-primary"><a href = "#">{{$cliente->nombre}} </a> <span class="badge badge-success">Atendido</span></h5>
+                                    {{$cliente->direccion}}
+                                    </br>
+                                    Deuda: ${{$cliente->deuda}}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 @endforeach
             </div>
         </div>

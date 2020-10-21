@@ -30,18 +30,20 @@
                                 @foreach($productos as $producto)
 
                                     <div class="form-group">
-                                    {!! Form::label('nombre',$producto->producto->nombre.'--->(Unidad='.$producto->producto->descripcion.')', ['for' => 'exampleFormControlInput1']) !!}
-                                    {!! Form::label('nombre','(Cantidad en nevera= '.$producto->cantidad.' unidades)', ['for' => 'exampleFormControlInput1']) !!}
-                                    
-                                    {!! Form::number('cantidad', null, ['min' => '0', 'max' => $producto->cantidad,'class' => 'form-control', 'id' => 'exampleFormControlInput1', 'name' => 'cantidad_producto_'.$producto->id]) !!}
+                                    {!! Form::label('nombre','Producto: '.$producto->producto->nombre, ['for' => 'exampleFormControlInput1']) !!}
+                                    </br>
+                                    {!! Form::label('precio','Precio: $'.$producto->producto->precio, ['for' => 'exampleFormControlInput1']) !!}    
+                                    {!! Form::number('cantidad', null, ['min' => '0', 'max' => $producto->cantidad,'class' => 'form-control', 'id' => 'exampleFormControlInput1', 'name' => 'cantidad_producto_'.$producto->id, 'placeholder'=>'Disponibles: '.$producto->cantidad ]) !!}
                                     
 
                                     </div>
                                 @endforeach
                         
-                                {!! Form::submit('Aceptar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
-                            
+                                <div class="form-group">
+                                    {!! Form::submit('Aceptar', ['class' => 'btn btn-success col-md-10'] ) !!}
+                                    </br>
+                                    <a class="btn btn-primary col-md-10" type="button" href="{{ route('carterista.gestion_cliente_cartera', $cliente_id) }}">Volver</a>
+                                </div>
                             {!! Form::close() !!}
                         </div>
                     </div>

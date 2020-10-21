@@ -18,7 +18,7 @@ class ProductosSeeder extends Seeder
         App\Producto::create([
             'id'=>'1',
             'nombre'=>'queso1',
-            'precio'=>'1000',
+            'precio'=>'14000',
             'descripcion'=>'queso1',
             'estado'=>'A',
             'cantidad' => '5',
@@ -30,7 +30,7 @@ class ProductosSeeder extends Seeder
         App\Producto::create([
             'id'=>'2',
             'nombre'=>'queso2',
-            'precio'=>'1000',
+            'precio'=>'2500',
             'descripcion'=>'queso2',
             'estado'=>'A',
             'cantidad' => '5',
@@ -42,7 +42,7 @@ class ProductosSeeder extends Seeder
         App\Producto::create([
             'id'=>'3',
             'nombre'=>'queso3',
-            'precio'=>'1000',
+            'precio'=>'1800',
             'descripcion'=>'queso3',
             'estado'=>'A',
             'cantidad' => '5',
@@ -54,7 +54,7 @@ class ProductosSeeder extends Seeder
         App\Producto::create([
             'id'=>'4',
             'nombre'=>'queso4',
-            'precio'=>'1000',
+            'precio'=>'1500',
             'descripcion'=>'queso4',
             'estado'=>'A',
             'cantidad' => '5',
@@ -66,7 +66,7 @@ class ProductosSeeder extends Seeder
         App\Producto::create([
             'id'=>'5',
             'nombre'=>'queso5',
-            'precio'=>'1000',
+            'precio'=>'15500',
             'descripcion'=>'queso5',
             'estado'=>'A',
             'cantidad' => '5',
