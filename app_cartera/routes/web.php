@@ -169,6 +169,11 @@ Route::get('/carterista','CarteristasController@panel_central_carteristas')->nam
 Route::get('/carterista/clientes/formulario_clientes_crear', 'CarteristasController@formulario_clientes_crear')->name('carterista.clientes.formulario_clientes_crear');
 Route::post('/carterista/clientes/clientes_crear','CarteristasController@clientes_crear')->name('carterista.clientes.clientes_crear');
 
+//-->carteristas - ordenar clientes
+Route::get('/carterista/clientes/formulario_clientes_ordenar', 'CarteristasController@formulario_clientes_ordenar')->name('carterista.clientes.formulario_clientes_ordenar');
+Route::post('/carterista/clientes/clientes_ordenar','CarteristasController@clientes_ordenar')->name('carterista.clientes.clientes_ordenar');
+
+
 //-->carteristas - Venta a clientes
 Route::get('/carterista/gestion_cliente_cartera/{cliente_id}','CarteristasController@gestion_cliente_cartera')->name('carterista.gestion_cliente_cartera');
 
@@ -187,10 +192,9 @@ Route::post('/carterista/cliente/{cliente_id}/reportar_lista_negra', 'Carterista
 Route::get('/carterista/bono/formulario_bono_crear','CarteristasController@formulario_bono_crear')->name('carterista.bono.formulario_bono_crear');
 Route::post('/carterista/bono/bono_crear','CarteristasController@bono_crear')->name('carterista.bono.bono_crear');
 
-
-
-
-
+//Carterista - novedades
+Route::get('/carterista/novedad/formulario_novedad_crear','CarteristasController@formulario_novedad_crear')->name('carterista.novedad.formulario_novedad_crear');
+Route::post('/carterista/novedad/novedad_crear','CarteristasController@novedad_crear')->name('carterista.novedad.novedad_crear');
 
 
 ////

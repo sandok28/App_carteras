@@ -3,8 +3,10 @@
 
 
 @section('titulo_pigina')
-    Registrar bono
+    Registras novedad
 @endsection
+
+
 
 @section('content')
     <main>
@@ -16,20 +18,16 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Registrar bono</div>
+                        <div class="card-header">Registrar novedad</div>
                         <div class="card-body">
                             @include('Partials.formularios.alerta_validaciones')
-                            {!! Form::model($bono, ['route' => ['carterista.bono.bono_crear'], 'method' => 'POST']) !!}
+                            {!! Form::model($novedad, ['route' => ['carterista.novedad.novedad_crear'], 'method' => 'POST']) !!}
                           
                                 <div class="form-group">
-                                    {!! Form::label('descripcion', 'Descripcion', ['for' => 'exampleFormControlInput1']) !!}
-                                    {!! Form::textarea('descripcion', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1', 'rows' => '5']) !!}
+                                    {!! Form::label('novedad', 'Descripcion', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::textarea('novedad', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1', 'rows' => '6']) !!}
                                 </div>
-                              
-                                <div class="form-group">
-                                    {!! Form::label('valor','Monto total: ', ['for' => 'exampleFormControlInput1']) !!}    
-                                    {!! Form::number('valor', null, ['min' => '0','class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
-                                </div>    
+                         
 
                                 <div class="form-group"> 
                                 {!! Form::submit('Registrar', ['class' => 'btn btn-success col-md-10'] ) !!}
