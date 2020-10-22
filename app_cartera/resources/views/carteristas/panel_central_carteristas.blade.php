@@ -21,8 +21,16 @@
                             <div class="card">
                             <div class="card-header">{{$cartera->nombre}}</div>
                                 <div class="row center-md card-body">
-                                    <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ route('carterista.clientes.formulario_clientes_crear') }}">Registar cliente</a>
+                                   
+                                    <div class="form-group col-md-10">
+                                        <a class="btn btn-success col-md-12" type="button" href="{{ route('carterista.clientes.formulario_clientes_crear') }}">Registar cliente</a>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <a class="btn btn-success col-md-12" type="button" href="{{ route('carterista.bono.formulario_bono_crear') }}">Registar bono</a>
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <a class="btn btn-success col-md-12" type="button" href="{{ route('carterista.clientes.formulario_clientes_crear') }}">Registar bono</a>
+                                    </div>                                
                                 </div>                                
                             </div>
                         </div>

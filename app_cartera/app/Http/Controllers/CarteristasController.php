@@ -7,6 +7,7 @@ use App\Devolucion;
 use App\Empresa;
 use App\Producto;
 use App\Cartera;
+use App\Bono;
 use App\HistorialVentaCliente;
 use Auth;
 use Illuminate\Http\Request;
@@ -278,6 +279,56 @@ class CarteristasController extends Controller
 
         return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);    
     }
+
+    public function formulario_bono_crear()
+    {      
+
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera->id;
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            
+        } else{
+            $bono = Bono::Find($cartera_bono_del_dia->get(0)->id);
+        }
+        
+        return view('carteristas.bonos.formulario_bono_crear')->with('bono',$bono);    
+    }
+
+    public function bono_crear(Request $request)
+    {      
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera->id;
+
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            $bono->cartera_id = $cartera_id;
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->mi_fecha = $current_date;
+            $bono->save();
+        } else{
+            $bono = Bono::find($cartera_bono_del_dia->get(0)->id);
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->save();
+        }
+       
+        return  redirect()->route('carterista');    
+    }
+
 
 
     
