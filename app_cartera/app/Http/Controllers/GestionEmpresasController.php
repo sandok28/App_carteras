@@ -90,12 +90,17 @@ class GestionEmpresasController extends Controller
         }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
-
+        try{DB::beginTransaction();
         $cartera = Cartera::find($cartera_id);
 
         $cartera->fill($request->all());
 
         $cartera->save();
+        DB::commit();
+        }
+        catch (\Exception $ex){dd($ex);
+                                DB::rollback();
+                                }
 
         return redirect()->route('empresa.empresa_carteras'); 
     
@@ -123,24 +128,36 @@ public function lista_productos()
 
     public function productos_crear(Request $request)
     {
-        //
+        
         $validatedData = $request->validate([
         'nombre' => 'required',
         'precio' => 'required',
-        'cantidad' => 'required',
         'descripcion' => 'required'
         
         ]);
-        $user = Auth::user();
-        $producto = new Producto();
-        $producto->nombre = $request->input('nombre');
-        $producto->precio = $request->input('precio');
-        $producto->cantidad = $request->input('cantidad');
-        $producto->empresa_id = $user->usuarios->get(0)->empresa_id;
-        $producto->descripcion = $request->input('descripcion');
-        $producto->estado ='A';
 
-        $producto->save();
+        try{DB::beginTransaction();
+           
+            //contenido del codigo a proteger
+            $user = Auth::user();
+            $producto = new Producto();
+            $producto->nombre = $request->input('nombre');
+            $producto->precio = $request->input('precio');
+            $producto->cantidad = '0';
+            $producto->empresa_id = $user->usuarios->get(0)->empresa_id;
+            $producto->descripcion = $request->input('descripcion');
+            $producto->estado ='A';
+            $producto->save();
+            DB::commit();
+
+        // //DB::commit();
+         }
+        catch (\Exception $ex){dd($ex);
+                                DB::rollback();
+                                }
+        
+
+        
 
         
         return redirect()->route('empresa.empresa_productos');
@@ -157,9 +174,60 @@ public function lista_productos()
 
     public function productos_actualizar(Request $request, $producto_id)
     {
+        try{DB::beginTransaction();
+            $producto = Producto::find($producto_id);
+            $producto->fill($request->all());
+            $producto->save();
+            DB::commit();
+            }
+        catch (\Exception $ex){dd($ex);
+                                DB::rollback();
+                                }
+        return redirect()->route('empresa.empresa_productos');
+    }
+
+    public function formulario_productos_agregar($producto_id)
+    {
+        //dd($producto_id);
         $producto = Producto::find($producto_id);
-        $producto->fill($request->all());
-        $producto->save();
+        //dd($producto);
+        return view('adminempresa.productos.formulario_productos_agregar', compact('producto'));
+    }
+
+    // public function formulario_productos_agregar($producto_id)
+    // {
+    //     $producto = Producto::find($producto_id);
+    //     return view('adminempresa.productos.formulario_productos_agregar')->with('producto',$producto);
+    // }
+
+    public function productos_agregar(Request $request, $producto_id)
+    {
+        //dd($request);
+        // try{DB::beginTransaction();
+        //      contenido del codigo a proteger
+        //     DB::commit();
+        //     
+        // }
+        // catch (\Exception $ex){dd($ex);
+        //                         DB::rollback();
+        //                         }
+
+        $producto = Producto::find($producto_id);
+        
+        try{DB::beginTransaction();
+            $cantproductoact=(($producto->cantidad)+($request->cantidad1));
+            //dd($cantproductoact);
+            $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact, $producto_id]);
+
+            DB::commit();
+            //contenido
+        }
+        catch (\Exception $ex){dd($ex);
+                                DB::rollback();
+                                }
+        
+        
+        //$producto->save();
         return redirect()->route('empresa.empresa_productos');
     }
 
@@ -198,7 +266,7 @@ public function lista_carteristas()
                                             'email' => new UsuariosEmailRule
                                             ]);
 
-
+        try{DB::beginTransaction();
         $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
 
 
@@ -233,6 +301,12 @@ public function lista_carteristas()
         $user = User::Where('email',$request->input('email'))->get()->get(0);     
         $usuario->user_id = $user->id;
         $usuario->save();
+        DB::commit();
+             
+         }
+         catch (\Exception $ex){dd($ex);
+            DB::rollback();
+            }
 
         
         return redirect()->route('empresa.empresa_carteristas');
@@ -259,23 +333,28 @@ public function lista_carteristas()
                                                 'direccion' => 'required',
                                                 'email' => 'required',           
                                                 ]);
+            try{DB::beginTransaction();
+                $usuario = Usuario::find($usuario_id);
+                //dd($usuario);
+                $usuario->fill($request->all());
+                //$user = User::Where('email',$request->input('email'))->get()->get(0);
+                //dd($user,$request->input('email'));
+                //$usuario->user_id = $user->id;
+                $user = User::Find($usuario->user_id);
 
-            $usuario = Usuario::find($usuario_id);
-            //dd($usuario);
-            $usuario->fill($request->all());
-            //$user = User::Where('email',$request->input('email'))->get()->get(0);
-            //dd($user,$request->input('email'));
-            //$usuario->user_id = $user->id;
-            $user = User::Find($usuario->user_id);
-
-            $user->name = $request->input('nombre');
-            $user->email = $request->input('email');
-            if(!is_null($request->input('contrasena'))){
-                $user->password = Hash::make($request->input('contrasena'));
+                $user->name = $request->input('nombre');
+                $user->email = $request->input('email');
+                if(!is_null($request->input('contrasena'))){
+                    $user->password = Hash::make($request->input('contrasena'));
+                }
+                
+                $user->save();
+                DB::commit();
+             
             }
-            
-            $user->save();
-
+            catch (\Exception $ex){dd($ex);
+                DB::rollback();
+                }
 
 
             $usuario->save();
@@ -295,51 +374,55 @@ public function lista_carteristas()
 
     public function correo_carterista_actualizar(Request $request, $usuario_id)
     {
-        $usuario = Usuario::find($usuario_id);
+        try{DB::beginTransaction();
+            $usuario = Usuario::find($usuario_id);
 
-        $correo_nuevo = $request->input('email');
-        $coreo_actual = $usuario->correo_user();
+            $correo_nuevo = $request->input('email');
+            $coreo_actual = $usuario->correo_user();
 
-        //dd($coreo_actual,$correo_nuevo);
-        $mensaje = 'Correo actualizado.';
+            //dd($coreo_actual,$correo_nuevo);
+            $mensaje = 'Correo actualizado.';
 
-       if( $correo_nuevo == $coreo_actual)
-       {
-            
-           return redirect()->route('empresa.empresa_carteristas.formulario.carteristas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
-       }
-       else if($correo_nuevo != $coreo_actual)
-       {
-                $user = User::Where('email',$correo_nuevo)->get()->get(0);
-              
-                if($correo_nuevo == ''){
-                    $mensaje = 'Ingrese un Correo Electronico '.$correo_nuevo;
+            if( $correo_nuevo == $coreo_actual)
+            {
                     
-                }
-                else if(is_null($user))
-                {
-                    $mensaje = 'No existe usuario registrado con el correo '.$correo_nuevo;
+                return redirect()->route('empresa.empresa_carteristas.formulario.carteristas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+            }
+            else if($correo_nuevo != $coreo_actual)
+            {
+                        $user = User::Where('email',$correo_nuevo)->get()->get(0);
                     
-                }                
-                else if(!is_null($user->usuarios->get(0)))
-                {   
-                    $usuario_nombre = $user->usuarios->get(0)->nombre;
-                    $descripcion_tipo_usuario = $user->usuarios->get(0)->descripcion_tipo_usuario();
-                    $mensaje = 'El correo '.$correo_nuevo.' se encuentra asociado al usuario '.$usuario_nombre.', dicho usuario es tipo '.$descripcion_tipo_usuario;
-                }
-                else if(is_null($user->usuarios->get(0)))
-                {
-                    //Vincular correo a un user registrado en el sistema
-                      
-                    $usuario->user_id = $user->id;
-                    $usuario->save();
-                    return redirect()->route('empresa.empresa_carteristas.formulario.carteristas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
-                }
-                
-                //dd($mensaje);
-                return redirect()->route('empresa.carterista.formulario_correo_carterista_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'error']);
-       }
-
+                        if($correo_nuevo == ''){
+                            $mensaje = 'Ingrese un Correo Electronico '.$correo_nuevo;
+                            
+                        }
+                        else if(is_null($user))
+                        {
+                            $mensaje = 'No existe usuario registrado con el correo '.$correo_nuevo;
+                            
+                        }                
+                        else if(!is_null($user->usuarios->get(0)))
+                        {   
+                            $usuario_nombre = $user->usuarios->get(0)->nombre;
+                            $descripcion_tipo_usuario = $user->usuarios->get(0)->descripcion_tipo_usuario();
+                            $mensaje = 'El correo '.$correo_nuevo.' se encuentra asociado al usuario '.$usuario_nombre.', dicho usuario es tipo '.$descripcion_tipo_usuario;
+                        }
+                        else if(is_null($user->usuarios->get(0)))
+                        {
+                            //Vincular correo a un user registrado en el sistema
+                            
+                            $usuario->user_id = $user->id;
+                            $usuario->save();
+                            return redirect()->route('empresa.empresa_carteristas.formulario.carteristas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+                        }
+                        
+                        //dd($mensaje);
+                        return redirect()->route('empresa.carterista.formulario_correo_carterista_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'error']);
+            }
+        }
+        catch (\Exception $ex){dd($ex);
+                                DB::rollback();
+                                }
 
        //dd("aaaaa");
         return view('adminempresa.carteristas.formulario_correo_editar', compact('usuario'));
@@ -427,17 +510,24 @@ public function lista_carteristas()
                                                 'telefono' => 'required',
                                                 'direccion' => 'required',          
                                                 ]);
+            try{DB::beginTransaction();
 
-            $cliente = Cliente::find($cliente_id);
+                $cliente = Cliente::find($cliente_id);
 
-            //dd($cliente);
-            $cliente->fill($request->all());
-            //dd($cliente);
-            //$user = User::Where('email',$request->input('email'))->get()->get(0);
-            //dd($user,$request->input('email'));
-            //$usuario->user_id = $user->id;
+                //dd($cliente);
+                $cliente->fill($request->all());
+                //dd($cliente);
+                //$user = User::Where('email',$request->input('email'))->get()->get(0);
+                //dd($user,$request->input('email'));
+                //$usuario->user_id = $user->id;
 
-            $cliente->save();
+                $cliente->save();
+                DB::commit();
+                
+            }
+            catch (\Exception $ex){dd($ex);
+                DB::rollback();
+                }
 
             return redirect('/empresa/empresa_carteras');
         }
@@ -483,7 +573,7 @@ public function lista_carteristas()
             $validatedData = $request->validate([                        
                                                 'cartera_id' => 'required',
                                                 ]);
-
+            try{DB::beginTransaction();
             $cliente = Cliente::find($cliente_id);
 
             //dd($cliente);
@@ -492,6 +582,12 @@ public function lista_carteristas()
             //dd($cliente);
 
             $cliente->save();
+            DB::commit();
+             
+         }
+         catch (\Exception $ex){dd($ex);
+                                 DB::rollback();
+                                 }
 
             return redirect('/empresa/listanegra');
         }
@@ -500,6 +596,7 @@ public function lista_carteristas()
         {
             //dd($cliente_id);
             //dd($request,$cliente_id);
+            try{DB::beginTransaction();
             $user = Auth::user();
             $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
 
@@ -511,6 +608,12 @@ public function lista_carteristas()
             //dd($cliente);
 
             $cliente->save();
+            DB::commit();
+             
+         }
+         catch (\Exception $ex){dd($ex);
+                                 DB::rollback();
+                                 }
 
             return redirect('/empresa/listanegra');
         }
@@ -627,39 +730,46 @@ public function bodeguistas_crear(Request $request)
                                         'email' => new UsuariosEmailRule 
                                         ]);
 
-    $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+    try{DB::beginTransaction();
+        $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
 
 
-    User::create([
-        
-        'name' => $request->input('nombre'),
-        'email' =>$request->input('email'),
-        'password'=> Hash::make($request->input('contrasena')),
-        'email_verified_at'=> null,
-        'remember_token'=>null,
-        'created_at'=>$current_date_time,
-        'updated_at'=> $current_date_time
-    ]);
+        User::create([
+            
+            'name' => $request->input('nombre'),
+            'email' =>$request->input('email'),
+            'password'=> Hash::make($request->input('contrasena')),
+            'email_verified_at'=> null,
+            'remember_token'=>null,
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
 
 
-                                  
-    $user = Auth::user();
-    $usuario = new Usuario();
+                                    
+        $user = Auth::user();
+        $usuario = new Usuario();
 
-    $usuario->nombre = $request->input('nombre');
-    $usuario->cedula = $request->input('cedula');
-    $usuario->telefono = $request->input('telefono');
-    $usuario->direccion = $request->input('direccion');
-    $usuario->empresa_id = $user->usuarios->get(0)->empresa_id;
-    $usuario->nit = '0';
-    $usuario->user_id = '0';
-    $usuario->tipo= '4';
-    $usuario->estado ='A';
+        $usuario->nombre = $request->input('nombre');
+        $usuario->cedula = $request->input('cedula');
+        $usuario->telefono = $request->input('telefono');
+        $usuario->direccion = $request->input('direccion');
+        $usuario->empresa_id = $user->usuarios->get(0)->empresa_id;
+        $usuario->nit = '0';
+        $usuario->user_id = '0';
+        $usuario->tipo= '4';
+        $usuario->estado ='A';
 
-    //Vincular correo a un user registrado en el sistema
-    $user = User::Where('email',$request->input('email'))->get()->get(0);     
-    $usuario->user_id = $user->id;
-    $usuario->save();
+        //Vincular correo a un user registrado en el sistema
+        $user = User::Where('email',$request->input('email'))->get()->get(0);     
+        $usuario->user_id = $user->id;
+        $usuario->save();
+        DB::commit();
+             
+        }
+         catch (\Exception $ex){dd($ex);
+                                 DB::rollback();
+                                 }
 
     
     return redirect()->route('empresa.bodeguistas');
@@ -686,24 +796,32 @@ public function bodeguistas_actualizar(Request $request,$usuario_id)
                                             'direccion' => 'required', 
                                             'email' => 'required',           
                                             ]);
+        try{DB::beginTransaction();
 
-        $usuario = Usuario::find($usuario_id);
-        //dd($usuario);
-        $usuario->fill($request->all());
-        //$user = User::Where('email',$request->input('email'))->get()->get(0);
-        //dd($user,$request->input('email'));
-        //$usuario->user_id = $user->id;
-        $user = User::Find($usuario->user_id);
+            $usuario = Usuario::find($usuario_id);
+            //dd($usuario);
+            $usuario->fill($request->all());
+            //$user = User::Where('email',$request->input('email'))->get()->get(0);
+            //dd($user,$request->input('email'));
+            //$usuario->user_id = $user->id;
+            $user = User::Find($usuario->user_id);
 
-        $user->name = $request->input('nombre');
-        $user->email = $request->input('email');
-        if(!is_null($request->input('contrasena'))){
-            $user->password = Hash::make($request->input('contrasena'));
+            $user->name = $request->input('nombre');
+            $user->email = $request->input('email');
+            if(!is_null($request->input('contrasena'))){
+                $user->password = Hash::make($request->input('contrasena'));
+            }
+            
+            $user->save();
+
+            $usuario->save();
+
+            DB::commit();
+             
         }
-        
-        $user->save();
-
-        $usuario->save();
+         catch (\Exception $ex){dd($ex);
+                                 DB::rollback();
+                                 }
 
         return redirect('/empresa/bodeguistas');
     
@@ -720,50 +838,56 @@ public function bodeguistas_actualizar(Request $request,$usuario_id)
 
 public function correo_bodeguistas_actualizar(Request $request, $usuario_id)
 {
-    $usuario = Usuario::find($usuario_id);
+    try{DB::beginTransaction();
 
-    $correo_nuevo = $request->input('email');
-    $coreo_actual = $usuario->correo_user();
+            $usuario = Usuario::find($usuario_id);
 
-    //dd($coreo_actual,$correo_nuevo);
-    $mensaje = 'Correo actualizado.';
+            $correo_nuevo = $request->input('email');
+            $coreo_actual = $usuario->correo_user();
 
-   if( $correo_nuevo == $coreo_actual)
-   {
-        
-       return redirect()->route('empresa.bodeguistas.formulario.bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
-   }
-   else if($correo_nuevo != $coreo_actual)
-   {
-            $user = User::Where('email',$correo_nuevo)->get()->get(0);
-          
-            if($correo_nuevo == ''){
-                $mensaje = 'Ingrese un Correo Electronico '.$correo_nuevo;
+            //dd($coreo_actual,$correo_nuevo);
+            $mensaje = 'Correo actualizado.';
+
+        if( $correo_nuevo == $coreo_actual)
+        {
                 
-            }
-            else if(is_null($user))
-            {
-                $mensaje = 'No existe usuario registrado con el correo '.$correo_nuevo;
+            return redirect()->route('empresa.bodeguistas.formulario.bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+        }
+        else if($correo_nuevo != $coreo_actual)
+        {
+                    $user = User::Where('email',$correo_nuevo)->get()->get(0);
                 
-            }                
-            else if(!is_null($user->usuarios->get(0)))
-            {   
-                $usuario_nombre = $user->usuarios->get(0)->nombre;
-                $descripcion_tipo_usuario = $user->usuarios->get(0)->descripcion_tipo_usuario();
-                $mensaje = 'El correo '.$correo_nuevo.' se encuentra asociado al usuario '.$usuario_nombre.', dicho usuario es tipo '.$descripcion_tipo_usuario;
-            }
-            else if(is_null($user->usuarios->get(0)))
-            {
-                //Vincular correo a un user registrado en el sistema
-                  
-                $usuario->user_id = $user->id;
-                $usuario->save();
-                return redirect()->route('empresa.bodeguistas.formulario.bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
-            }
-            
-            //dd($mensaje);
-            return redirect()->route('empresa.bodeguistas.formulario_correo_bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'error']);
-   }
+                    if($correo_nuevo == ''){
+                        $mensaje = 'Ingrese un Correo Electronico '.$correo_nuevo;
+                        
+                    }
+                    else if(is_null($user))
+                    {
+                        $mensaje = 'No existe usuario registrado con el correo '.$correo_nuevo;
+                        
+                    }                
+                    else if(!is_null($user->usuarios->get(0)))
+                    {   
+                        $usuario_nombre = $user->usuarios->get(0)->nombre;
+                        $descripcion_tipo_usuario = $user->usuarios->get(0)->descripcion_tipo_usuario();
+                        $mensaje = 'El correo '.$correo_nuevo.' se encuentra asociado al usuario '.$usuario_nombre.', dicho usuario es tipo '.$descripcion_tipo_usuario;
+                    }
+                    else if(is_null($user->usuarios->get(0)))
+                    {
+                        //Vincular correo a un user registrado en el sistema
+                        
+                        $usuario->user_id = $user->id;
+                        $usuario->save();
+                        return redirect()->route('empresa.bodeguistas.formulario.bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'message']);
+                    }
+                    
+                    //dd($mensaje);
+                    return redirect()->route('empresa.bodeguistas.formulario_correo_bodeguistas_actualizar',$usuario_id)->with(['message'=> $mensaje,'tipo'=>'error']);
+        }
+    }
+    catch (\Exception $ex){dd($ex);
+                            DB::rollback();
+                            }
 
 
    //dd("aaaaa");

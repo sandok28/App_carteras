@@ -13,10 +13,7 @@
     {!! Form::text('descripcion', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
 </div>
 
-<div class="form-group">
-    {!! Form::label('cantidad', 'Cantidad', ['for' => 'exampleFormControlInput1']) !!}
-    {!! Form::number('cantidad', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
-</div>
+
 
 
 
