@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Auth;
 use Carbon\Carbon;
-
+//STIVENS
 
 class AdministradorController extends Controller
 {

@@ -171,6 +171,11 @@ Route::get('/carterista','CarteristasController@panel_central_carteristas')->nam
 Route::get('/carterista/clientes/formulario_clientes_crear', 'CarteristasController@formulario_clientes_crear')->name('carterista.clientes.formulario_clientes_crear');
 Route::post('/carterista/clientes/clientes_crear','CarteristasController@clientes_crear')->name('carterista.clientes.clientes_crear');
 
+//-->carteristas - ordenar clientes
+Route::get('/carterista/clientes/formulario_clientes_ordenar', 'CarteristasController@formulario_clientes_ordenar')->name('carterista.clientes.formulario_clientes_ordenar');
+Route::post('/carterista/clientes/clientes_ordenar','CarteristasController@clientes_ordenar')->name('carterista.clientes.clientes_ordenar');
+
+
 //-->carteristas - Venta a clientes
 Route::get('/carterista/gestion_cliente_cartera/{cliente_id}','CarteristasController@gestion_cliente_cartera')->name('carterista.gestion_cliente_cartera');
 
@@ -183,6 +188,15 @@ Route::post('/carterista/cliente/{cliente_id}/recaudo', 'CarteristasController@r
 Route::get('/carterista/cliente/{cliente_id}/formulario_reportar_lista_negra', 'CarteristasController@formulario_reportar_lista_negra')->name('carterista.cliente.formulario_reportar_lista_negra');
 Route::post('/carterista/cliente/{cliente_id}/reportar_lista_negra', 'CarteristasController@reportar_lista_negra')->name('carterista.cliente.reportar_lista_negra');
 
+
+
+//Carterista - bonos
+Route::get('/carterista/bono/formulario_bono_crear','CarteristasController@formulario_bono_crear')->name('carterista.bono.formulario_bono_crear');
+Route::post('/carterista/bono/bono_crear','CarteristasController@bono_crear')->name('carterista.bono.bono_crear');
+
+//Carterista - novedades
+Route::get('/carterista/novedad/formulario_novedad_crear','CarteristasController@formulario_novedad_crear')->name('carterista.novedad.formulario_novedad_crear');
+Route::post('/carterista/novedad/novedad_crear','CarteristasController@novedad_crear')->name('carterista.novedad.novedad_crear');
 
 
 ////
@@ -246,11 +260,6 @@ Route::PUT('/novedades/{novedad_id}','DemoIvanController@noveadades_actualizar')
 
 
 
-Route::get('/bonos','DemoIvanController@inicio2');
-Route::get('/bonos/formulario_bonos_crear','DemoIvanController@formulario_bonos_crear');
-Route::post('/bonos','DemoIvanController@bonos_crear');
-Route::get('/bonos/{bono_id}/formulario_bonos_actualizar','DemoIvanController@formulario_bonos_actualizar');
-Route::PUT('/bonos/{bono_id}','DemoIvanController@bonos_actualizar');
 
 
 
