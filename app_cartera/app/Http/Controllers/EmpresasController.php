@@ -103,7 +103,7 @@ class EmpresasController extends Controller
                 ]);
 
 
-                            
+                $empresa=Empresa::where('nombre',$request->nombre);            
                 $user = Auth::user();
                 $usuario = new Usuario();
 
@@ -111,7 +111,7 @@ class EmpresasController extends Controller
                 $usuario->cedula = $request->input('cedula');
                 $usuario->telefono = $request->input('telefono');
                 $usuario->direccion = $request->input('direccion');
-                $usuario->empresa_id = $user->usuarios->get(0)->empresa_id;
+                $usuario->empresa_id = $empresa->first()->id;
                 $usuario->nit = '0';
                 $usuario->user_id = '0';
                 $usuario->tipo= '2';
@@ -122,16 +122,13 @@ class EmpresasController extends Controller
                 $usuario->user_id = $user->id;
                 $usuario->save();    
 
-
-
-
-
-
+                
+                //dd($empresa->first()->id);
 
             //dd($listainactivos);
             DB::commit(); //////->SAVE
         }
-        catch (\Exception $ex){xfgndfjg;
+        catch (\Exception $ex){dd($ex);
             DB::rollback();
 
         }
@@ -156,10 +153,17 @@ class EmpresasController extends Controller
             'telefono' => 'required'
             ]);
 
-        $empresa = Empresa::find($empresa_id);
-        $empresa->fill($request->all());
-        $empresa->telefono = $request->input('telefono');
-        $empresa->save();
+        try{DB::beginTransaction();
+            $empresa = Empresa::find($empresa_id);
+            $empresa->fill($request->all());
+            $empresa->telefono = $request->input('telefono');
+            $empresa->save();
+        DB::commit();
+             
+         }
+         catch (\Exception $ex){dd($ex);
+                                 DB::rollback();
+                                 }
 
         return redirect()->route('administrador.administrador_empresas');
     }

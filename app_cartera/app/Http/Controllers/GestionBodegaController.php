@@ -59,7 +59,8 @@ class GestionBodegaController extends Controller
 
     public function cargar_cartera(Request $request,$cartera_id)
     {   
-        //dd($request);         
+        //dd($request); 
+                
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
         $productos=Producto::where('empresa_id',$empresa_id)->get();

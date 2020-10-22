@@ -84,6 +84,8 @@ Route::post('/empresa/productos/productos_crear','GestionEmpresasController@prod
 Route::get('/empresa/productos/{producto_id}/formulario_productos_actualizar','GestionEmpresasController@formulario_productos_actualizar')->name('empresa.empresa_productos.formulario.productos_actualizar');
 Route::PUT('/empresa/productos/{producto_id}','GestionEmpresasController@productos_actualizar')->name('empresa.empresa_productos.empresa.productos_actualizar');
 
+Route::get('/empresa/productos/{producto_id}/formulario_productos_agregar','GestionEmpresasController@formulario_productos_agregar')->name('empresa.productos.formulario.productos_agregar');
+Route::PUT('/empresa/productos/{producto_id}/agregar','GestionEmpresasController@productos_agregar')->name('empresa.productos.agregar');
 /////->Gestionempresa - clientes
 
 Route::get('/empresa/carteras/{cartera_id}/clientes','GestionEmpresasController@lista_clientes')->name('empresa.empresa_carteras_clientes');

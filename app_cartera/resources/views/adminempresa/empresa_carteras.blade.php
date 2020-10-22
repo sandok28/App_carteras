@@ -57,7 +57,7 @@
                             @foreach($empresa_carteras as $cartera)
                                 <tr>
                                     <td>{{$cartera->nombre}}</td>
-                                    <td>{{$cartera->usuario->nombre}}</td>
+                                    <td>{{is_null($cartera->usuario) ? '' : $cartera->usuario->nombre}}</td>
                                     <td>
 
 

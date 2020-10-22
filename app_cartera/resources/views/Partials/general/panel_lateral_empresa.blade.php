@@ -22,9 +22,9 @@
                 </a>
                 <a class="nav-link" href="{{route('empresa.listanegra')}}">
                     Lista negra clientes
-                </a>                
+                </a>
+                                
             </nav>
-        </div>
-        
+        </div>        
     </div>
 </div>
