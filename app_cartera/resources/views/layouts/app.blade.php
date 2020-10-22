@@ -29,7 +29,7 @@
             @yield('content')
         @else
         <nav class="topnav navbar navbar-expand shadow navbar-light bg-white" id="sidenavAccordion">
-            <a class="navbar-brand" href="index.html">DistriCartera</a>
+            <a class="navbar-brand" href="/">Cabasistem</a>
             <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
             
             <ul class="navbar-nav align-items-center ml-auto">
@@ -47,10 +47,7 @@
                             </div>
                         </h6>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#!">
-                            <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
-                            Cuenta
-                        </a>
+                        
                         <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                             <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
@@ -69,19 +66,18 @@
                     
                     
                     @if( Auth::user()->usuarios->get(0)->tipo == "1" )
-
                         @include('Partials.general.panel_lateral_administrador')
-                   
+
                     @elseif( Auth::user()->usuarios->get(0)->tipo == "2" )
 
                         @include('Partials.general.panel_lateral_empresa')
-
                     @elseif( Auth::user()->usuarios->get(0)->tipo == "4" )
 
                         @include('Partials.general.panel_lateral_bodega')
 
                     @elseif( Auth::user()->usuarios->get(0)->tipo == "3" )
 
+                        @include('Partials.general.panel_lateral_carterista')
 
                     @endif
 

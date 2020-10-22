@@ -4,7 +4,7 @@
 
 
 @section('titulo_pigina')
-    Carterista
+    Ordenar clientes
 @endsection
 
 @section('content_css')
@@ -23,7 +23,7 @@
                                 {{$cartera->nombre}}
                             </h1>
                             <div class="page-header-subtitle">
-                                {{$cartera->descripcion}}
+                                Ordene los clientes en las posiciones deseadas y al final hacer click en "Guardar cambios"
                             </div>
                         </div>
                     </div>
@@ -33,34 +33,35 @@
         <!-- Main page content-->
         <div class="container mt-n10"><!-- Styled timeline component example -->
             <div class="timeline">
-                @foreach($clientes_por_atender as $cliente)                    
+                @include('Partials.formularios.alerta_validaciones')
+
+                {!! Form::model($clientes, ['route' => ['carterista.clientes.clientes_ordenar'], 'method' => 'POST']) !!}
+                @foreach($clientes as $cliente)                    
                     <div class="timeline-item">                        
                         <div class="timeline-item-content pt-0">
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->posicion}} - {{$cliente->nombre}} </a><span class="badge badge-warning">Pendiente</span></h5>
-                                    {{$cliente->direccion}}
+                                    <h5 class="text-primary">{{$cliente->nombre}}<span class="badge badge-cyan">En edicion</span></h5>
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            Posicion:    {!! Form::number('posicion', $cliente->posicion, ['style' => 'width : 20%;border: none; border-color: transparent;', 'id' => 'id_cliente_posicion_'.$cliente->id, 'name' => 'cliente_posicion_'.$cliente->id, 'disabled']) !!}   
+                                        </div>
+                                        <div class="col-md-2">
+                                         
+                                        </div>
+                                        <div class="col-md-8">
+                                        </div>
+                                    </div>
                                     </br>
-                                    Deuda: ${{$cliente->deuda}}
+                                    {{$cliente->direccion}}
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>                   
                 @endforeach
-                @foreach($clientes_atendidos as $cliente)
-                    <div class="timeline-item">                        
-                        <div class="timeline-item-content pt-0">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->nombre}} </a> <span class="badge badge-success">Atendido</span></h5>
-                                    {{$cliente->direccion}}
-                                    </br>
-                                    Deuda: ${{$cliente->deuda}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>                    
-                @endforeach
+                {!! Form::close() !!}
+                
             </div>
         </div>
     </main>

@@ -7,6 +7,8 @@ use App\Devolucion;
 use App\Empresa;
 use App\Producto;
 use App\Cartera;
+use App\Bono;
+use App\Novedad;
 use App\HistorialVentaCliente;
 use Auth;
 use Illuminate\Http\Request;
@@ -60,6 +62,11 @@ class CarteristasController extends Controller
 
     public function clientes_crear(Request $request)
     {
+
+        $validatedData = $request->validate([
+            'nombre' => 'required',
+            'direccion' => 'required'
+            ]);
         try{
             DB::beginTransaction();
 
@@ -75,8 +82,8 @@ class CarteristasController extends Controller
             $cliente = new Cliente();
             $cliente->nombre = $request->input('nombre');
             $cliente->direccion = $request->input('direccion');
-            $cliente->telefono = $request->input('telefono');
-            $cliente->cedula = $request->input('cedula');
+            $cliente->telefono = is_null($request->input('telefono')) ? '' : $request->input('telefono');
+            $cliente->cedula = is_null($request->input('cedula')) ? '' : $request->input('cedula');
             $cliente->estado = 'A';
             $cliente->fecha_ultima_visita = Carbon::now()->subDays(1)->toDateString(); // Produces something like "2019-03-11"
             $cliente->posicion = $clientes_por_atender->get(0)->posicion;
@@ -225,6 +232,9 @@ class CarteristasController extends Controller
     }
     public function recaudo(Request $request, $cliente_id)
     {      
+        $validatedData = $request->validate([
+            'pago' => 'required'
+            ]);
         try{
             DB::beginTransaction();
 
@@ -279,6 +289,132 @@ class CarteristasController extends Controller
         return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);    
     }
 
+    public function formulario_bono_crear()
+    {      
+
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera->id;
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            
+        } else{
+            $bono = Bono::Find($cartera_bono_del_dia->get(0)->id);
+        }
+        
+        return view('carteristas.bonos.formulario_bono_crear')->with('bono',$bono);    
+    }
+
+    public function bono_crear(Request $request)
+    {      
+        $validatedData = $request->validate([
+            'descripcion' => 'required',
+            'valor' => 'required'
+            ]);
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera->id;
+
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            $bono->cartera_id = $cartera_id;
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->mi_fecha = $current_date;
+            $bono->save();
+        } else{
+            $bono = Bono::find($cartera_bono_del_dia->get(0)->id);
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->save();
+        }
+       
+        return  redirect()->route('carterista');    
+    }
+
+    public function formulario_novedad_crear()
+    {      
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera->id;
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_novedad_del_dia = DB::table('novedades')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                              
+        if($cartera_novedad_del_dia->isEmpty()){     
+            $novedad = new Novedad();
+            
+        } else{
+            $novedad = Novedad::Find($cartera_novedad_del_dia->get(0)->id);
+        }
+        
+        return view('carteristas.novedades.formulario_novedad_crear')->with('novedad',$novedad);    
+    }
+
+    public function novedad_crear(Request $request)
+    {      
+        $validatedData = $request->validate([
+            'novedad' => 'required'
+            ]);
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera->id;
+
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_novedad_del_dia = DB::table('novedades')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_novedad_del_dia->isEmpty()){     
+            $novedad = new Novedad();
+            $novedad->cartera_id = $cartera_id;
+            $novedad->novedad = $request->novedad;
+            $novedad->usuario_nombre = $user->usuarios->get(0)->nombre;
+            $novedad->mi_fecha = $current_date;
+            $novedad->save();
+        } else{
+            $novedad = Novedad::find($cartera_novedad_del_dia->get(0)->id);
+            $novedad->novedad = $request->novedad;
+            $novedad->usuario_nombre = $user->usuarios->get(0)->nombre;
+            $novedad->save();
+        }
+       
+        return  redirect()->route('carterista');    
+    }
+
+
+
+    public function formulario_clientes_ordenar()
+    {      
+        $user = Auth::user();
+        $usuario = $user->usuarios->get(0);
+        $cartera = $usuario->cartera;
+        
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        
+        $clientes = DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->orderBy('posicion','asc')->get();
+     
+
+        return view('carteristas.clientes.ordenar.formulario_clientes_ordenar')->with('clientes',$clientes)->with('cartera',$cartera);     
+    }
+
+    public function clientes_ordenar(Request $request)
+    {      
+        
+       
+        return  redirect()->route('carterista');    
+    }
 
     
  }

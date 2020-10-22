@@ -17,9 +17,9 @@ class BonosSeeder extends Seeder
          App\Bono::create([
             
             'cartera_id' => '1',
-            'descripcion' => 'descripcion del id 1',                         
+            'descripcion' => 'Se le pagan 30 mil para almuerzos y demas',                         
             'mi_fecha' => $current_date_time, 
-            'valor' => '100',
+            'valor' => '30000',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);    
@@ -28,9 +28,9 @@ class BonosSeeder extends Seeder
          App\Bono::create([
             
             'cartera_id' => '2',
-            'descripcion' => 'descripcion del id 2',                         
+            'descripcion' => 'Se le pagan 30 mil para almuerzos y demas',                         
             'mi_fecha' => $current_date_time, 
-            'valor' => '33333',
+            'valor' => '30000',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);    
@@ -40,9 +40,9 @@ class BonosSeeder extends Seeder
          App\Bono::create([
             
             'cartera_id' => '3',
-            'descripcion' => 'descripcion del id 3',                         
+            'descripcion' => 'Se le pagan 30 mil para almuerzos y demas',                         
             'mi_fecha' => $current_date_time, 
-            'valor' => '39999999',
+            'valor' => '30000',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);    
@@ -52,9 +52,9 @@ class BonosSeeder extends Seeder
          App\Bono::create([
             
             'cartera_id' => '4',
-            'descripcion' => 'descripcion del id 4',                         
+            'descripcion' => 'Se le pagan 30 mil para almuerzos y demas',                         
             'mi_fecha' => $current_date_time, 
-            'valor' => '99999',
+            'valor' => '30000',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);    
@@ -64,9 +64,9 @@ class BonosSeeder extends Seeder
          App\Bono::create([
             
             'cartera_id' => '5',
-            'descripcion' => 'descripcion del id 5',                         
+            'descripcion' => 'Se le pagan 30 mil para almuerzos y demas',                         
             'mi_fecha' => $current_date_time, 
-            'valor' => '6555666',
+            'valor' => '30000',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);    
@@ -76,9 +76,9 @@ class BonosSeeder extends Seeder
          App\Bono::create([
             
             'cartera_id' => '6',
-            'descripcion' => 'descripcion del id 6',                         
+            'descripcion' => 'Se le pagan 30 mil para almuerzos y demas',                         
             'mi_fecha' => $current_date_time, 
-            'valor' => '9998888',
+            'valor' => '30000',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);    
