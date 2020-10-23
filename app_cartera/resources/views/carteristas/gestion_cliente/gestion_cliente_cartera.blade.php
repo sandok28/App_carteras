@@ -42,7 +42,7 @@
                                 <a class="btn btn-success col-md-10" type="button" href="{{ route('carterista.cliente.formulario_pagar',$cliente->id) }}">Recaudar</a>                          
                             </div>                   
                             <div class="form-group">
-                                <a class="btn btn-info col-md-10" type="button" href="{{ url()->previous() }}">Actualizar informacion</a>                          
+                                <a class="btn btn-info col-md-10" type="button" href="{{ route('carterista.clientes.formulario_clientes_actualizar',$cliente->id) }}">Actualizar informacion</a>                          
                             </div>   
                             <div class="form-group">
                                 <a class="btn btn-danger col-md-10" type="button" href="{{ route('carterista.cliente.formulario_reportar_lista_negra',$cliente->id) }}">Reportar</a>                          

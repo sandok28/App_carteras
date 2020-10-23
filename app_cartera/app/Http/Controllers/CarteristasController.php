@@ -86,7 +86,7 @@ class CarteristasController extends Controller
             $cliente->cedula = is_null($request->input('cedula')) ? '' : $request->input('cedula');
             $cliente->estado = 'A';
             $cliente->fecha_ultima_visita = Carbon::now()->subDays(1)->toDateString(); // Produces something like "2019-03-11"
-            $cliente->posicion = $clientes_por_atender->get(0)->posicion;
+            $cliente->posicion = ($clientes_por_atender->isEmpty() ? '0': $clientes_por_atender->get(0)->posicion);
             $cliente->cartera_id = $usuario->cartera->id;
             $cliente->deuda = 0;
             $cliente->intentos_sin_ventas = 0;
@@ -103,6 +103,69 @@ class CarteristasController extends Controller
 
         return redirect()->route('carterista');
     }
+
+/**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function formulario_clientes_actualizar($cliente_id)
+    {
+        $cliente = Cliente::Find($cliente_id);
+        return view('carteristas.clientes.formulario_clientes_actualizar')->with('cliente',$cliente);
+    }
+
+
+    public function clientes_actualizar(Request $request, $cliente_id)
+    {
+        $validatedData = $request->validate([
+            'nombre' => 'required',
+            'direccion' => 'required'
+            ]);
+        try{
+            DB::beginTransaction();
+
+            $cliente = Cliente::Find($cliente_id);
+
+            if(is_null($request->estado)){
+                
+                $cliente->nombre = $request->input('nombre');
+                $cliente->direccion = $request->input('direccion');
+                $cliente->telefono = is_null($request->input('telefono')) ? '' : $request->input('telefono');
+                $cliente->cedula = is_null($request->input('cedula')) ? '' : $request->input('cedula');            
+                $cliente->save();
+            }else{
+               
+                $user = Auth::user();
+                $usuario = $user->usuarios->get(0);        
+                $cartera_lista_negra = Cartera::where('empresa_id',$usuario->empresa_id)->where('tipo','3')->get();//tipo=3 es cartera tipo lista inactivo
+        
+
+                DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
+
+                DB::table('clientes')
+                    ->where('id',  $cliente_id)->update([   'estado' => 'LIP',//LNP -Lista Inactivo pendiente de confirmar
+                                                            'cartera_id'=> $cartera_lista_negra->get(0)->id
+                                                        ]);
+            }
+                        
+            
+            DB::commit(); //////->SAVE
+        }
+        catch (\Exception $ex){
+            DB::rollback();
+            dd($ex);
+            
+
+        }            
+
+        return redirect()->route('carterista');
+    }
+
+
+
+
+
     //Vista venta del Cliente
     public function regHistorialCliente($cliente_id, $venta, $abono)
     {      
@@ -281,12 +344,14 @@ class CarteristasController extends Controller
 
         $cartera_lista_negra = Cartera::where('empresa_id',$usuario->empresa_id)->where('tipo','2')->get();//tipo=2 es carteria tipo lista negra
 
+        DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
+
         DB::table('clientes')
             ->where('id',  $cliente_id)->update([   'estado' => 'LNP',//LNP -Lista negra pendiente de confirmar
                                                     'cartera_id'=> $cartera_lista_negra->get(0)->id
                                                 ]);
 
-        return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);    
+        return redirect()->route('carterista');    
     }
 
     public function formulario_bono_crear()
@@ -411,7 +476,30 @@ class CarteristasController extends Controller
 
     public function clientes_ordenar(Request $request)
     {      
-        
+        //dd($request);
+
+        try{
+            DB::beginTransaction();
+            $user = Auth::user();// Usuario carterista en sesion         
+            $cartera_clientes = $user->usuarios->get(0)->cartera->clientes; //neveras de la cartera a la cual pertenece el carterista logueado
+            //dd($neveras);
+
+            foreach($cartera_clientes as $cliente){
+
+                $nueva_posicion = $request->input('cliente_posicion_'.$cliente->id);// obtiene la cantidad segun el producto seleccionado
+                if(!is_null($nueva_posicion)) {
+                    DB::table('clientes')
+                    ->where('id', $cliente->id)->update(['posicion' => $nueva_posicion]);
+                }
+
+            }
+            DB::commit(); //////->SAVE
+        }
+        catch (\Exception $ex){
+            DB::rollback();
+            dd($ex);           
+
+        }
        
         return  redirect()->route('carterista');    
     }

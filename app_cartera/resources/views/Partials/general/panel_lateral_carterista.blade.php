@@ -8,7 +8,9 @@
         </a>
         <div class="collapse show" id="collapseDashboards" data-parent="#accordionSidenav">
             <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-               
+                <a class="nav-link" href="{{route('carterista')}}">
+                    Cartera
+                </a>
                 <a class="nav-link" href="{{route('carterista.clientes.formulario_clientes_crear')}}">
                     Registar cliente
                 </a>
