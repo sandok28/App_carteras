@@ -72,7 +72,7 @@
 
 
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_actualizar') }}"><i data-feather="edit"></i></a>
-                                                                                                                    
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_agregar') }}"><i data-feather="plus-square"></i></a>                                                                           
                                         
                                     </td>
                                 </tr>

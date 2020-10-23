@@ -84,6 +84,8 @@ Route::post('/empresa/productos/productos_crear','GestionEmpresasController@prod
 Route::get('/empresa/productos/{producto_id}/formulario_productos_actualizar','GestionEmpresasController@formulario_productos_actualizar')->name('empresa.empresa_productos.formulario.productos_actualizar');
 Route::PUT('/empresa/productos/{producto_id}','GestionEmpresasController@productos_actualizar')->name('empresa.empresa_productos.empresa.productos_actualizar');
 
+Route::get('/empresa/productos/{producto_id}/formulario_productos_agregar','GestionEmpresasController@formulario_productos_agregar')->name('empresa.productos.formulario.productos_agregar');
+Route::PUT('/empresa/productos/{producto_id}/agregar','GestionEmpresasController@productos_agregar')->name('empresa.productos.agregar');
 /////->Gestionempresa - clientes
 
 Route::get('/empresa/carteras/{cartera_id}/clientes','GestionEmpresasController@lista_clientes')->name('empresa.empresa_carteras_clientes');
@@ -168,6 +170,10 @@ Route::get('/carterista','CarteristasController@panel_central_carteristas')->nam
 //-->carteristas - crear clientes
 Route::get('/carterista/clientes/formulario_clientes_crear', 'CarteristasController@formulario_clientes_crear')->name('carterista.clientes.formulario_clientes_crear');
 Route::post('/carterista/clientes/clientes_crear','CarteristasController@clientes_crear')->name('carterista.clientes.clientes_crear');
+//-->carteristas - actualizar clientes
+Route::get('/carterista/clientes/{cliente_id}/formulario_clientes_actualizar', 'CarteristasController@formulario_clientes_actualizar')->name('carterista.clientes.formulario_clientes_actualizar');
+Route::PUT('/carterista/clientes/{cliente_id}/clientes_actualizar','CarteristasController@clientes_actualizar')->name('carterista.clientes.clientes_actualizar');
+
 
 //-->carteristas - ordenar clientes
 Route::get('/carterista/clientes/formulario_clientes_ordenar', 'CarteristasController@formulario_clientes_ordenar')->name('carterista.clientes.formulario_clientes_ordenar');
