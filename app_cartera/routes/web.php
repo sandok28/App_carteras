@@ -174,6 +174,10 @@ Route::get('/carterista','CarteristasController@panel_central_carteristas')->nam
 //-->carteristas - crear clientes
 Route::get('/carterista/clientes/formulario_clientes_crear', 'CarteristasController@formulario_clientes_crear')->name('carterista.clientes.formulario_clientes_crear');
 Route::post('/carterista/clientes/clientes_crear','CarteristasController@clientes_crear')->name('carterista.clientes.clientes_crear');
+//-->carteristas - actualizar clientes
+Route::get('/carterista/clientes/{cliente_id}/formulario_clientes_actualizar', 'CarteristasController@formulario_clientes_actualizar')->name('carterista.clientes.formulario_clientes_actualizar');
+Route::PUT('/carterista/clientes/{cliente_id}/clientes_actualizar','CarteristasController@clientes_actualizar')->name('carterista.clientes.clientes_actualizar');
+
 
 //-->carteristas - ordenar clientes
 Route::get('/carterista/clientes/formulario_clientes_ordenar', 'CarteristasController@formulario_clientes_ordenar')->name('carterista.clientes.formulario_clientes_ordenar');
