@@ -91,7 +91,7 @@ class GestionEmpresasController extends Controller
         }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
-        //dd($request->input('2'));
+        dd($request->input('2'));
         try{DB::beginTransaction();
         $cartera = Cartera::find($cartera_id);
         //dd($cartera);
