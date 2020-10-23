@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\HistorialVentaCartera;
 use App\Producto;
 use App\Empresa;
 use App\Cartera;
@@ -90,12 +91,20 @@ class GestionEmpresasController extends Controller
         }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
+        //dd($request->input('2'));
         try{DB::beginTransaction();
         $cartera = Cartera::find($cartera_id);
-
+        //dd($cartera);
         $cartera->fill($request->all());
 
         $cartera->save();
+
+
+        //$cartera_dia = new Dia();
+
+
+
+
         DB::commit();
         }
         catch (\Exception $ex){dd($ex);
@@ -913,4 +922,17 @@ public function usuarios4_activar(Usuario $usuario)
 
     return redirect('/empresa/bodeguistas');
     }
+
+    public function ventas($cartera_id)
+    {
+        //dd($cartera_id);
+        //$ventas=HistorialVentaCartera::where('cartera_id',$cartera_id)->get();
+        $ventas = DB::table('historial_venta_carteras')->where('cartera_id',$cartera_id)->orderBy('fecha','desc')->get();
+        //dd($ventas->get()->all());
+        return view('adminempresa.empresa_ventas', compact('ventas'));
+
+    
+    }
+
+    
 }

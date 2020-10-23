@@ -61,13 +61,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/carteras/'.$cartera->id.'/formulario_cartera_actualizar')}}"><i data-feather="edit"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/carteras/'.$cartera->id.'/clientes') }}" title="clientes de la cartera"><i data-feather ="users"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/bonos/'.$cartera->id)}}" title="bonos de la cartera"><i data-feather ="dollar-sign"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/novedades/'.$cartera->id)}}" title="novedades de la cartera"><i data-feather ="eye"></i></a>
-                                                                                                           
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/carteras/'.$cartera->id.'/formulario_cartera_actualizar')}}"title="Editar"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/carteras/'.$cartera->id.'/clientes') }}" title="Clientes"><i data-feather ="users"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/bonos/'.$cartera->id)}}" title="Bonos"><i data-feather ="dollar-sign"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/novedades/'.$cartera->id)}}" title="Novedades"><i data-feather ="message-circle"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/ventas/'.$cartera->id)}}"title="Transacciones"><i data-feather ="shopping-cart"></i></a>                                                                  
                                         
-
                                         
                                     </td>
                                 </tr>

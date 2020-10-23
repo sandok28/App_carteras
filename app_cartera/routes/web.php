@@ -107,6 +107,10 @@ Route::get('/empresa/listainactivos','GestionEmpresasController@lista_inactivos_
 Route::get('/empresa/listainactivos/{cliente_id}/formulario_cliente_listainactivos_actualizar','GestionEmpresasController@formulario_cliente_listainactivos_actualizar')->name('formulario.listainactivos.actualizar');
 Route::PUT('/empresa/listainactivos/{cliente_id}','GestionEmpresasController@cliente_listainactivos_actualizar')->name('cliente_listainactivos.actualizar');
 
+/////->Gestionempresa - Reportes
+
+Route::get('/empresa/ventas/{cartera_id}','GestionEmpresasController@ventas')->name('empresa.ventas');
+
 /////->Gestionempresa - bonos
 
 Route::get('/empresa/bonos/{cartera_id}','GestionEmpresasController@bonos')->name('empresa.bonos');
