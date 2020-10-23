@@ -22,7 +22,7 @@
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/productos/create') }}">Registar producto</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/productos/formulario_productos_crear') }}">Registar producto</a>
                                     <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
                                 
                                 </div>
@@ -89,8 +89,8 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/productos/'.$producto->id.'/edit') }}"><i data-feather="edit"></i></a>
-                                        
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/productos/'.$producto->id.'/formulario_productos_actualizar') }}"><i data-feather="edit"></i></a>
+                                                                                                                
                                         @if ($producto->estado === "A")
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/productos/desactivar/'.$producto->id) }}"><i data-feather="user-x"></i></a>
                                         @elseif ($producto->estado === "I")

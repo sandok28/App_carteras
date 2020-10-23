@@ -16,4 +16,15 @@ class Producto extends Model
         'usuario_id',
         'empresa_id'
 ];
+
+        public function devoluciones()
+        {
+            return $this->hasMany('App\Devolucion', 'producto_id', 'id');
+        }
+
+        public function neveras()
+        {
+            return $this->hasMany('App\Nevera', 'producto_id', 'id');
+        }
+
 }

@@ -17,9 +17,9 @@ class ProductosSeeder extends Seeder
         //
         App\Producto::create([
             'id'=>'1',
-            'nombre'=>'yogurt1',
-            'precio'=>'1000',
-            'descripcion'=>'yogurt de mora',
+            'nombre'=>'queso1',
+            'precio'=>'14000',
+            'descripcion'=>'queso1',
             'estado'=>'A',
             'cantidad' => '5',
             'empresa_id' => '1',
@@ -29,21 +29,21 @@ class ProductosSeeder extends Seeder
 
         App\Producto::create([
             'id'=>'2',
-            'nombre'=>'yogurt2',
-            'precio'=>'1000',
-            'descripcion'=>'yogurt de mora',
+            'nombre'=>'queso2',
+            'precio'=>'2500',
+            'descripcion'=>'queso2',
             'estado'=>'A',
             'cantidad' => '5',
-            'empresa_id' => '2',
+            'empresa_id' => '1',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);
 
         App\Producto::create([
             'id'=>'3',
-            'nombre'=>'yogurt3',
-            'precio'=>'1000',
-            'descripcion'=>'yogurt de mora',
+            'nombre'=>'queso3',
+            'precio'=>'1800',
+            'descripcion'=>'queso3',
             'estado'=>'A',
             'cantidad' => '5',
             'empresa_id' => '1',
@@ -53,9 +53,33 @@ class ProductosSeeder extends Seeder
 
         App\Producto::create([
             'id'=>'4',
-            'nombre'=>'yogurt',
+            'nombre'=>'queso4',
+            'precio'=>'1500',
+            'descripcion'=>'queso4',
+            'estado'=>'A',
+            'cantidad' => '5',
+            'empresa_id' => '1',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Producto::create([
+            'id'=>'5',
+            'nombre'=>'queso5',
+            'precio'=>'15500',
+            'descripcion'=>'queso5',
+            'estado'=>'A',
+            'cantidad' => '5',
+            'empresa_id' => '1',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Producto::create([
+            'id'=>'6',
+            'nombre'=>'yogurt1',
             'precio'=>'1000',
-            'descripcion'=>'yogurt de mora',
+            'descripcion'=>'yogurt1',
             'estado'=>'A',
             'cantidad' => '5',
             'empresa_id' => '2',
@@ -64,13 +88,49 @@ class ProductosSeeder extends Seeder
         ]);
 
         App\Producto::create([
-            'id'=>'5',
-            'nombre'=>'yogurt5',
+            'id'=>'7',
+            'nombre'=>'yogurt2',
             'precio'=>'1000',
-            'descripcion'=>'yogurt de mora',
+            'descripcion'=>'yogurt2',
             'estado'=>'A',
             'cantidad' => '5',
-            'empresa_id' => '1',
+            'empresa_id' => '2',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Producto::create([
+            'id'=>'8',
+            'nombre'=>'yogurt3',
+            'precio'=>'1000',
+            'descripcion'=>'yogurt3',
+            'estado'=>'A',
+            'cantidad' => '5',
+            'empresa_id' => '2',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Producto::create([
+            'id'=>'9',
+            'nombre'=>'yogurt4',
+            'precio'=>'1000',
+            'descripcion'=>'yogurt4',
+            'estado'=>'A',
+            'cantidad' => '5',
+            'empresa_id' => '2',
+            'created_at'=> $current_date_time,
+            'updated_at'=> $current_date_time
+        ]);
+
+        App\Producto::create([
+            'id'=>'10',
+            'nombre'=>'yogurt5',
+            'precio'=>'1000',
+            'descripcion'=>'yogurt5',
+            'estado'=>'A',
+            'cantidad' => '5',
+            'empresa_id' => '2',
             'created_at'=> $current_date_time,
             'updated_at'=> $current_date_time
         ]);

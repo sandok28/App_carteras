@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Producto;
+use Auth;
 use Illuminate\Http\Request;
 
 class ProductosController extends Controller
@@ -12,13 +13,11 @@ class ProductosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function inicio()
     {
         //
         $productos = Producto::all();
-       
         return view('productos.index', compact('productos'));
-        
     }
 
     /**
@@ -26,9 +25,9 @@ class ProductosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    
+    public function formulario_productos_crear()
     {
-        //
         return view('productos.create');
     }
 
@@ -38,14 +37,22 @@ class ProductosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function productos_crear(Request $request)
     {
         //
+        $validatedData = $request->validate([
+        'nombre' => 'required',
+        'precio' => 'required',
+        'cantidad' => 'required',
+        'descripcion' => 'required'
+        
+        ]);
+        $user = Auth::user();
         $producto = new Producto();
         $producto->nombre = $request->input('nombre');
         $producto->precio = $request->input('precio');
         $producto->cantidad = $request->input('cantidad');
-        $producto->empresa_id = $request->input('empresa_id');
+        $producto->empresa_id = $user->usuarios->get(0)->empresa_id;
         $producto->descripcion = $request->input('descripcion');
         $producto->estado ='A';
 
@@ -55,24 +62,15 @@ class ProductosController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Producto $producto)
+    public function formulario_productos_actualizar($producto_id)
     {
+        //dd($producto_id);
+        $producto = Producto::find($producto_id);
         return view('productos.edit', compact('producto'));
     }
 
@@ -83,11 +81,11 @@ class ProductosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Producto $producto)
+    public function productos_actualizar(Request $request, $producto_id)
     {
+        $producto = Producto::find($producto_id);
         $producto->fill($request->all());
         $producto->save();
-
         return redirect('/productos');
     }
 
