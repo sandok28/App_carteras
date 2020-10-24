@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\HistorialVentaCartera;
 use App\Producto;
 use App\Empresa;
 use App\Cartera;
@@ -90,12 +91,52 @@ class GestionEmpresasController extends Controller
         }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
+        //dd($request);
         try{DB::beginTransaction();
         $cartera = Cartera::find($cartera_id);
-
+        //dd($cartera);
         $cartera->fill($request->all());
+        
+        
+        DB::table('cartera_dia')->where(['cartera_id' => $cartera_id])->delete();   
+        
+        if(($request->input('1'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 1]);
+        }
+
+        if(($request->input('2'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 2]);
+        }
+
+        if(($request->input('3'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 3]);
+        }
+
+        if(($request->input('4'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 4]);
+        }
+
+        if(($request->input('5'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 5]);
+        }
+
+        if(($request->input('6'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 6]);
+        }
+
+        if(($request->input('7'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 7]);
+        }
+        
 
         $cartera->save();
+
+
+        //$cartera_dia = new Dia();
+
+
+
+
         DB::commit();
         }
         catch (\Exception $ex){dd($ex);
@@ -913,4 +954,17 @@ public function usuarios4_activar(Usuario $usuario)
 
     return redirect('/empresa/bodeguistas');
     }
+
+    public function ventas($cartera_id)
+    {
+        //dd($cartera_id);
+        //$ventas=HistorialVentaCartera::where('cartera_id',$cartera_id)->get();
+        $ventas = DB::table('historial_venta_carteras')->where('cartera_id',$cartera_id)->orderBy('fecha','desc')->get();
+        //dd($ventas->get()->all());
+        return view('adminempresa.empresa_ventas', compact('ventas'));
+
+    
+    }
+
+    
 }

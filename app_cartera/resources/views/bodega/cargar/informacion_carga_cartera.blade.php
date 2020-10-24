@@ -22,6 +22,8 @@
                     <div class="card mb-4">
                     
                         <div class="card-header">Productos en la nevera de la cartera</div>
+                        
+                        
                         <div class="card-body">
                             @include('Partials.formularios.alerta_validaciones')
                                                            
@@ -55,9 +57,10 @@
                                     </tbody>
                                     
                                 </table>
-                                
+                                <div class="card-header">Cargue inicial de la cartera: ${{$cargue_inicial}}</div>
                                 <a class="btn btn-danger btn-lg btn-block" type="button" href="{{route('bodega.cierre_cartera',$cartera_id)}}">Cierre del dia</a>
                         </div>
+                        
                     </div>
                 </div>
             </div>
