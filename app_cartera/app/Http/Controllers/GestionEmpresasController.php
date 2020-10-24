@@ -91,11 +91,43 @@ class GestionEmpresasController extends Controller
         }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
-        dd($request->input('2'));
+        //dd($request);
         try{DB::beginTransaction();
         $cartera = Cartera::find($cartera_id);
         //dd($cartera);
         $cartera->fill($request->all());
+        
+        
+        DB::table('cartera_dia')->where(['cartera_id' => $cartera_id])->delete();   
+        
+        if(($request->input('1'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 1]);
+        }
+
+        if(($request->input('2'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 2]);
+        }
+
+        if(($request->input('3'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 3]);
+        }
+
+        if(($request->input('4'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 4]);
+        }
+
+        if(($request->input('5'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 5]);
+        }
+
+        if(($request->input('6'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 6]);
+        }
+
+        if(($request->input('7'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 7]);
+        }
+        
 
         $cartera->save();
 
