@@ -119,6 +119,10 @@ Route::get('/empresa/bonos/{cartera_id}','GestionEmpresasController@bonos')->nam
 
 Route::get('/empresa/novedades/{cartera_id}','GestionEmpresasController@novedades')->name('empresa.novedades');
 
+/////->Gestionempresa - novedades
+
+Route::get('/empresa/devoluciones','GestionEmpresasController@devoluciones_empresa')->name('empresa.devoluciones');
+
 //-> Administrador
 Route::get('/administrador/empresas', 'AdministradorController@administrador_empresas')->name('administrador.administrador_empresas');
 Route::get('/administrador/usuarios', 'AdministradorController@administrador_usuarios')->name('administrador.administrador_usuarios');

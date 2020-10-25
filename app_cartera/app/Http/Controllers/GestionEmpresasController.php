@@ -13,6 +13,7 @@ use App\Cliente;
 use App\ListaNegraCliente;
 use App\Bono;
 use App\Novedad;
+use App\Devolucion;
 use App\User;
 use Auth;
 use Carbon\Carbon;
@@ -784,6 +785,25 @@ public function lista_carteristas()
             //dd($carteras);
             
             return view('adminempresa.empresa_novedades')->with('novedades', $novedades);
+                                                    
+        }
+
+        public function devoluciones_empresa() 
+        {
+            $user = Auth::user();
+            $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+            $devoluciones = Devolucion::where('empresa_id',$empresa_id)->get();////// devoluciones de la empresa
+            //dd($carteras);
+            //dd($devoluciones->all());
+            
+
+
+            //$devoluciones = DB::table('devoluciones')->where('empresa_id',$empresa_id)->orderBy('fecha','desc')->get();
+            //dd($ventas->get()->all());
+            //dd($devoluciones);
+            return view('adminempresa.empresa_devoluciones', compact('devoluciones'));
+            
+            //return view('adminempresa.empresa_devoluciones')->with('devoluciones', $devoluciones);
                                                     
         }
 
