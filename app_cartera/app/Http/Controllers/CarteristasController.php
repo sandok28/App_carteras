@@ -213,7 +213,7 @@ class CarteristasController extends Controller
     public function formulario_cliente_venta($cliente_id)
     {      
         $user = Auth::user();
-        $productos = $user->usuarios->get(0)->cartera->neveras; //neveras de la cartera a la cual pertenece el usuario logueado
+        $productos = $user->usuarios->get(0)->cartera()->neveras; //neveras de la cartera a la cual pertenece el usuario logueado
        
         return view('carteristas.clientes.formulario_cliente_venta')->with('productos',$productos)
                                                                     ->with('cliente_id',$cliente_id);
@@ -226,7 +226,7 @@ class CarteristasController extends Controller
             DB::beginTransaction();
         
             $user = Auth::user();// Usuario carterista en sesion         
-            $neveras = $user->usuarios->get(0)->cartera->neveras; //neveras de la cartera a la cual pertenece el carterista logueado
+            $neveras = $user->usuarios->get(0)->cartera()->neveras; //neveras de la cartera a la cual pertenece el carterista logueado
             //dd($neveras);
 
             $resumen_venta = new Collection();
@@ -366,7 +366,7 @@ class CarteristasController extends Controller
     {      
 
         $user = Auth::user();
-        $cartera_id = $user->usuarios->get(0)->cartera->id;
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         $cartera_bono_del_dia = DB::table('bonos')
                                     ->where('cartera_id',$cartera_id)
@@ -390,7 +390,7 @@ class CarteristasController extends Controller
             'valor' => 'required'
             ]);
         $user = Auth::user();
-        $cartera_id = $user->usuarios->get(0)->cartera->id;
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
 
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         $cartera_bono_del_dia = DB::table('bonos')
@@ -418,7 +418,7 @@ class CarteristasController extends Controller
     public function formulario_novedad_crear()
     {      
         $user = Auth::user();
-        $cartera_id = $user->usuarios->get(0)->cartera->id;
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         $cartera_novedad_del_dia = DB::table('novedades')
                                     ->where('cartera_id',$cartera_id)
@@ -441,7 +441,7 @@ class CarteristasController extends Controller
             'novedad' => 'required'
             ]);
         $user = Auth::user();
-        $cartera_id = $user->usuarios->get(0)->cartera->id;
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
 
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         $cartera_novedad_del_dia = DB::table('novedades')
