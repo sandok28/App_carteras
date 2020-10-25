@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\HistorialVentaCartera;
 use App\Producto;
 use App\Empresa;
 use App\Cartera;
@@ -42,6 +43,7 @@ class GestionEmpresasController extends Controller
     public function formulario_carteras_actualizar($cartera_id)
     {
         
+        //dd($dias);
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
         $empresa_id_cartera=Cartera::find($cartera_id)->empresa_id;//////empresa a la cual pertenece la cartera
@@ -51,18 +53,18 @@ class GestionEmpresasController extends Controller
 
         if($empresa_id == $empresa_id_cartera)
             {
-                $usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->pluck('usuario_id')->toArray();
+                //$usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->pluck('usuario_id')->toArray();
 
         $usuarios_empresa_sin_asignados = Usuario::all()
                                             ->where('empresa_id','=',$empresa_id)
                                             ->where('estado','=','A')//Activo
                                             ->where('tipo','=','3')// 3 - Carterista
-                                            ->whereNotIn('id',$usuarios_empresa_asignados)
+                                            //->whereNotIn('id',$usuarios_empresa_asignados)
                                             ->pluck('nombre', 'id');
 
        // dd($usuarios_empresa_sin_asignados);
 
-        $usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->select('usuario_id')->get();
+        //$usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->select('usuario_id')->get();
 
         //dd($usuario_actual_cartera);
 
@@ -72,14 +74,67 @@ class GestionEmpresasController extends Controller
                                       ->where('empresa_id','=',$empresa_id)
                                       ->where('estado','=','A')//Activo
                                       ->where('tipo','=','3')// 3 - Carterista
-                                      
                                       ->pluck('nombre', 'id');
 
         //dd($usuarios_empresa);
         
+        $dia1 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',1)->get()->all();
+        
+        if(empty($dia1)){
+            $dia1_id=0;
+        }else{$dia1_id=1;}
+                
+        $dia2 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',2)->get()->all();
+        
+        if(empty($dia2)){
+            $dia2_id=0;
+        }else{$dia2_id=1;}
+
+        $dia3 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',3)->get()->all();
+        
+        if(empty($dia3)){
+            $dia3_id=0;
+        }else{$dia3_id=1;}
+
+        $dia4 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',4)->get()->all();
+        
+        if(empty($dia4)){
+            $dia4_id=0;
+        }else{$dia4_id=1;}
+
+        $dia5 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',5)->get()->all();
+
+        if(empty($dia5)){
+            $dia5_id=0;
+        }else{$dia5_id=1;}
+
+        $dia6 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',6)->get()->all();
+        
+        if(empty($dia6)){
+            $dia6_id=0;
+        }else{$dia6_id=1;}
+        
+        $dia7 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',7)->get()->all();
+        //dd($dia7);
+        if(empty($dia7)){
+            $dia7_id=0;
+        }else{$dia7_id=1;}
+        //dd($dia1_id,$dia2_id,$dia3_id,$dia4_id,$dia5_id,$dia6_id,$dia7_id);
+        
+           //dd($var_aux);
+
+            
+        
         return view('adminempresa.carteras.formulario_carteras_actualizar' )->with('cartera',$cartera)
                                                                                             ->with('empresa_id',$empresa_id)
-                                                                                            ->with('usuarios_empresa',$usuarios_empresa_sin_asignados);
+                                                                                            ->with('usuarios_empresa',$usuarios_empresa_sin_asignados)
+                                                                                            ->with('dia1_id',$dia1_id)
+                                                                                            ->with('dia2_id',$dia2_id)
+                                                                                            ->with('dia3_id',$dia3_id)
+                                                                                            ->with('dia4_id',$dia4_id)
+                                                                                            ->with('dia5_id',$dia5_id)
+                                                                                            ->with('dia6_id',$dia6_id)
+                                                                                            ->with('dia7_id',$dia7_id);
     }
             
 
@@ -90,12 +145,52 @@ class GestionEmpresasController extends Controller
         }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
+        //dd($request);
         try{DB::beginTransaction();
         $cartera = Cartera::find($cartera_id);
-
+        //dd($cartera);
         $cartera->fill($request->all());
+        
+        
+        DB::table('cartera_dia')->where(['cartera_id' => $cartera_id])->delete();   
+        
+        if(($request->input('1'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 1]);
+        }
+
+        if(($request->input('2'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 2]);
+        }
+
+        if(($request->input('3'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 3]);
+        }
+
+        if(($request->input('4'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 4]);
+        }
+
+        if(($request->input('5'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 5]);
+        }
+
+        if(($request->input('6'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 6]);
+        }
+
+        if(($request->input('7'))=='value'){
+            DB::insert('insert into cartera_dia (cartera_id, dia_id) values (?, ?)', [$cartera_id, 7]);
+        }
+        
 
         $cartera->save();
+
+
+        //$cartera_dia = new Dia();
+
+
+
+
         DB::commit();
         }
         catch (\Exception $ex){dd($ex);
@@ -913,4 +1008,17 @@ public function usuarios4_activar(Usuario $usuario)
 
     return redirect('/empresa/bodeguistas');
     }
+
+    public function ventas($cartera_id)
+    {
+        //dd($cartera_id);
+        //$ventas=HistorialVentaCartera::where('cartera_id',$cartera_id)->get();
+        $ventas = DB::table('historial_venta_carteras')->where('cartera_id',$cartera_id)->orderBy('fecha','desc')->get();
+        //dd($ventas->get()->all());
+        return view('adminempresa.empresa_ventas', compact('ventas'));
+
+    
+    }
+
+    
 }

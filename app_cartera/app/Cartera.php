@@ -17,7 +17,8 @@ class Cartera extends Model
             'credito_del_dia',
             'saldo_del_dia',
             'abono_del_dia',
-            'venta_del_dia'
+            'venta_del_dia',
+            'cargue_del_dia'
     ];
 
 

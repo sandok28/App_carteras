@@ -14,7 +14,7 @@ class CreateCarterasTable extends Migration
     public function up()
     {
         Schema::create('carteras', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string("nombre");
             $table->string("descripcion");
             $table->string("estado");
@@ -26,6 +26,7 @@ class CreateCarterasTable extends Migration
             $table->integer('saldo_del_dia')->default('0');
             $table->integer('abono_del_dia')->default('0');
             $table->integer('venta_del_dia')->default('0');
+            $table->integer('cargue_del_dia')->default('0');
             $table->timestamps();
         });
     }
