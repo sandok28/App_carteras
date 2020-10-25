@@ -512,5 +512,52 @@ class CarteristasController extends Controller
         return  redirect()->route('carterista');    
     }
 
+    public function formulario_devolucion_crear()
+    {      
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+        $productos = $user->usuarios->get(0)->empresa->productos->pluck('nombre','id'); // Produces something like "2019-03-11"
+        
+        dd($productos);
+                  
+         
+        return view('carteristas.clientes.devolucion.formulario_cliente_devolucion')->with('productos',$productos);    
+    }
+
+    public function devolucion_crear(Request $request)
+    {      
+        $validatedData = $request->validate([
+            'novedad' => 'required'
+            ]);
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_novedad_del_dia = DB::table('novedades')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_novedad_del_dia->isEmpty()){     
+            $novedad = new Novedad();
+            $novedad->cartera_id = $cartera_id;
+            $novedad->novedad = $request->novedad;
+            $novedad->usuario_nombre = $user->usuarios->get(0)->nombre;
+            $novedad->mi_fecha = $current_date;
+            $novedad->save();
+        } else{
+            $novedad = Novedad::find($cartera_novedad_del_dia->get(0)->id);
+            $novedad->novedad = $request->novedad;
+            $novedad->usuario_nombre = $user->usuarios->get(0)->nombre;
+            $novedad->save();
+        }
+       
+        return  redirect()->route('carterista');    
+    }
+
+
+
+
+
     
  }
