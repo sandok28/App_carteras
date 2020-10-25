@@ -2,7 +2,11 @@
 
 namespace App;
 
+
 use Illuminate\Database\Eloquent\Model;
+use App\Cartera;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Usuario extends Model
 {
@@ -39,9 +43,31 @@ class Usuario extends Model
      /**
      * obtiene la cartera asociada al usuario.
      */
+    public function carteras()
+    {
+        return $this->hasMany('App\Cartera', 'usuario_id','id');
+    }
+
+     /**
+     * obtiene la cartera asociada al usuario para el dia actual.
+     */
     public function cartera()
     {
-        return $this->hasOne('App\Cartera', 'usuario_id');
+
+        $dia_id = 1;
+        $current_day = Carbon::now()->dayOfWeek; // Produces something like "2019-03-11"
+        
+        if($current_day == 0){
+            $current_day = 7;
+        }
+      
+        foreach($this->carteras as $cartera){
+            $carteras_dias = DB::table('cartera_dia')->where('cartera_id',$cartera->id)->where('dia_id',$current_day)->get()->get(0);            
+            if(!is_null($carteras_dias)){
+                return $cartera;
+            }
+        }
+        return "null";
     }
 
      /**

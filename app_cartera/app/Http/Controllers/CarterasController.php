@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 
+
+
 class CarterasController extends Controller
 
 
