@@ -20,10 +20,11 @@
                         <div class="col-auto mt-4">
                             <h1 class="page-header-title">
                                 <div class="page-header-icon"><i data-feather="chevrons-right"></i></div>
-                                {{$cartera->nombre}}
+                                {{is_null($cartera) ? 'Sin cartera' : $cartera->nombre}}
                             </h1>
                             <div class="page-header-subtitle">
-                                {{$cartera->descripcion}}
+                                {{is_null($cartera) ? 'No cuenta con carteras asignadas para hoy.' : $cartera->descripcion}}
+                               
                             </div>
                         </div>
                     </div>
@@ -33,34 +34,38 @@
         <!-- Main page content-->
         <div class="container mt-n10"><!-- Styled timeline component example -->
             <div class="timeline">
-                @foreach($clientes_por_atender as $cliente)                    
-                    <div class="timeline-item">                        
-                        <div class="timeline-item-content pt-0">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->posicion}} - {{$cliente->nombre}} </a><span class="badge badge-warning">Pendiente</span></h5>
-                                    {{$cliente->direccion}}
-                                    </br>
-                                    Deuda: ${{$cliente->deuda}}
+                @if(!is_null($clientes_por_atender))
+                    @foreach($clientes_por_atender as $cliente)                    
+                        <div class="timeline-item">                        
+                            <div class="timeline-item-content pt-0">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->posicion}} - {{$cliente->nombre}} </a><span class="badge badge-warning">Pendiente</span></h5>
+                                        {{$cliente->direccion}}
+                                        </br>
+                                        Deuda: ${{$cliente->deuda}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>                   
-                @endforeach
-                @foreach($clientes_atendidos as $cliente)
-                    <div class="timeline-item">                        
-                        <div class="timeline-item-content pt-0">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->nombre}} </a> <span class="badge badge-success">Atendido</span></h5>
-                                    {{$cliente->direccion}}
-                                    </br>
-                                    Deuda: ${{$cliente->deuda}}
+                        </div>                   
+                    @endforeach
+                @endif
+                @if(!is_null($clientes_atendidos))
+                    @foreach($clientes_atendidos as $cliente)
+                        <div class="timeline-item">                        
+                            <div class="timeline-item-content pt-0">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->nombre}} </a> <span class="badge badge-success">Atendido</span></h5>
+                                        {{$cliente->direccion}}
+                                        </br>
+                                        Deuda: ${{$cliente->deuda}}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>                    
-                @endforeach
+                        </div>                    
+                    @endforeach
+                @endif
             </div>
         </div>
     </main>

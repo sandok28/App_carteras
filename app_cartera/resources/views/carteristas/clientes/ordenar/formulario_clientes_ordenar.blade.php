@@ -46,7 +46,7 @@
                                         <h5 class="text-primary">{{$cliente->nombre}}<span class="badge badge-cyan">En edicion</span></h5>
                                         <div class="row">
                                             <div class="col-md-2">
-                                                Posicion:    {!! Form::number('posicion', $cliente->posicion, ['style' => 'width : 20%;border: none; border-color: transparent;', 'id' => 'id_cliente_posicion_'.$cliente->posicion, 'name' => 'cliente_posicion_'.$cliente->id]) !!}   
+                                                Posicion:    {!! Form::number('posicion', $cliente->posicion, ['style' => 'width : 20%;border: none; border-color: transparent;', 'id' => 'id_cliente_posicion_'.$cliente->posicion, 'name' => 'cliente_posicion_'.$cliente->id, 'readonly']) !!}   
                                             </div>
                                             <div class="col-md-2">
                                                 {{$cliente->direccion}}
@@ -84,6 +84,10 @@
   <script>
     function subirPosicion(posicion,cliente_id){
       
+        if(posicion=="1"){
+            return false;
+        }
+
         console.log("Subir posicion: "+posicion);
         var div_selecionado = 'div_pos_'+posicion;
         var div_superior = 'div_pos_'+(posicion-1);
@@ -136,7 +140,7 @@
 
     function bajarPosicion(posicion){
 
-      
+        
         console.log("Bajar posicion: "+posicion);
         var div_selecionado = 'div_pos_'+posicion;
         var div_inferior = 'div_pos_'+(posicion+1);
