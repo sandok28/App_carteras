@@ -86,7 +86,7 @@ class CarteristasController extends Controller
             $cliente->cedula = is_null($request->input('cedula')) ? '' : $request->input('cedula');
             $cliente->estado = 'A';
             $cliente->fecha_ultima_visita = Carbon::now()->subDays(1)->toDateString(); // Produces something like "2019-03-11"
-            $cliente->posicion = ($clientes_por_atender->isEmpty() ? '0': $clientes_por_atender->get(0)->posicion);
+            $cliente->posicion = ($clientes_por_atender->isEmpty() ? '1': $clientes_por_atender->get(0)->posicion);
             $cliente->cartera_id = $usuario->cartera->id;
             $cliente->deuda = 0;
             $cliente->intentos_sin_ventas = 0;
