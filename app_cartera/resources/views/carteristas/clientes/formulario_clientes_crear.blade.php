@@ -22,8 +22,15 @@
                             {!! Form::open(['route' => 'carterista.clientes.clientes_crear', 'method' => 'POST']) !!}
                          
                                 @include('carteristas.clientes.formulario')
-                                {!! Form::submit('Guardar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
+
+                                <div class="form-group"> 
+                                    {!! Form::submit('Guardar', ['class' => 'btn btn-success  col-md-10'] ) !!}
+                                </div>
+                                <div class="form-group"> 
+                                    <a class="btn btn-primary  col-md-10" type="button" href="{{ route('carterista') }}">Volver</a>
+                                </div>
+                                
+                                
                                 
                             {!! Form::close() !!}
                         </div>

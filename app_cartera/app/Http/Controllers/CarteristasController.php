@@ -512,52 +512,53 @@ class CarteristasController extends Controller
         return  redirect()->route('carterista');    
     }
 
-    public function formulario_devolucion_crear()
+    public function formulario_devolucion_crear($cliente_id)
     {      
         $user = Auth::user();
-        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+        $cliente = Cliente::find($cliente_id);
         $productos = $user->usuarios->get(0)->empresa->productos->pluck('nombre','id'); // Produces something like "2019-03-11"
-        
-        dd($productos);
-                  
-         
-        return view('carteristas.clientes.devolucion.formulario_cliente_devolucion')->with('productos',$productos);    
+                 
+        return view('carteristas.clientes.devolucion.formulario_cliente_devolucion')->with('cliente',$cliente)
+                                                                                    ->with('productos',$productos);    
     }
 
-    public function devolucion_crear(Request $request)
+    public function devolucion_crear(Request $request, $cliente_id)
     {      
-        $validatedData = $request->validate([
-            'novedad' => 'required'
+        $validatedData = $request->validate([            
+            'producto_devuelto_id' => 'required',
+            'producto_devuelto_cantidad' => 'required',            
+            'producto_entregado_id' => 'required',
+            'producto_entregado_cantidad' => 'required'
             ]);
-        $user = Auth::user();
-        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+        try{
+            DB::beginTransaction();
+            $user = Auth::user();
+            $cartera_id = $user->usuarios->get(0)->cartera()->id;
+            $empres_id = $user->usuarios->get(0)->empresa_id;
+            $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+                                        
+            $devolucion= new Devolucion();
+            $devolucion->cartera_id = $cartera_id;
+            $devolucion->empresa_id = $empres_id;
+            $devolucion->cliente_id = $cliente_id;
+            $devolucion->fecha = $current_date;
+            $devolucion->producto_id = $request->producto_devuelto_id;
+            $devolucion->producto_cantidad =  $request->producto_devuelto_cantidad;
 
-        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
-        $cartera_novedad_del_dia = DB::table('novedades')
-                                    ->where('cartera_id',$cartera_id)
-                                    ->where('mi_fecha',$current_date)->get();
-                  
-                                    
-        if($cartera_novedad_del_dia->isEmpty()){     
-            $novedad = new Novedad();
-            $novedad->cartera_id = $cartera_id;
-            $novedad->novedad = $request->novedad;
-            $novedad->usuario_nombre = $user->usuarios->get(0)->nombre;
-            $novedad->mi_fecha = $current_date;
-            $novedad->save();
-        } else{
-            $novedad = Novedad::find($cartera_novedad_del_dia->get(0)->id);
-            $novedad->novedad = $request->novedad;
-            $novedad->usuario_nombre = $user->usuarios->get(0)->nombre;
-            $novedad->save();
+            $devolucion->save();
+
+            DB::table('neveras')->where('producto_id', $request->producto_entregado_id)
+                                ->where('cartera_id', $cartera_id)
+                                ->decrement('cantidad',$request->producto_entregado_cantidad);
+                                
+            DB::commit(); //////->SAVE
         }
-       
-        return  redirect()->route('carterista');    
+        catch (\Exception $ex){
+            DB::rollback();
+            dd($ex);           
+
+        }
+
+        return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);           
     }
-
-
-
-
-
-    
  }

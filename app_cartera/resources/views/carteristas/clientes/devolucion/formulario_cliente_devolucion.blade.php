@@ -18,22 +18,34 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Registrar novedad</div>
+                        <div class="card-header">Registrar devolucion</div>
                         <div class="card-body">
                             @include('Partials.formularios.alerta_validaciones')
-                            {!! Form::model($novedad, ['route' => ['carterista.devolucion.devolucion_crear'], 'method' => 'POST']) !!}
+                            {!! Form::model($cliente, ['route' => ['carterista.devolucion.devolucion_crear',$cliente], 'method' => 'POST']) !!}
                           
                                 <div class="form-group">
-                                    {!! Form::label('novedad', 'Descripcion', ['for' => 'exampleFormControlInput1']) !!}
-                                    {!! Form::textarea('novedad', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1', 'rows' => '6']) !!}
+                                    {!! Form::label('producto', 'Producto devuelto', ['for' => 'exampleFormControlInput1']) !!}
+                                    {{ Form::select('producto_devuelto_id', $productos, null, ['class'=>'form-control']) }}
                                 </div>
-                         
+                                <div class="form-group">
+                                    {!! Form::label('cantidad', 'Cantidad', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::number('producto_devuelto_cantidad', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                </div>
 
+                                <div class="form-group">
+                                    {!! Form::label('producto', 'Producto a entregar', ['for' => 'exampleFormControlInput1']) !!}
+                                    {{ Form::select('producto_entregado_id', $productos, null, ['class'=>'form-control']) }}
+                                </div>
+                                <div class="form-group">
+                                    {!! Form::label('cantidad', 'Cantidad', ['for' => 'exampleFormControlInput1']) !!}
+                                    {!! Form::number('producto_entregado_cantidad', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                </div>
+                                
                                 <div class="form-group"> 
-                                {!! Form::submit('Registrar', ['class' => 'btn btn-success col-md-10'] ) !!}
+                                    {!! Form::submit('Guardar', ['class' => 'btn btn-success  col-md-10'] ) !!}
                                 </div>
                                 <div class="form-group"> 
-                                    <a class="btn btn-primary col-md-10" type="button" href="{{ route('carterista') }}">Cancelar</a>
+                                    <a class="btn btn-primary col-md-10" type="button" href="{{ route('carterista.gestion_cliente_cartera',$cliente->id) }}">Cancelar</a>
                                 </div>
                             {!! Form::close() !!}
                         </div>
