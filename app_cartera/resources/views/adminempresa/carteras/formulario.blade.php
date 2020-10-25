@@ -15,37 +15,37 @@
 
 
 <div class="form-check ">
-    {!!Form::checkbox('1','value')!!}
+    {!!Form::checkbox('1','value',$dia1_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Lunes</label>
 </div>
 
 <div class="form-check">
-    {!!Form::checkbox('2','value')!!}
+    {!!Form::checkbox('2','value',$dia2_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Martes</label>
 </div>
 
 <div class="form-check">
-    {!!Form::checkbox('3','value')!!}
+    {!!Form::checkbox('3','value',$dia3_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Miercoles</label>
 </div>
 
 <div class="form-check">
-    {!!Form::checkbox('4','value')!!}
+    {!!Form::checkbox('4','value',$dia4_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Jueves</label>
 </div>
 
 <div class="form-check">
-    {!!Form::checkbox('5','value')!!}
+    {!!Form::checkbox('5','value',$dia5_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Viernes</label>
 </div>
 
 <div class="form-check">
-    {!!Form::checkbox('6','value')!!}
+    {!!Form::checkbox('6','value',$dia6_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Sabado</label>
 </div>
 
 <div class="form-check">
-    {!!Form::checkbox('7','value')!!}
+    {!!Form::checkbox('7','value',$dia7_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Domingo</label>
 </div>
 
