@@ -512,5 +512,53 @@ class CarteristasController extends Controller
         return  redirect()->route('carterista');    
     }
 
-    
+    public function formulario_devolucion_crear($cliente_id)
+    {      
+        $user = Auth::user();
+        $cliente = Cliente::find($cliente_id);
+        $productos = $user->usuarios->get(0)->empresa->productos->pluck('nombre','id'); // Produces something like "2019-03-11"
+                 
+        return view('carteristas.clientes.devolucion.formulario_cliente_devolucion')->with('cliente',$cliente)
+                                                                                    ->with('productos',$productos);    
+    }
+
+    public function devolucion_crear(Request $request, $cliente_id)
+    {      
+        $validatedData = $request->validate([            
+            'producto_devuelto_id' => 'required',
+            'producto_devuelto_cantidad' => 'required',            
+            'producto_entregado_id' => 'required',
+            'producto_entregado_cantidad' => 'required'
+            ]);
+        try{
+            DB::beginTransaction();
+            $user = Auth::user();
+            $cartera_id = $user->usuarios->get(0)->cartera()->id;
+            $empres_id = $user->usuarios->get(0)->empresa_id;
+            $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+                                        
+            $devolucion= new Devolucion();
+            $devolucion->cartera_id = $cartera_id;
+            $devolucion->empresa_id = $empres_id;
+            $devolucion->cliente_id = $cliente_id;
+            $devolucion->fecha = $current_date;
+            $devolucion->producto_id = $request->producto_devuelto_id;
+            $devolucion->producto_cantidad =  $request->producto_devuelto_cantidad;
+
+            $devolucion->save();
+
+            DB::table('neveras')->where('producto_id', $request->producto_entregado_id)
+                                ->where('cartera_id', $cartera_id)
+                                ->decrement('cantidad',$request->producto_entregado_cantidad);
+                                
+            DB::commit(); //////->SAVE
+        }
+        catch (\Exception $ex){
+            DB::rollback();
+            dd($ex);           
+
+        }
+
+        return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);           
+    }
  }

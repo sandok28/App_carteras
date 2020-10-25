@@ -210,6 +210,10 @@ Route::post('/carterista/bono/bono_crear','CarteristasController@bono_crear')->n
 Route::get('/carterista/novedad/formulario_novedad_crear','CarteristasController@formulario_novedad_crear')->name('carterista.novedad.formulario_novedad_crear');
 Route::post('/carterista/novedad/novedad_crear','CarteristasController@novedad_crear')->name('carterista.novedad.novedad_crear');
 
+//Carterista - clientes - devolucion
+Route::get('/carterista/devolucion/{cliente_id}/formulario_devolucion_crear','CarteristasController@formulario_devolucion_crear')->name('carterista.devolucion.formulario_devolucion_crear');
+Route::post('/carterista/devolucion/{cliente_id}/devolucion_crear','CarteristasController@devolucion_crear')->name('carterista.devolucion.devolucion_crear');
+
 
 ////
 Route::get('/usuariosadmin/formulario_usuarios_crear','Usuarioscontroller@formulario_usuariosadmin_crear');
