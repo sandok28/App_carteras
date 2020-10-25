@@ -45,6 +45,9 @@
                                 <a class="btn btn-info col-md-10" type="button" href="{{ route('carterista.clientes.formulario_clientes_actualizar',$cliente->id) }}">Actualizar informacion</a>                          
                             </div>   
                             <div class="form-group">
+                                <a class="btn btn-warning col-md-10" type="button" href="{{ route('carterista.devolucion.formulario_devolucion_crear',$cliente->id) }}">Devolucion</a>                          
+                            </div>   
+                            <div class="form-group">
                                 <a class="btn btn-danger col-md-10" type="button" href="{{ route('carterista.cliente.formulario_reportar_lista_negra',$cliente->id) }}">Reportar</a>                          
                             </div> 
                             <div class="form-group">
