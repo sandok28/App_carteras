@@ -35,13 +35,21 @@ class CarteristasController extends Controller
     {
         $user = Auth::user();
         $usuario = $user->usuarios->get(0);
-        $cartera = $usuario->cartera;
-        
+        $cartera = $usuario->cartera();
+        //dd($cartera);
+
+        if($cartera == "null"){
+            return view('carteristas.panel_central_carteristas')->with('cartera',null)
+                                                                ->with('clientes_atendidos',null)
+                                                                ->with('clientes_por_atender',null);
+        }
+
+
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         
-        $clientes_por_atender = DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
+        $clientes_por_atender = DB::table('clientes')->where('cartera_id',$cartera->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
         
-        $clientes_atendidos = DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('fecha_ultima_visita','=',$current_date)->orderBy('posicion','asc')->get();
+        $clientes_atendidos = DB::table('clientes')->where('cartera_id',$cartera->id)->where('fecha_ultima_visita','=',$current_date)->orderBy('posicion','asc')->get();
         
         return view('carteristas.panel_central_carteristas')->with('cartera',$cartera)
                                                             ->with('clientes_atendidos',$clientes_atendidos)
@@ -75,8 +83,8 @@ class CarteristasController extends Controller
             $usuario = $user->usuarios->get(0);
             $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         
-            $clientes_por_atender = DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
-            DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('fecha_ultima_visita','!=',$current_date)->increment('posicion',1);
+            $clientes_por_atender = DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
+            DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('fecha_ultima_visita','!=',$current_date)->increment('posicion',1);
             
             //dd($clientes_por_atender);
             $cliente = new Cliente();
@@ -87,7 +95,7 @@ class CarteristasController extends Controller
             $cliente->estado = 'A';
             $cliente->fecha_ultima_visita = Carbon::now()->subDays(1)->toDateString(); // Produces something like "2019-03-11"
             $cliente->posicion = ($clientes_por_atender->isEmpty() ? '1': $clientes_por_atender->get(0)->posicion);
-            $cliente->cartera_id = $usuario->cartera->id;
+            $cliente->cartera_id = $usuario->cartera()->id;
             $cliente->deuda = 0;
             $cliente->intentos_sin_ventas = 0;
             $cliente->save();
@@ -141,7 +149,7 @@ class CarteristasController extends Controller
                 $cartera_lista_negra = Cartera::where('empresa_id',$usuario->empresa_id)->where('tipo','3')->get();//tipo=3 es cartera tipo lista inactivo
         
 
-                DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
+                DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
 
                 DB::table('clientes')
                     ->where('id',  $cliente_id)->update([   'estado' => 'LIP',//LNP -Lista Inactivo pendiente de confirmar
@@ -344,7 +352,7 @@ class CarteristasController extends Controller
 
         $cartera_lista_negra = Cartera::where('empresa_id',$usuario->empresa_id)->where('tipo','2')->get();//tipo=2 es carteria tipo lista negra
 
-        DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
+        DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
 
         DB::table('clientes')
             ->where('id',  $cliente_id)->update([   'estado' => 'LNP',//LNP -Lista negra pendiente de confirmar
@@ -464,11 +472,11 @@ class CarteristasController extends Controller
     {      
         $user = Auth::user();
         $usuario = $user->usuarios->get(0);
-        $cartera = $usuario->cartera;
+        $cartera = $usuario->cartera();
         
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         
-        $clientes = DB::table('clientes')->where('cartera_id',$usuario->cartera->id)->orderBy('posicion','asc')->get();
+        $clientes = DB::table('clientes')->where('cartera_id',$cartera->id)->orderBy('posicion','asc')->get();
      
 
         return view('carteristas.clientes.ordenar.formulario_clientes_ordenar')->with('clientes',$clientes)->with('cartera',$cartera);     
@@ -476,12 +484,12 @@ class CarteristasController extends Controller
 
     public function clientes_ordenar(Request $request)
     {      
-        //dd($request);
+      
 
         try{
             DB::beginTransaction();
             $user = Auth::user();// Usuario carterista en sesion         
-            $cartera_clientes = $user->usuarios->get(0)->cartera->clientes; //neveras de la cartera a la cual pertenece el carterista logueado
+            $cartera_clientes = $user->usuarios->get(0)->cartera()->clientes; //neveras de la cartera a la cual pertenece el carterista logueado
             //dd($neveras);
 
             foreach($cartera_clientes as $cliente){
