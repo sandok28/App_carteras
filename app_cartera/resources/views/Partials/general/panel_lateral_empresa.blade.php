@@ -23,6 +23,9 @@
                 <a class="nav-link" href="{{route('empresa.listanegra')}}">
                     Lista negra clientes
                 </a>
+                <a class="nav-link" href="{{route('empresa.devoluciones')}}">
+                    Devoluciones
+                </a>
                                 
             </nav>
         </div>        

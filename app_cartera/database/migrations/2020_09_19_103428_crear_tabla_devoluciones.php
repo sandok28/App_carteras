@@ -17,6 +17,9 @@ class CrearTablaDevoluciones extends Migration
         Schema::create('devoluciones', function (Blueprint $table) {
             
             $table->id("devolucion_id");
+            $table->integer ("empresa_id");
+            $table->integer ("cartera_id");
+            $table->integer ("cliente_id");
             $table->date("fecha");
             $table->integer ("producto_id");
             $table->integer("producto_cantidad");

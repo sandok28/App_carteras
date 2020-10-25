@@ -30,6 +30,11 @@ class Cliente extends Model
         return $this->belongsTo('App\Cartera', 'cartera_id', 'id');
     }
 
+    public function devoluciones()
+        {
+            return $this->hasMany('App\Devolucion', 'producto_id', 'id');
+        }
+
  
 
 }
