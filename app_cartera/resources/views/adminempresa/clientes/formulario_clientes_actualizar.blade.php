@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Actualizar cliente
+    Editar cliente
 @endsection
 
 
@@ -20,7 +20,7 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Actualizar cliente</div>
+                        <div class="card-header">Editar cliente</div>
                         <div class="card-body">
                             @include('Partials.formularios.alerta_validaciones')
                             

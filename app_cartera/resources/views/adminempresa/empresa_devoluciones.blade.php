@@ -7,8 +7,7 @@
 @endsection
 
 @section('content_css')
-        <link href="css/styles.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet" crossorigin="anonymous" />
+        
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
 @endsection
 
@@ -25,14 +24,6 @@
                                     <div class="col-md-8"></div>
                                         
                     
-                                    <button class="btn btn-white btn-sm line-height-normal p-3" id="reportrange">
-                                        <i class="mr-2 text-primary" data-feather="calendar"></i>
-                                        <span></span>
-                                        <i class="ml-1" data-feather="chevron-down"></i>
-                                    </button>
-
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
-
                                     
                                 
                                 </div>
@@ -91,9 +82,7 @@
 @section('content_js')
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+   
     <script src="{{ asset('js/demo/datatables-demo.js') }}" defer></script>
-    <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/demo/date-range-picker-demo.js') }}" defer></script>
 
 @endsection

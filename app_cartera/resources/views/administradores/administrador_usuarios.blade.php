@@ -4,7 +4,7 @@
 
 
 @section('titulo_pigina')
-    Lista empresas
+    Lista de administradores
 @endsection
 
 @section('content_css')
@@ -23,7 +23,7 @@
                                 <div class="row center-md card-body">
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-success col-md-2" type="button" href="{{ route('administrador.administrador_usuarios.formulario_usuarios_crear') }}">Registar usuario administrador</a>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -84,12 +84,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_usuarios.formulario_usuarios_actualizar',$usuario_administrador->id) }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_usuarios.formulario_usuarios_actualizar',$usuario_administrador->id) }}"title="Editar"><i data-feather="edit"></i></a>
                                                                                                                         
                                         @if ($usuario_administrador->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_usuarios.usuarios_desactivar',$usuario_administrador->id) }}"><i data-feather="user-x"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_usuarios.usuarios_desactivar',$usuario_administrador->id) }}"title="Desactivar"><i data-feather="user-x"></i></a>
                                         @elseif ($usuario_administrador->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_usuarios.usuarios_activar', $usuario_administrador->id) }}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_usuarios.usuarios_activar', $usuario_administrador->id) }}"title="Activar"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         

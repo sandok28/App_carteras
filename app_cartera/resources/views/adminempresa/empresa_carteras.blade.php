@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista carteras
+    Lista de carteras
 @endsection
 
 @section('content_css')
@@ -21,8 +21,7 @@
                                 <div class="card-header">Panel de administracion de carteras</div>
                                 <div class="row center-md card-body">
                                 
-                                    <div class="col-md-8"></div>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    
                                 
                                 </div>
                                 

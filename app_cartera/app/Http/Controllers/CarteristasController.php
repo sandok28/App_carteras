@@ -192,7 +192,7 @@ class CarteristasController extends Controller
             $historial_cliente->venta = $venta;
             $historial_cliente->deuda = $cliente->deuda;
             $historial_cliente->abono = $abono;
-            $historial_cliente->saldo = $cliente->deuda + $venta - $abono;
+            $historial_cliente->saldo = ($cliente->deuda + $venta) - $abono;
             $historial_cliente->save();
         }else{
 

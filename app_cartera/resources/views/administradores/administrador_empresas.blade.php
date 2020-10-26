@@ -80,14 +80,14 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_empresas.formulario_empresas_actualizar',['empresa_id' => $empresa->id]) }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_empresas.formulario_empresas_actualizar',['empresa_id' => $empresa->id]) }}"title="Editar"><i data-feather="edit"></i></a>
                                         
                                         @if ($empresa->estado === "A")
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_empresas.empresas_desactivar',['empresa' => $empresa->id]) }}"><i data-feather="user-x"></i></a>
+                                            <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_empresas.empresas_desactivar',['empresa' => $empresa->id]) }}"title="Desactivar"><i data-feather="user-x"></i></a>
                                         @elseif ($empresa->estado === "I")
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_empresas.empresas_activar',['empresa' => $empresa->id]) }}"><i data-feather="user-check"></i></a>
+                                            <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_empresas.empresas_activar',['empresa' => $empresa->id]) }}"title="Activar"><i data-feather="user-check"></i></a>
                                         @endif
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_carteras',$empresa->id) }}"><i data-feather="book-open"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ route('administrador.administrador_carteras',$empresa->id) }}"title="Carteras"><i data-feather="book-open"></i></a>
                                     </td>
                                 </tr>
                                 

@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista productos
+    Lista de bonos de la empresa
 @endsection
 
 @section('content_css')
@@ -23,7 +23,7 @@
                                 
                                     <div class="col-md-8"></div>
                                     
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    <a class="btn btn-primary col-md-2" type="button" href="{{route('empresa.empresa_carteras')}}">Volver</a>
                                 
                                 </div>
                                 
