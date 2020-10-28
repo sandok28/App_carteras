@@ -31,7 +31,7 @@
             </div>
         </header>
         <!-- Main page content-->
-        <div class="container mt-n10"><!-- Styled timeline component example -->
+        <div class="container mt-n10" id="algo"><!-- Styled timeline component example -->
             <div  class="timeline">
                 @include('Partials.formularios.alerta_validaciones')
                 
@@ -46,15 +46,20 @@
                                         <h5 class="text-primary">{{$cliente->nombre}}<span class="badge badge-cyan">En edicion</span></h5>
                                         <div class="row">
                                             <div class="col-md-2">
-                                                Posicion:    {!! Form::number('posicion', $cliente->posicion, ['style' => 'width : 20%;border: none; border-color: transparent;', 'id' => 'id_cliente_posicion_'.$cliente->posicion, 'name' => 'cliente_posicion_'.$cliente->id, 'readonly']) !!}   
+                                                <div style="width: 50%; display: inline-block;">
+                                                    Posicion:    {!! Form::number('posicion', $cliente->posicion, ['style' => 'width : 20%;border: none; border-color: transparent;', 'id' => 'id_cliente_posicion_'.$cliente->posicion, 'name' => 'cliente_posicion_'.$cliente->id]) !!} 
+                                                </div>
+                                                <div style="width: 40%; display: inline-block;">
+                                                    <a class="btn btn-warning col-md-10" style="color: black !important;" type="button" id="div_botn_setPosicion_{{$cliente->posicion}}" onclick="setPosicion({{$cliente->posicion}});">Mover<i data-feather="arrow-right-circle"></i></a>  
+                                                </div>
                                             </div>
                                             <div class="col-md-2">
                                                 {{$cliente->direccion}}
                                             </div>
                                         </div>
                                         </br>                                        
-                                        <a class="btn btn-teal col-md-10" type="button" id="div_botn_pos_subir_{{$cliente->posicion}}" onclick="subirPosicion({{$cliente->posicion}},{{$cliente->id}});">Subir</a>
-                                        <a class="btn btn-danger col-md-10" type="button" id="div_botn_pos_bajar_{{$cliente->posicion}}" onclick="bajarPosicion({{$cliente->posicion}},{{$cliente->id}});">Bajar</a>
+                                        <a class="btn btn-teal col-md-10" style="width: 45%; display: inline-block; color: white !important;"type="button" id="div_botn_pos_subir_{{$cliente->posicion}}" onclick="subirPosicion({{$cliente->posicion}});"><i data-feather="arrow-up"></i> Subir</a>
+                                        <a class="btn btn-danger col-md-10" style="width: 45%; display: inline-block;color: white !important;" type="button" id="div_botn_pos_bajar_{{$cliente->posicion}}" onclick="bajarPosicion({{$cliente->posicion}});"><i data-feather="arrow-down"></i>Bajar</a>
                                                                                
                                     </div>
                                 </div>
@@ -81,117 +86,162 @@
 @section('content_js')
 
 
-  <script>
-    function subirPosicion(posicion,cliente_id){
+    <script>
+        function subirPosicion(posicion){
       
-        if(posicion=="1"){
-            return false;
+            if(posicion=="1"){
+                return false;
+            }
+
+            
+            var div_selecionado = 'div_pos_'+posicion;
+            var div_superior = 'div_pos_'+(posicion-1);
+            
+            var div_botn_pos_subir_selecionado = 'div_botn_pos_subir_'+posicion;
+            var div_botn_pos_subir_superior = 'div_botn_pos_subir_'+(posicion-1);
+
+            var div_botn_pos_bajar_selecionado = 'div_botn_pos_bajar_'+posicion;
+            var div_botn_pos_bajar_superior = 'div_botn_pos_bajar_'+(posicion-1);
+
+            var input_cliente_posicion_selecionado = 'id_cliente_posicion_'+posicion
+            var input_cliente_posicion_superior = 'id_cliente_posicion_'+(posicion-1)
+
+
+            var div_botn_setPosicion_selecionado = 'div_botn_setPosicion_'+posicion;
+            var div_botn_setPosicion_superior = 'div_botn_setPosicion_'+(posicion-1);
+
+            $('#'+div_selecionado).insertBefore('#'+div_superior);	
+
+            document.getElementById(div_selecionado).setAttribute("id", "tempo");
+            
+            document.getElementById(div_superior).setAttribute("id", div_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_superior);
+
+            document.getElementById(div_botn_pos_subir_selecionado).setAttribute("onclick", "subirPosicion("+(posicion-1)+");");
+            document.getElementById(div_botn_pos_subir_superior).setAttribute("onclick", "subirPosicion("+posicion+");");
+        
+
+            document.getElementById(div_botn_pos_subir_selecionado).setAttribute("id", "tempo");        
+            document.getElementById(div_botn_pos_subir_superior).setAttribute("id", div_botn_pos_subir_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_botn_pos_subir_superior);
+
+
+            document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("onclick", "bajarPosicion("+(posicion-1)+");");
+            document.getElementById(div_botn_pos_bajar_superior).setAttribute("onclick", "bajarPosicion("+posicion+");");
+        
+
+            document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("id", "tempo");        
+            document.getElementById(div_botn_pos_bajar_superior).setAttribute("id", div_botn_pos_bajar_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_botn_pos_bajar_superior);
+
+
+            document.getElementById(div_botn_setPosicion_selecionado).setAttribute("onclick", "setPosicion("+(posicion-1)+");");
+            document.getElementById(div_botn_setPosicion_superior).setAttribute("onclick", "setPosicion("+posicion+");");
+        
+
+            document.getElementById(div_botn_setPosicion_selecionado).setAttribute("id", "tempo");        
+            document.getElementById(div_botn_setPosicion_superior).setAttribute("id", div_botn_setPosicion_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_botn_setPosicion_superior);
+
+        
+            document.getElementById(input_cliente_posicion_selecionado).value = (posicion-1)
+            document.getElementById(input_cliente_posicion_superior).value = posicion
+
+
+            document.getElementById(input_cliente_posicion_selecionado).setAttribute("id", "tempo");
+            
+            document.getElementById(input_cliente_posicion_superior).setAttribute("id", input_cliente_posicion_selecionado);
+            document.getElementById("tempo").setAttribute("id", input_cliente_posicion_superior);
+
         }
 
-        console.log("Subir posicion: "+posicion);
-        var div_selecionado = 'div_pos_'+posicion;
-        var div_superior = 'div_pos_'+(posicion-1);
-        
-        var div_botn_pos_subir_selecionado = 'div_botn_pos_subir_'+posicion;
-        var div_botn_pos_subir_superior = 'div_botn_pos_subir_'+(posicion-1);
+        function bajarPosicion(posicion){
+            
+            
+            var div_selecionado = 'div_pos_'+posicion;
+            var div_inferior = 'div_pos_'+(posicion+1);
+            
+            var div_botn_pos_subir_selecionado = 'div_botn_pos_subir_'+posicion;
+            var div_botn_pos_subir_superior = 'div_botn_pos_subir_'+(posicion+1);
 
-        var div_botn_pos_bajar_selecionado = 'div_botn_pos_bajar_'+posicion;
-        var div_botn_pos_bajar_superior = 'div_botn_pos_bajar_'+(posicion-1);
+            var div_botn_pos_bajar_selecionado = 'div_botn_pos_bajar_'+posicion;
+            var div_botn_pos_bajar_superior = 'div_botn_pos_bajar_'+(posicion+1);
 
-        var input_cliente_posicion_selecionado = 'id_cliente_posicion_'+posicion
-        var input_cliente_posicion_superior = 'id_cliente_posicion_'+(posicion-1)
+            var input_cliente_posicion_selecionado = 'id_cliente_posicion_'+posicion
+            var input_cliente_posicion_superior = 'id_cliente_posicion_'+(posicion+1)
 
-        $('#'+div_selecionado).insertBefore('#'+div_superior);	
+            var div_botn_setPosicion_selecionado = 'div_botn_setPosicion_'+posicion;
+            var div_botn_setPosicion_superior = 'div_botn_setPosicion_'+(posicion+1);
 
-        document.getElementById(div_selecionado).setAttribute("id", "tempo");
-        
-        document.getElementById(div_superior).setAttribute("id", div_selecionado);
-        document.getElementById("tempo").setAttribute("id", div_superior);
+            $('#'+div_inferior).insertBefore('#'+div_selecionado);	
 
-        document.getElementById(div_botn_pos_subir_selecionado).setAttribute("onclick", "subirPosicion("+(posicion-1)+");");
-        document.getElementById(div_botn_pos_subir_superior).setAttribute("onclick", "subirPosicion("+posicion+");");
-       
+            document.getElementById(div_selecionado).setAttribute("id", "tempo");
+            
+            document.getElementById(div_inferior).setAttribute("id", div_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_inferior);
 
-        document.getElementById(div_botn_pos_subir_selecionado).setAttribute("id", "tempo");        
-        document.getElementById(div_botn_pos_subir_superior).setAttribute("id", div_botn_pos_subir_selecionado);
-        document.getElementById("tempo").setAttribute("id", div_botn_pos_subir_superior);
-
-
-        document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("onclick", "bajarPosicion("+(posicion-1)+");");
-        document.getElementById(div_botn_pos_bajar_superior).setAttribute("onclick", "bajarPosicion("+posicion+");");
-       
-
-        document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("id", "tempo");        
-        document.getElementById(div_botn_pos_bajar_superior).setAttribute("id", div_botn_pos_bajar_selecionado);
-        document.getElementById("tempo").setAttribute("id", div_botn_pos_bajar_superior);
-
-
-       
-        document.getElementById(input_cliente_posicion_selecionado).value = (posicion-1)
-        document.getElementById(input_cliente_posicion_superior).value = posicion
-
-
-        document.getElementById(input_cliente_posicion_selecionado).setAttribute("id", "tempo");
-        
-        document.getElementById(input_cliente_posicion_superior).setAttribute("id", input_cliente_posicion_selecionado);
-        document.getElementById("tempo").setAttribute("id", input_cliente_posicion_superior);
-
-    }
-
-    function bajarPosicion(posicion){
 
         
-        console.log("Bajar posicion: "+posicion);
-        var div_selecionado = 'div_pos_'+posicion;
-        var div_inferior = 'div_pos_'+(posicion+1);
-        
-        var div_botn_pos_subir_selecionado = 'div_botn_pos_subir_'+posicion;
-        var div_botn_pos_subir_superior = 'div_botn_pos_subir_'+(posicion+1);
+            document.getElementById(div_botn_pos_subir_selecionado).setAttribute("onclick", "subirPosicion("+(posicion+1)+");");
+            document.getElementById(div_botn_pos_subir_superior).setAttribute("onclick", "subirPosicion("+posicion+");");
+            
 
-        var div_botn_pos_bajar_selecionado = 'div_botn_pos_bajar_'+posicion;
-        var div_botn_pos_bajar_superior = 'div_botn_pos_bajar_'+(posicion+1);
-
-        var input_cliente_posicion_selecionado = 'id_cliente_posicion_'+posicion
-        var input_cliente_posicion_superior = 'id_cliente_posicion_'+(posicion+1)
-
-        $('#'+div_inferior).insertBefore('#'+div_selecionado);	
-
-        document.getElementById(div_selecionado).setAttribute("id", "tempo");
-        
-        document.getElementById(div_inferior).setAttribute("id", div_selecionado);
-        document.getElementById("tempo").setAttribute("id", div_inferior);
+            document.getElementById(div_botn_pos_subir_selecionado).setAttribute("id", "tempo");        
+            document.getElementById(div_botn_pos_subir_superior).setAttribute("id", div_botn_pos_subir_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_botn_pos_subir_superior);
 
 
-      
-        document.getElementById(div_botn_pos_subir_selecionado).setAttribute("onclick", "subirPosicion("+(posicion+1)+");");
-        document.getElementById(div_botn_pos_subir_superior).setAttribute("onclick", "subirPosicion("+posicion+");");
+            document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("onclick", "bajarPosicion("+(posicion+1)+");");
+            document.getElementById(div_botn_pos_subir_superior).setAttribute("onclick", "bajarPosicion("+posicion+");");
+            
+
+            document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("id", "tempo");        
+            document.getElementById(div_botn_pos_bajar_superior).setAttribute("id", div_botn_pos_bajar_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_botn_pos_bajar_superior);
+
+            document.getElementById(div_botn_setPosicion_selecionado).setAttribute("onclick", "setPosicion("+(posicion+1)+");");
+            document.getElementById(div_botn_setPosicion_superior).setAttribute("onclick", "setPosicion("+posicion+");");
         
 
-        document.getElementById(div_botn_pos_subir_selecionado).setAttribute("id", "tempo");        
-        document.getElementById(div_botn_pos_subir_superior).setAttribute("id", div_botn_pos_subir_selecionado);
-        document.getElementById("tempo").setAttribute("id", div_botn_pos_subir_superior);
+            document.getElementById(div_botn_setPosicion_selecionado).setAttribute("id", "tempo");        
+            document.getElementById(div_botn_setPosicion_superior).setAttribute("id", div_botn_setPosicion_selecionado);
+            document.getElementById("tempo").setAttribute("id", div_botn_setPosicion_superior);
+            
+            document.getElementById(input_cliente_posicion_selecionado).value = (posicion+1)
+            document.getElementById(input_cliente_posicion_superior).value = posicion
 
 
-        document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("onclick", "bajarPosicion("+(posicion+1)+");");
-        document.getElementById(div_botn_pos_subir_superior).setAttribute("onclick", "bajarPosicion("+posicion+");");
-        
+            document.getElementById(input_cliente_posicion_selecionado).setAttribute("id", "tempo");
+            
+            document.getElementById(input_cliente_posicion_superior).setAttribute("id", input_cliente_posicion_selecionado);
+            document.getElementById("tempo").setAttribute("id", input_cliente_posicion_superior);
 
-        document.getElementById(div_botn_pos_bajar_selecionado).setAttribute("id", "tempo");        
-        document.getElementById(div_botn_pos_bajar_superior).setAttribute("id", div_botn_pos_bajar_selecionado);
-        document.getElementById("tempo").setAttribute("id", div_botn_pos_bajar_superior);
+            
 
-        
-        document.getElementById(input_cliente_posicion_selecionado).value = (posicion+1)
-        document.getElementById(input_cliente_posicion_superior).value = posicion
+        }
 
+        function setPosicion(posicion){
 
-        document.getElementById(input_cliente_posicion_selecionado).setAttribute("id", "tempo");
-        
-        document.getElementById(input_cliente_posicion_superior).setAttribute("id", input_cliente_posicion_selecionado);
-        document.getElementById("tempo").setAttribute("id", input_cliente_posicion_superior);
+            var nueva_posicion = document.getElementById('id_cliente_posicion_'+posicion).value
+            var i;
+            
+            if(posicion > nueva_posicion)
+               
+                for (i = posicion; i >nueva_posicion; i--) {
+                    subirPosicion(i);
+                    console.log("subir i: "+i);
+                }
+            else{
+                for (i = posicion; i <nueva_posicion; i++) {
+                    bajarPosicion(i);
+                    console.log("bajar i: "+i);
 
-  }
-  </script>
+                }
+            }
+          
+
+        }
+    </script>
 @endsection
 
 
