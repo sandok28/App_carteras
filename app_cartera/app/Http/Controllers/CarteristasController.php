@@ -232,11 +232,9 @@ class CarteristasController extends Controller
                 ->increment('abono',$abono);
             DB::table('historial_venta_clientes')
                 ->where('cliente_id',$cliente_id)->where('fecha',$current_date)
-                ->decrement('saldo',($abono - $venta));
-        }                         
-   
+                ->decrement('saldo',($venta + $cliente->deuda - $abono));
+        }    
     }
-
 
     public function formulario_cliente_venta($cliente_id)
     {      
@@ -638,10 +636,8 @@ class CarteristasController extends Controller
         }
         catch (\Exception $ex){
             DB::rollback();
-            dd($ex);           
-
+            dd($ex);
         }
-
         return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);           
     }
 
