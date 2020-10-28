@@ -40,7 +40,7 @@ class GestionEmpresasController extends Controller
         //dd($empresa_cartera);
 
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.empresa_carteras')->with('empresa_carteras', $empresa_cartera);}
         
@@ -60,7 +60,7 @@ class GestionEmpresasController extends Controller
 
 
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{if($empresa_id == $empresa_id_cartera)
             {
@@ -227,7 +227,7 @@ public function lista_productos()
         //dd($productos);
 
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{ return view('adminempresa.empresa_productos', compact('productos'));}
 
@@ -240,7 +240,7 @@ public function lista_productos()
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
         $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.productos.formulario_productos_crear');}
         
@@ -293,7 +293,7 @@ public function lista_productos()
         $producto = Producto::find($producto_id);
         //dd($producto);
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.productos.formulario_productos_actualizar', compact('producto'));}
         
@@ -322,7 +322,7 @@ public function lista_productos()
         $producto = Producto::find($producto_id);
         //dd($producto);
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.productos.formulario_productos_agregar', compact('producto'));}
         
@@ -356,7 +356,50 @@ public function lista_productos()
         
         //$producto->save();
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
+        }
+        else{return redirect()->route('empresa.empresa_productos');}
+        
+    }
+
+    public function formulario_productos_restar($producto_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        //dd($producto_id);
+        $producto = Producto::find($producto_id);
+        //dd($producto);
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.productos.formulario_productos_restar', compact('producto'));}
+        
+    }
+
+    public function productos_restar(Request $request, $producto_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        $producto = Producto::find($producto_id);
+        
+        try{DB::beginTransaction();
+            $cantproductoact=(($producto->cantidad)-($request->cantidad1));
+            //dd($cantproductoact);
+            $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact, $producto_id]);
+
+            DB::commit();
+            //contenido
+        }
+        catch (\Exception $ex){dd($ex);
+                                DB::rollback();
+                                }
+        
+        
+        //$producto->save();
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
         }
         else{return redirect()->route('empresa.empresa_productos');}
         
@@ -378,7 +421,7 @@ public function lista_carteristas()
         //dd($empresa_id);
         //dd($usuarios);
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.empresa_carteristas', compact('usuarios'));}
         
@@ -390,7 +433,7 @@ public function lista_carteristas()
         $empresa_id = $user->usuarios->get(0)->empresa_id;
         $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.carteristas.formulario_carteristas_crear');}
         
@@ -467,7 +510,7 @@ public function lista_carteristas()
 
         
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.carteristas.formulario_carteristas_actualizar', compact('usuario'));}
                 
@@ -623,7 +666,7 @@ public function lista_carteristas()
             
             //dd($clientes);
             if($estado_empresa=='I'){
-                dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+                return view('errores.empresa');
             }
             else{return view('adminempresa.empresa_clientes', compact('clientes'));}
             
@@ -645,7 +688,7 @@ public function lista_carteristas()
             
             //dd($producto);
             if($estado_empresa=='I'){
-                dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+                return view('errores.empresa');
             }
             else{if($empresa_id == $empresa_id_cartera)
                 {
@@ -715,7 +758,7 @@ public function lista_carteristas()
 
 
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.empresa_LN', compact('clientesP','clientesC'));}                          
         
@@ -733,7 +776,7 @@ public function lista_carteristas()
             //dd($cliente);
 
             if($estado_empresa=='I'){
-                dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+                return view('errores.empresa');
             }
             else{return view('adminempresa.listanegra.formulario_clientes_listanegra_actualizar', compact('cliente','empresa_carteras'));}
             
@@ -809,7 +852,7 @@ public function lista_carteristas()
                                   ->where('estado','=','LI');
 
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.empresa_LI', compact('clientesI'));}
         
@@ -826,7 +869,7 @@ public function lista_carteristas()
         $cliente = Cliente::find($cliente_id);
         //dd($cliente);
         if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.lista_inactivos.formulario_clientes_listainactivos_actualizar', compact('cliente','empresa_carteras'));}
         
@@ -860,7 +903,7 @@ public function lista_carteristas()
             $bonos = Bono::where('cartera_id',$cartera_id)->get();////// bonos de la cartera
             //dd($carteras);
             if($estado_empresa=='I'){
-                dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+                return view('errores.empresa');
             }
             else{return view('adminempresa.empresa_bonos')->with('bonos', $bonos);}
             
@@ -876,7 +919,7 @@ public function lista_carteristas()
 
 
             if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
             }
             else{return view('adminempresa.empresa_novedades')->with('novedades', $novedades);}
            
@@ -899,7 +942,7 @@ public function lista_carteristas()
             //dd($ventas->get()->all());
             //dd($devoluciones);
             if($estado_empresa=='I'){
-                dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+                return view('errores.empresa');
             }
             else{return view('adminempresa.empresa_devoluciones', compact('devoluciones'));}
             
@@ -927,7 +970,7 @@ public function lista_bodeguistas()
     //dd($empresa_id);
     //dd($usuarios);
     if($estado_empresa=='I'){
-        dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+        return view('errores.empresa');
     }
     else{return view('adminempresa.empresa_bodeguistas', compact('usuarios'));}
     
@@ -940,7 +983,7 @@ public function formulario_bodeguistas_crear()
     $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
 
     if($estado_empresa=='I'){
-        dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+        return view('errores.empresa');
     }
     else{return view('adminempresa.bodeguistas.formulario_bodeguistas_crear');}
     
@@ -1003,7 +1046,7 @@ public function bodeguistas_crear(Request $request)
                                  }
 
         if($estado_empresa=='I'){
-                dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+                return view('errores.empresa');
             }
             else{return redirect()->route('empresa.bodeguistas');}
     
@@ -1021,7 +1064,7 @@ public function formulario_bodeguistas_actualizar($usuario_id)
     $usuario->email= $usuario->user->email;
 
     if($estado_empresa=='I'){
-        dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+        return view('errores.empresa');
     }
     else{return view('adminempresa.bodeguistas.formulario_bodeguistas_actualizar', compact('usuario'));}
 
@@ -1080,7 +1123,7 @@ public function bodeguistas_actualizar(Request $request,$usuario_id)
 
 
     if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.bodeguistas.formulario_correo_editar', compact('usuario'));}
     
@@ -1176,17 +1219,15 @@ public function usuarios4_activar(Usuario $usuario)
 
 
     if($estado_empresa=='I'){
-            dd('no tiene acceso, por favor comuniquese con el administrador de la aplicacion');
+            return view('errores.empresa');
         }
         else{return view('adminempresa.empresa_ventas', compact('ventas'));}
         //dd($cartera_id);
         //$ventas=HistorialVentaCartera::where('cartera_id',$cartera_id)->get();
        
         //dd($ventas->get()->all());
-        
-
-    
+            
     }
-
+    
     
 }

@@ -7,6 +7,7 @@ use App\Cartera;
 use App\Producto;
 use App\Nevera;
 use App\Cliente;
+use App\Empresa;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -21,16 +22,23 @@ class GestionBodegaController extends Controller
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
         $cartera = Cartera::where('empresa_id',$empresa_id);////// carteras de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        //dd($estado_empresa, $estado_usuario);
         $carteras_por_atender=$cartera->where('tipo',1)->where('cargue','=','D')->get();////// filtro de las carteras tipo 1
         //dd($carteras_por_atender);
         $cartera = Cartera::where('empresa_id',$empresa_id);
         $carteras_atendidas  =$cartera->where('tipo',1)->where('cargue','=','C')->get();
         //dd($carteras_atendidas,$carteras_por_atender);
 
+        if($estado_empresa=='I'|| $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('bodega.panel_central_bodega')
+            ->with('carteras_atendidas',$carteras_atendidas)
+            ->with('carteras_por_atender',$carteras_por_atender);}
 
-        return view('bodega.panel_central_bodega')
-                                                  ->with('carteras_atendidas',$carteras_atendidas)
-                                                  ->with('carteras_por_atender',$carteras_por_atender);
+        
                                                      
     }
 
@@ -38,22 +46,28 @@ class GestionBodegaController extends Controller
     {
         //dd($id);
         $user = Auth::user();
-        $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $productos=Producto::where('empresa_id',$empresa_id)->get();
         $empresa_id_cartera=Cartera::find($id)->empresa_id;
         $nombre_cartera=Cartera::find($id)->nombre;
         //dd($nombre_cartera);
 
-
-        if($empresa_id == $empresa_id_cartera){
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{if($empresa_id == $empresa_id_cartera){
 
             return view('bodega.cargar.formulario_cartera_cargar')->with('productos',$productos)
-                                                              ->with('cartera_id',$id)
-                                                              ->with('nombre_cartera',$nombre_cartera);
+                                                            ->with('cartera_id',$id)
+                                                            ->with('nombre_cartera',$nombre_cartera);
+            }
+            else {
+                return redirect('xxx');
+            }
         }
-        else {
-            return redirect('xxx');
-        }
+                       
         
     }
 
@@ -161,32 +175,50 @@ class GestionBodegaController extends Controller
     {
 
         $user = Auth::user();
-        $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $empresa_id_cartera=Cartera::find($cartera_id)->empresa_id;//////empresa a la cual pertenece la cartera
         $productos=Producto::where('empresa_id',$empresa_id)->get();
         $neveras=Nevera::where('cartera_id',$cartera_id)->get();
         $cargue_inicial=Cartera::find($cartera_id)->cargue_del_dia;
         
-
-        if($empresa_id == $empresa_id_cartera){
-
-            return view('bodega.cargar.informacion_carga_cartera')->with('productos',$productos)
-                                                                  ->with('neveras',$neveras)
-                                                                  ->with('cargue_inicial',$cargue_inicial)
-                                                                  ->with('cartera_id',$cartera_id);
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
         }
-        else {
-            return redirect('xxx');
-        }
+            else{if($empresa_id == $empresa_id_cartera){
+
+                return view('bodega.cargar.informacion_carga_cartera')->with('productos',$productos)
+                                                                    ->with('neveras',$neveras)
+                                                                    ->with('cargue_inicial',$cargue_inicial)
+                                                                    ->with('cartera_id',$cartera_id);
+                }
+                else {
+                    return redirect('xxx');
+                }
+            }
+
+
+                
 
     }
 
     public function formulario_recargar_cartera($nevera_id)
     {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+
         $producto_nevera=Nevera::where('id',$nevera_id)->get();
         //dd($producto_nevera);
-        return view('bodega.cargar.formulario_cartera_recargar')->with('producto_nevera',$producto_nevera)
-                                                                ->with('nevera_id',$nevera_id);
+
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('bodega.cargar.formulario_cartera_recargar')->with('producto_nevera',$producto_nevera)
+            ->with('nevera_id',$nevera_id);}
+        
     }
 
     public function recargar_cartera(Request $request,$nevera_id)
@@ -237,10 +269,19 @@ class GestionBodegaController extends Controller
     public function formulario_descargar_cartera($nevera_id)
     {
         //dd('hola');
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $producto_nevera=Nevera::where('id',$nevera_id)->get();
         //dd($producto_nevera);
-        return view('bodega.cargar.formulario_cartera_descargar')->with('producto_nevera',$producto_nevera)
-                                                                ->with('nevera_id',$nevera_id);
+
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('bodega.cargar.formulario_cartera_descargar')->with('producto_nevera',$producto_nevera)
+            ->with('nevera_id',$nevera_id);}
+        
     }
 
     public function descargar_cartera(Request $request,$nevera_id)

@@ -86,6 +86,9 @@ Route::PUT('/empresa/productos/{producto_id}','GestionEmpresasController@product
 
 Route::get('/empresa/productos/{producto_id}/formulario_productos_agregar','GestionEmpresasController@formulario_productos_agregar')->name('empresa.productos.formulario.productos_agregar');
 Route::PUT('/empresa/productos/{producto_id}/agregar','GestionEmpresasController@productos_agregar')->name('empresa.productos.agregar');
+
+Route::get('/empresa/productos/{producto_id}/formulario_productos_restar','GestionEmpresasController@formulario_productos_restar')->name('empresa.productos.formulario.productos_restar');
+Route::PUT('/empresa/productos/{producto_id}/restar','GestionEmpresasController@productos_restar')->name('empresa.productos.restar');
 /////->Gestionempresa - clientes
 
 Route::get('/empresa/carteras/{cartera_id}/clientes','GestionEmpresasController@lista_clientes')->name('empresa.empresa_carteras_clientes');
@@ -200,7 +203,13 @@ Route::post('/carterista/cliente/{cliente_id}/recaudo', 'CarteristasController@r
 Route::get('/carterista/cliente/{cliente_id}/formulario_reportar_lista_negra', 'CarteristasController@formulario_reportar_lista_negra')->name('carterista.cliente.formulario_reportar_lista_negra');
 Route::post('/carterista/cliente/{cliente_id}/reportar_lista_negra', 'CarteristasController@reportar_lista_negra')->name('carterista.cliente.reportar_lista_negra');
 
+//Carterista - almuerzos
+Route::get('/carterista/almuerzo/formulario_almuerzo_crear','CarteristasController@formulario_almuerzo_crear')->name('carterista.almuerzo.formulario_almuerzo_crear');
+Route::post('/carterista/almuerzo/almuerzo_crear','CarteristasController@almuerzo_crear')->name('carterista.almuerzo.almuerzo_crear');
 
+//Carterista - gastos
+Route::get('/carterista/gasto/formulario_gasto_crear','CarteristasController@formulario_gasto_crear')->name('carterista.gasto.formulario_gasto_crear');
+Route::post('/carterista/gasto/gasto_crear','CarteristasController@gasto_crear')->name('carterista.gasto.gasto_crear');
 
 //Carterista - bonos
 Route::get('/carterista/bono/formulario_bono_crear','CarteristasController@formulario_bono_crear')->name('carterista.bono.formulario_bono_crear');

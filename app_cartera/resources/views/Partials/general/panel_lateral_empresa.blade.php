@@ -12,7 +12,7 @@
                     Carteras
                 </a>
                 <a class="nav-link" href="{{route('empresa.bodeguistas')}}">
-                    Bodeguistas
+                    Bodegueros
                 </a>
                 <a class="nav-link" href="{{route('empresa.empresa_carteristas')}}">
                     Carteristas

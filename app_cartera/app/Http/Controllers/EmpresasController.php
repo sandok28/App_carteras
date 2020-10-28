@@ -141,12 +141,19 @@ class EmpresasController extends Controller
         
        
         $empresa = Empresa::find($empresa_id);
+
+        $usuario = Usuario::where('empresa_id',$empresa_id)->where('tipo',2)->get()->get(0);
+        $empresa->cedula=$usuario->cedula;
+        $empresa->direccion=$usuario->direccion;
+        $empresa->email=$usuario->user->email;
         
-        return view('administradores.administrador_empresas.formulario_empresas_actualizar', compact('empresa'));
+
+        return view('administradores.administrador_empresas.formulario_empresas_actualizar')->with('empresa',$empresa)->with('usuario',$usuario);
     }
 
     public function empresas_actualizar(Request $request, $empresa_id)
     {
+        //dd($request);
         $validatedData = $request->validate([
             'nombre' => 'required',
             'descripcion' => 'required',
@@ -158,6 +165,26 @@ class EmpresasController extends Controller
             $empresa->fill($request->all());
             $empresa->telefono = $request->input('telefono');
             $empresa->save();
+
+            $usuario = Usuario::where('empresa_id',$empresa_id)->where('tipo',2)->get()->get(0);
+            $usuario->cedula=($request->cedula);
+            $usuario->direccion=($request->direccion);
+            $usuario->save();
+
+            $user=User::where('id',$usuario->user_id)->get()->get(0);
+            //dd($request->input('contrasena'));
+            $user->email=($request->email);
+            
+            if(!is_null($request->input('contrasena'))){
+                $user->password = Hash::make($request->input('contrasena'));
+            }
+            $user->save();
+            //dd($usuario->user->email);
+            
+            
+            //dd($usuario);
+
+
         DB::commit();
              
          }

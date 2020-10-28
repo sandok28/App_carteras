@@ -19,6 +19,7 @@ class CreateBonosTable extends Migration
             $table->string("descripcion");
             $table->date("mi_fecha");
             $table->integer("valor");
+            $table->integer("tipo")->nullable();
             $table->timestamps();
         });
     }

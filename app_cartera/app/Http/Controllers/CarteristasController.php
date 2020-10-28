@@ -35,25 +35,36 @@ class CarteristasController extends Controller
     {
         $user = Auth::user();
         $usuario = $user->usuarios->get(0);
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $cartera = $usuario->cartera();
         //dd($cartera);
 
-        if($cartera == "null"){
-            return view('carteristas.panel_central_carteristas')->with('cartera',null)
-                                                                ->with('clientes_atendidos',null)
-                                                                ->with('clientes_por_atender',null);
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
         }
+                else{if($cartera == "null"){
+                    return view('carteristas.panel_central_carteristas')->with('cartera',null)
+                                                                        ->with('clientes_atendidos',null)
+                                                                        ->with('clientes_por_atender',null);
+                    }
 
 
-        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+                $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+                
+                $clientes_por_atender = DB::table('clientes')->where('cartera_id',$cartera->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
+                
+                $clientes_atendidos = DB::table('clientes')->where('cartera_id',$cartera->id)->where('fecha_ultima_visita','=',$current_date)->orderBy('posicion','asc')->get();
+                
+                return view('carteristas.panel_central_carteristas')->with('cartera',$cartera)
+                                                                    ->with('clientes_atendidos',$clientes_atendidos)
+                                                                    ->with('clientes_por_atender',$clientes_por_atender);
+                }
+
+
+
         
-        $clientes_por_atender = DB::table('clientes')->where('cartera_id',$cartera->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
-        
-        $clientes_atendidos = DB::table('clientes')->where('cartera_id',$cartera->id)->where('fecha_ultima_visita','=',$current_date)->orderBy('posicion','asc')->get();
-        
-        return view('carteristas.panel_central_carteristas')->with('cartera',$cartera)
-                                                            ->with('clientes_atendidos',$clientes_atendidos)
-                                                            ->with('clientes_por_atender',$clientes_por_atender);
     }
 
      /**
@@ -63,9 +74,16 @@ class CarteristasController extends Controller
      */
     public function formulario_clientes_crear()
     {
-          
-            return view('carteristas.clientes.formulario_clientes_crear');
-    }
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+                    return view('errores.usuario');
+                }
+                else{return view('carteristas.clientes.formulario_clientes_crear');}   
+            }
 
 
     public function clientes_crear(Request $request)
@@ -119,8 +137,18 @@ class CarteristasController extends Controller
      */
     public function formulario_clientes_actualizar($cliente_id)
     {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $cliente = Cliente::Find($cliente_id);
-        return view('carteristas.clientes.formulario_clientes_actualizar')->with('cliente',$cliente);
+
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+                    return view('errores.usuario');
+                }
+                else{return view('carteristas.clientes.formulario_clientes_actualizar')->with('cliente',$cliente);}
+                
+                
     }
 
 
@@ -214,9 +242,15 @@ class CarteristasController extends Controller
     {      
         $user = Auth::user();
         $productos = $user->usuarios->get(0)->cartera()->neveras; //neveras de la cartera a la cual pertenece el usuario logueado
-       
-        return view('carteristas.clientes.formulario_cliente_venta')->with('productos',$productos)
-                                                                    ->with('cliente_id',$cliente_id);
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+                    return view('errores.usuario');
+                }
+                else{return view('carteristas.clientes.formulario_cliente_venta')->with('productos',$productos)
+                    ->with('cliente_id',$cliente_id);}
     
     }
 
@@ -227,6 +261,9 @@ class CarteristasController extends Controller
         
             $user = Auth::user();// Usuario carterista en sesion         
             $neveras = $user->usuarios->get(0)->cartera()->neveras; //neveras de la cartera a la cual pertenece el carterista logueado
+            $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+            $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+            $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
             //dd($neveras);
 
             $resumen_venta = new Collection();
@@ -280,25 +317,47 @@ class CarteristasController extends Controller
             
 
         }
+
         
-        return view('carteristas.clientes.confirmar_compra')->with('resumen_venta',$resumen_venta);
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('carteristas.clientes.confirmar_compra')->with('resumen_venta',$resumen_venta);}
+        
+        
     
     }
 
     public function gestion_cliente_cartera($cliente_id)
     {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $cliente = Cliente::Find($cliente_id);
-        return view('carteristas.gestion_cliente.gestion_cliente_cartera')->with('cliente',$cliente);//->with('deuda_cliente',$deuda_cliente);
+
+        
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('carteristas.gestion_cliente.gestion_cliente_cartera')->with('cliente',$cliente);}//->with('deuda_cliente',$deuda_cliente);
+        
     
     }
 
 
     public function formulario_pagar($cliente_id)
     {      
-       
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
         
-        return view('carteristas.clientes.formulario_pagar')->with('cliente',$cliente);
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('carteristas.clientes.formulario_pagar')->with('cliente',$cliente);}  
     
     }
     public function recaudo(Request $request, $cliente_id)
@@ -337,10 +396,17 @@ class CarteristasController extends Controller
     }
     public function formulario_reportar_lista_negra($cliente_id)
     {      
-       
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
-     
-        return view('carteristas.clientes.reportar.formulario_reportar_lista_negra')->with('cliente',$cliente);    
+        
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('carteristas.clientes.reportar.formulario_reportar_lista_negra')->with('cliente',$cliente);}
+            
     }
 
     public function reportar_lista_negra($cliente_id)
@@ -370,6 +436,7 @@ class CarteristasController extends Controller
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         $cartera_bono_del_dia = DB::table('bonos')
                                     ->where('cartera_id',$cartera_id)
+                                    ->where('tipo','1')
                                     ->where('mi_fecha',$current_date)->get();
                   
                                     
@@ -395,6 +462,7 @@ class CarteristasController extends Controller
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         $cartera_bono_del_dia = DB::table('bonos')
                                     ->where('cartera_id',$cartera_id)
+                                    ->where('tipo','1')
                                     ->where('mi_fecha',$current_date)->get();
                   
                                     
@@ -404,6 +472,7 @@ class CarteristasController extends Controller
             $bono->descripcion = $request->descripcion;
             $bono->valor = $request->valor;
             $bono->mi_fecha = $current_date;
+            $bono->tipo = '1';
             $bono->save();
         } else{
             $bono = Bono::find($cartera_bono_del_dia->get(0)->id);
@@ -473,13 +542,19 @@ class CarteristasController extends Controller
         $user = Auth::user();
         $usuario = $user->usuarios->get(0);
         $cartera = $usuario->cartera();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         
         $clientes = DB::table('clientes')->where('cartera_id',$cartera->id)->orderBy('posicion','asc')->get();
      
-
-        return view('carteristas.clientes.ordenar.formulario_clientes_ordenar')->with('clientes',$clientes)->with('cartera',$cartera);     
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('carteristas.clientes.ordenar.formulario_clientes_ordenar')->with('clientes',$clientes)->with('cartera',$cartera);}
+             
     }
 
     public function clientes_ordenar(Request $request)
@@ -517,9 +592,17 @@ class CarteristasController extends Controller
         $user = Auth::user();
         $cliente = Cliente::find($cliente_id);
         $productos = $user->usuarios->get(0)->empresa->productos->pluck('nombre','id'); // Produces something like "2019-03-11"
-                 
-        return view('carteristas.clientes.devolucion.formulario_cliente_devolucion')->with('cliente',$cliente)
-                                                                                    ->with('productos',$productos);    
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+       
+        
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('carteristas.clientes.devolucion.formulario_cliente_devolucion')->with('cliente',$cliente)
+            ->with('productos',$productos);}
+                    
     }
 
     public function devolucion_crear(Request $request, $cliente_id)
@@ -561,4 +644,120 @@ class CarteristasController extends Controller
 
         return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);           
     }
+
+    public function formulario_almuerzo_crear()
+    {      
+
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('tipo','2')
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            
+        } else{
+            $bono = Bono::Find($cartera_bono_del_dia->get(0)->id);
+        }
+        
+        return view('carteristas.almuerzos.formulario_almuerzo_crear')->with('bono',$bono);    
+    }
+
+    public function almuerzo_crear(Request $request)
+    {      
+        $validatedData = $request->validate([
+            'descripcion' => 'required',
+            'valor' => 'required'
+            ]);
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('tipo','2')
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            $bono->cartera_id = $cartera_id;
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->mi_fecha = $current_date;
+            $bono->tipo = '2';
+            $bono->save();
+        } else{
+            $bono = Bono::find($cartera_bono_del_dia->get(0)->id);
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->save();
+        }
+       
+        return  redirect()->route('carterista');    
+    }
+
+    ////////////////////////
+
+    public function formulario_gasto_crear()
+    {      
+
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('tipo','3')
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            
+        } else{
+            $bono = Bono::Find($cartera_bono_del_dia->get(0)->id);
+        }
+        
+        return view('carteristas.gastos.formulario_gasto_crear')->with('bono',$bono);    
+    }
+
+    public function gasto_crear(Request $request)
+    {      
+        $validatedData = $request->validate([
+            'descripcion' => 'required',
+            'valor' => 'required'
+            ]);
+        $user = Auth::user();
+        $cartera_id = $user->usuarios->get(0)->cartera()->id;
+
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $cartera_bono_del_dia = DB::table('bonos')
+                                    ->where('cartera_id',$cartera_id)
+                                    ->where('tipo','3')
+                                    ->where('mi_fecha',$current_date)->get();
+                  
+                                    
+        if($cartera_bono_del_dia->isEmpty()){     
+            $bono = new Bono();
+            $bono->cartera_id = $cartera_id;
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->mi_fecha = $current_date;
+            $bono->tipo = '3';
+            $bono->save();
+        } else{
+            $bono = Bono::find($cartera_bono_del_dia->get(0)->id);
+            $bono->descripcion = $request->descripcion;
+            $bono->valor = $request->valor;
+            $bono->save();
+        }
+       
+        return  redirect()->route('carterista');    
+    }
+
+
  }

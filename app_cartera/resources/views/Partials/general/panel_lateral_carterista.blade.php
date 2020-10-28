@@ -15,10 +15,16 @@
                     Registar cliente
                 </a>
                 <a class="nav-link" href="{{ route('carterista.bono.formulario_bono_crear') }}">
-                    Registar bono
+                    Registar bonos
                 </a>
                 <a class="nav-link" href="{{ route('carterista.novedad.formulario_novedad_crear') }}">
-                    Registrar Novedad
+                    Registrar Novedades
+                </a>
+                <a class="nav-link" href="{{ route('carterista.almuerzo.formulario_almuerzo_crear') }}">
+                    Registrar almuerzos
+                </a>
+                <a class="nav-link" href="{{ route('carterista.gasto.formulario_gasto_crear') }}">
+                    Registrar gastos extras
                 </a>
                 <a class="nav-link" href="{{ route('carterista.clientes.formulario_clientes_ordenar') }}">
                     Ordenar clientes

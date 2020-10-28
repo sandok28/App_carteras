@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Registrar bono
+    Registrar bonos
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Registrar bono</div>
+                        <div class="card-header">Registrar bonos</div>
                         <div class="card-body">
                             @include('Partials.formularios.alerta_validaciones')
                             {!! Form::model($bono, ['route' => ['carterista.bono.bono_crear'], 'method' => 'POST']) !!}

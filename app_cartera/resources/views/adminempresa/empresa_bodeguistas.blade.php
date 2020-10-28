@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista de bodeguistas
+    Lista de bodegueros
 @endsection
 
 @section('content_css')
@@ -18,7 +18,7 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion de bodeguistas</div>
+                                <div class="card-header">Panel de administracion de bodegueros</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
@@ -36,7 +36,7 @@
         <!-- Main page content-->
         <div class="container mt-n10">
             <div class="card mb-4">
-                <div class="card-header">Listado de bodeguistas</div>
+                <div class="card-header">Listado de bodegueros</div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">

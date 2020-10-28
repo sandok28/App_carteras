@@ -73,7 +73,9 @@
 
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_actualizar') }}" title="Editar"><i data-feather="edit"></i></a>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_agregar') }}" title="Agregar"><i data-feather="plus-square"></i></a>                                                                           
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_restar') }}" title="Restar"><i data-feather="minus-square"></i></a>
                                         
+
                                     </td>
                                 </tr>
                                 
