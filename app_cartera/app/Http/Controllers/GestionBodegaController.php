@@ -8,6 +8,7 @@ use App\Producto;
 use App\Nevera;
 use App\Cliente;
 use App\Empresa;
+use App\Devolucion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -21,14 +22,37 @@ class GestionBodegaController extends Controller
 
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
-        $cartera = Cartera::where('empresa_id',$empresa_id);////// carteras de la empresa del usuario logueado
+        //$carteras = Cartera::where('empresa_id',$empresa_id);////// carteras de la empresa del usuario logueado
         $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
         //dd($estado_empresa, $estado_usuario);
-        $carteras_por_atender=$cartera->where('tipo',1)->where('cargue','=','D')->get();////// filtro de las carteras tipo 1
+        //$carteras_por_atender=$carteras->where('tipo',1)->where('cargue','=','D')->get();////// filtro de las carteras tipo 1
+       
+        $current_day = Carbon::now()->dayOfWeek; // Produces something like "2019-03-11"
+
+        $carteras_por_atender = DB::table('carteras')
+                ->join('cartera_dia', 'cartera_dia.cartera_id', '=', 'carteras.id')
+                ->where('carteras.tipo',1)
+                ->where('carteras.cargue','=','D')
+                ->where('cartera_dia.dia_id','=',$current_day)
+                ->select('carteras.*')
+                ->get();
+
+        $carteras_atendidas = DB::table('carteras')
+                ->join('cartera_dia', 'cartera_dia.cartera_id', '=', 'carteras.id')
+                ->where('carteras.tipo',1)
+                ->where('carteras.cargue','=','C')
+                ->where('cartera_dia.dia_id','=',$current_day)
+                ->select('carteras.*')
+                ->get();
+
+     
+
+       
+       
+       
         //dd($carteras_por_atender);
-        $cartera = Cartera::where('empresa_id',$empresa_id);
-        $carteras_atendidas  =$cartera->where('tipo',1)->where('cargue','=','C')->get();
+       // $carteras_atendidas  =$carteras->where('tipo',1)->where('cargue','=','C')->get();
         //dd($carteras_atendidas,$carteras_por_atender);
 
         if($estado_empresa=='I'|| $estado_usuario=='I'){
@@ -38,7 +62,6 @@ class GestionBodegaController extends Controller
             ->with('carteras_atendidas',$carteras_atendidas)
             ->with('carteras_por_atender',$carteras_por_atender);}
 
-        
                                                      
     }
 
@@ -173,7 +196,7 @@ class GestionBodegaController extends Controller
 
     public function informacion_carga_cartera($cartera_id)
     {
-
+        $current_date= Carbon::now()->toDateString(); // Produces something like "2019-03-11 12:25:00"
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
         $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
@@ -182,7 +205,10 @@ class GestionBodegaController extends Controller
         $productos=Producto::where('empresa_id',$empresa_id)->get();
         $neveras=Nevera::where('cartera_id',$cartera_id)->get();
         $cargue_inicial=Cartera::find($cartera_id)->cargue_del_dia;
-        
+        $devoluciones= Devolucion::where('cartera_id',$cartera_id)->where('fecha',$current_date)->get();
+        //dd($devoluciones);
+        //dd($current_date);
+
         if($estado_empresa=='I' || $estado_usuario=='I'){
             return view('errores.usuario');
         }
@@ -191,7 +217,8 @@ class GestionBodegaController extends Controller
                 return view('bodega.cargar.informacion_carga_cartera')->with('productos',$productos)
                                                                     ->with('neveras',$neveras)
                                                                     ->with('cargue_inicial',$cargue_inicial)
-                                                                    ->with('cartera_id',$cartera_id);
+                                                                    ->with('cartera_id',$cartera_id)
+                                                                    ->with('devoluciones',$devoluciones);
                 }
                 else {
                     return redirect('xxx');
@@ -381,7 +408,9 @@ class GestionBodegaController extends Controller
             //dd($abono);
             $venta=$cartera->venta_del_dia;
             //dd($venta);
-            DB::insert('insert into historial_venta_carteras (cartera_id, fecha, venta, deuda, saldo, abono) values (?, ?, ?, ?, ?, ?)', [$cartera_id, $current_date, $venta, $credito, $saldo, $abono]);
+            $saldo_final=($credito+$venta)-($abono);
+            //dd($saldo_final);
+            DB::insert('insert into historial_venta_carteras (cartera_id, fecha, venta, deuda, saldo, abono, saldo_final) values (?, ?, ?, ?, ?, ?, ?)', [$cartera_id, $current_date, $venta, $credito, $saldo, $abono, $saldo_final]);
            
            
             DB::commit();

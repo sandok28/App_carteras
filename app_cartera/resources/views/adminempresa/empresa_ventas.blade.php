@@ -43,20 +43,20 @@
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
-                                    <th>Credito</th>
-                                    <th>Venta</th>
-                                    <th>Abono</th> 
-                                    <th>Saldo</th>                                    
+                                    <th>Credito inicial</th>
+                                    <th>Ventas del dia</th>
+                                    <th>Abonos del dia</th> 
+                                    <th>Credito final</th>                                    
                                     
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th>Fecha</th>
-                                    <th>Credito</th>
-                                    <th>Venta</th>
-                                    <th>Abono</th> 
-                                    <th>Saldo</th> 
+                                    <<th>Fecha</th>
+                                    <th>Credito inicial</th>
+                                    <th>Ventas del dia</th>
+                                    <th>Abonos del dia</th> 
+                                    <th>Credito final</th>  
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -66,7 +66,7 @@
                                     <td>{{$venta->deuda}}</td>
                                     <td>{{$venta->venta}}</td>
                                     <td>{{$venta->abono}}</td>
-                                    <td>{{$venta->saldo}}</td>
+                                    <td>{{$venta->saldo_final}}</td>
                                 </tr>
                                 
                             @endforeach

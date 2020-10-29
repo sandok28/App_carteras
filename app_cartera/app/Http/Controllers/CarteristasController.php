@@ -205,6 +205,7 @@ class CarteristasController extends Controller
     //Vista venta del Cliente
     public function regHistorialCliente($cliente_id, $venta, $abono)
     {      
+        //dd($cliente_id, $venta, $abono,'historial');
         $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
      
         $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
@@ -223,21 +224,29 @@ class CarteristasController extends Controller
             $historial_cliente->saldo = ($cliente->deuda + $venta) - $abono;
             $historial_cliente->save();
         }else{
-
+            
            DB::table('historial_venta_clientes')
                 ->where('cliente_id',$cliente_id)->where('fecha',$current_date)
                 ->increment('venta',$venta);
            DB::table('historial_venta_clientes')
                 ->where('cliente_id',$cliente_id)->where('fecha',$current_date)
                 ->increment('abono',$abono);
+                
+            // $deuda=DB::table('historial_venta_clientes')
+            //             ->where('cliente_id',$cliente_id)->where('fecha',$current_date)->get()->get(0)->deuda;
+            // $venta1=DB::table('historial_venta_clientes')
+            //             ->where('cliente_id',$cliente_id)->where('fecha',$current_date)->get()->get(0)->venta;
+            // //dd($deuda,$venta1,$abono);
             DB::table('historial_venta_clientes')
                 ->where('cliente_id',$cliente_id)->where('fecha',$current_date)
-                ->decrement('saldo',($venta + $cliente->deuda - $abono));
+                //dd($abono, $venta,$deuda);
+                ->decrement('saldo',($abono));
         }    
     }
 
     public function formulario_cliente_venta($cliente_id)
     {      
+        
         $user = Auth::user();
         $productos = $user->usuarios->get(0)->cartera()->neveras; //neveras de la cartera a la cual pertenece el usuario logueado
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
@@ -254,6 +263,7 @@ class CarteristasController extends Controller
 
     public function formulario_cliente_pagar(Request $request, $cliente_id)
     {
+        
         try{
             DB::beginTransaction();
         
@@ -359,7 +369,8 @@ class CarteristasController extends Controller
     
     }
     public function recaudo(Request $request, $cliente_id)
-    {      
+    {     
+        
         $validatedData = $request->validate([
             'pago' => 'required'
             ]);
@@ -368,6 +379,7 @@ class CarteristasController extends Controller
 
             $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
         
+            //dd($cliente->deuda);
             DB::table('clientes')
                 ->where('id', $cliente_id)->decrement('deuda',$request->pago);
             
@@ -379,9 +391,9 @@ class CarteristasController extends Controller
                 ->where('id', $cliente->cartera->id)->increment('abono_del_dia',$request->pago);
             DB::table('carteras')
                 ->where('id', $cliente->cartera->id)->decrement('saldo_del_dia',$request->pago);
-            
+                
             $this->regHistorialCliente($cliente_id, 0, $request->pago);
-            
+            //dd('recaudo',$cliente_id, 0, $request->pago);
             DB::commit(); //////->SAVE
         }
         catch (\Exception $ex){

@@ -21,6 +21,7 @@ class CreateHistorialVentaCarterasTable extends Migration
             $table->integer('deuda')->default('0');
             $table->integer('abono')->default('0');
             $table->integer('saldo')->default('0');
+            $table->integer('saldo_final')->default('0');
             $table->timestamps();
         });
     }
