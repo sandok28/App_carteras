@@ -198,10 +198,6 @@ class CarteristasController extends Controller
         return redirect()->route('carterista');
     }
 
-
-
-
-
     //Vista venta del Cliente
     public function regHistorialCliente($cliente_id, $venta, $abono)
     {      
@@ -419,8 +415,9 @@ class CarteristasController extends Controller
             
     }
 
-    public function reportar_lista_negra($cliente_id)
-    {      
+    public function reportar_lista_negra(Request $request,$cliente_id)
+    {   
+        
         $cliente = Cliente::Find($cliente_id); //neveras de la cartera a la cual pertenece el usuario logueado
      
         $user = Auth::user();
@@ -428,11 +425,13 @@ class CarteristasController extends Controller
 
         $cartera_lista_negra = Cartera::where('empresa_id',$usuario->empresa_id)->where('tipo','2')->get();//tipo=2 es carteria tipo lista negra
 
+
         DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
 
         DB::table('clientes')
             ->where('id',  $cliente_id)->update([   'estado' => 'LNP',//LNP -Lista negra pendiente de confirmar
-                                                    'cartera_id'=> $cartera_lista_negra->get(0)->id
+                                                    'cartera_id'=> $cartera_lista_negra->get(0)->id,
+                                                    'comentarios' => $request->comentarios
                                                 ]);
 
         return redirect()->route('carterista');    
@@ -765,6 +764,41 @@ class CarteristasController extends Controller
         }
        
         return  redirect()->route('carterista');    
+    }
+
+
+    public function resumen_del_dia()
+    {   
+        
+        $user = Auth::user();
+        $usuario = $user->usuarios->get(0);
+        $cartera = $usuario->cartera();
+        $creditoinicial=$cartera->credito_del_dia;
+        $saldo=$cartera->saldo_del_dia;
+        $venta=$cartera->venta_del_dia;
+        $abono=$cartera->abono_del_dia;
+        
+        //dd($creditoinicial,$saldo,$venta,$abono);
+
+        return view('carteristas.resumen_del_dia')->with('creditoinicial',$creditoinicial)->with('saldo',$saldo)->with('venta',$venta)->with('abono',$abono); 
+    }
+
+    public function historial_cliente($cliente_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        //dd($cliente_id);
+        $transacciones=HistorialVentaCliente::where('cliente_id',$cliente_id)->orderBy('fecha','desc')->get(); 
+        
+        //dd($cartera_id);
+        //dd($transacciones);
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('carteristas.clientes.carterista_cliente_ventas')->with('transacciones',$transacciones)
+            ->with('cliente_id',$cliente_id);}  
+          
     }
 
 

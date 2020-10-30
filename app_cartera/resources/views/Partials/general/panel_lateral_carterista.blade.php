@@ -28,6 +28,9 @@
                 </a>
                 <a class="nav-link" href="{{ route('carterista.clientes.formulario_clientes_ordenar') }}">
                     Ordenar clientes
+                </a>
+                <a class="nav-link" href="{{ route('carterista.resumen_del_dia') }}">
+                    Resumen del dia
                 </a>                
             </nav>
 

@@ -80,7 +80,7 @@
 
 
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/carteras/clientes/'.$cliente->id.'/formulario_cliente_actualizar')}}"title="Editar"><i data-feather="edit"></i></a>
-                                      
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/empresa_carteras/clientes/'.$cliente->id.'/transacciones')}}"title="Transacciones"><i data-feather="shopping-cart"></i></a>
                                         
                                     </td>
                                 </tr>

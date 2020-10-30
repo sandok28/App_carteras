@@ -18,8 +18,8 @@ class CreateCarterasTable extends Migration
             $table->string("nombre");
             $table->string("descripcion");
             $table->string("estado");
-            $table->integer('empresa_id');
-            $table->integer('usuario_id');
+            $table->integer('empresa_id')->unsigned();
+            $table->integer('usuario_id')->nullable()->unsigned();
             $table->integer('tipo');
             $table->string("cargue")->default('D');
             $table->integer('credito_del_dia')->default('0');
@@ -28,6 +28,10 @@ class CreateCarterasTable extends Migration
             $table->integer('venta_del_dia')->default('0');
             $table->integer('cargue_del_dia')->default('0');
             $table->timestamps();
+
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade')->onUpdate('cascade');
+
         });
     }
 

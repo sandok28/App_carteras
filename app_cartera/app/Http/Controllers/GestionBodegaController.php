@@ -16,6 +16,12 @@ use Illuminate\Http\Request;
 
 class GestionBodegaController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        //$this->middleware('RolUserAdminMiddleware');
+      
+    }
     
     public function panel_central_bodega()
     {
@@ -174,6 +180,7 @@ class GestionBodegaController extends Controller
                         }
                         //dd($total_deuda);
                         $affected = DB::update('update carteras set credito_del_dia = ? where id = ?', [$total_deuda,$cartera_id]);//actualiza el total de la deuda de todos los clientes en la cartera
+                        $affected = DB::update('update carteras set saldo_del_dia = ? where id = ?', [$total_deuda,$cartera_id]);//actualiza el total de la deuda de todos los clientes en la cartera
 
                         
                         

@@ -105,7 +105,7 @@ class AdministradorController extends Controller
         
             $usuario->user_id = $user->id;
 
-            $usuario->empresa_id = 0;
+            
             $usuario->save();
             DB::commit();
              
@@ -331,7 +331,7 @@ public function correo_usuarios_actualizar(Request $request, $usuario_id)
             $cartera->descripcion = $request->input('descripcion');
             $cartera->estado = 'A'; // A - Activo
             $cartera->empresa_id = $request->input('empresa_id');
-            $cartera->usuario_id ='0';
+            
             $cartera->tipo ='1';
             //$cartera->usuario_id = $request->input('usuario_id');
         

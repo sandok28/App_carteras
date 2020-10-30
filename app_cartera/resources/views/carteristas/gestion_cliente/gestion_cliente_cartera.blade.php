@@ -51,6 +51,9 @@
                                 <a class="btn btn-danger col-md-10" type="button" href="{{ route('carterista.cliente.formulario_reportar_lista_negra',$cliente->id) }}">Reportar</a>                          
                             </div> 
                             <div class="form-group">
+                                <a class="btn btn-secondary col-md-10" type="button" href="{{ route('carterista.historial_cliente',$cliente->id) }}">Historial de transacciones</a>                          
+                            </div>
+                            <div class="form-group">
                                 <a class="btn btn-primary col-md-10" type="button" href="{{ route('carterista') }}">Volver</a>                          
                             </div>
                         </div>

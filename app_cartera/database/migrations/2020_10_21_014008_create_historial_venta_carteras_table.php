@@ -14,8 +14,8 @@ class CreateHistorialVentaCarterasTable extends Migration
     public function up()
     {
         Schema::create('historial_venta_carteras', function (Blueprint $table) {
-            $table->id();
-            $table->integer('cartera_id');
+            $table->increments('id');
+            $table->integer('cartera_id')->unsigned();
             $table->date("fecha");
             $table->integer('venta')->default('0');
             $table->integer('deuda')->default('0');
@@ -23,6 +23,8 @@ class CreateHistorialVentaCarterasTable extends Migration
             $table->integer('saldo')->default('0');
             $table->integer('saldo_final')->default('0');
             $table->timestamps();
+
+            $table->foreign('cartera_id')->references('id')->on('carteras')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

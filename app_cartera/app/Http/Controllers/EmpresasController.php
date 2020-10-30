@@ -29,6 +29,7 @@ class EmpresasController extends Controller
 
     public function empresas_crear(Request $request)
     {
+        //dd($request);
         $validatedData = $request->validate([
             'nombre' => 'required',
             'descripcion' => 'required',
@@ -44,6 +45,52 @@ class EmpresasController extends Controller
         
             ]);
 
+            $validatedData = $request->validate([
+                'nombre' => 'required',
+                'cedula' => 'required',
+                'telefono' => 'required',
+                'direccion' => 'required',
+                'contrasena' => 'required',
+                'email' => 'required',
+                'email' => new UsuariosEmailRule 
+                ]);
+
+            $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+
+
+            User::create([
+
+            'name' => $request->input('nombre'),
+            'email' =>$request->input('email'),
+            'password'=> Hash::make($request->input('contrasena')),
+            'email_verified_at'=> null,
+            'remember_token'=>null,
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+            ]);
+
+
+            $empresa=Empresa::where('nombre',$request->nombre);            
+            $user = Auth::user();
+
+            $usuario = new Usuario();
+
+            $usuario->nombre = $request->input('nombre');
+            $usuario->cedula = $request->input('cedula');
+            $usuario->telefono = $request->input('telefono');
+            $usuario->direccion = $request->input('direccion');
+            $usuario->empresa_id = $empresa->first()->id;
+            $usuario->nit = '0';
+            $usuario->user_id = '0';
+            $usuario->tipo= '2';
+            $usuario->estado ='A';
+
+            //Vincular correo a un user registrado en el sistema
+            $user = User::Where('email',$request->input('email'))->get()->get(0);     
+            $usuario->user_id = $user->id;
+            $usuario->save(); 
+            //dd($usuario->id);
+
             $ultima_empresa = DB::table('empresas')
                 ->select('id','nombre')
                 ->orderBy('created_at', 'desc')
@@ -55,7 +102,7 @@ class EmpresasController extends Controller
                 'descripcion'=>'lista de las personas que le deben a la empresa '.$ultima_empresa->nombre,
                 'estado'=>'A',
                 'empresa_id'=>$ultima_empresa->id,
-                'usuario_id'=>'0',
+                'usuario_id'=>$usuario->id,
                 'tipo'=>'2'       
             ]);
             
@@ -68,59 +115,14 @@ class EmpresasController extends Controller
                 'descripcion'=>'lista de las personas sin deudas que no volvieron a comprar a la empresa '.$ultima_empresa->nombre,
                 'estado'=>'A',
                 'empresa_id'=>$ultima_empresa->id,
-                'usuario_id'=>'0',
+                'usuario_id'=>$usuario->id,
                 'tipo'=>'3'       
             ]);
             
             $listainactivos = DB::table('carteras')
                 ->orderBy('created_at', 'desc')
                 ->first();
-
-
-
-                $validatedData = $request->validate([
-                    'nombre' => 'required',
-                    'cedula' => 'required',
-                    'telefono' => 'required',
-                    'direccion' => 'required',
-                    'contrasena' => 'required',
-                    'email' => 'required',
-                    'email' => new UsuariosEmailRule 
-                    ]);
-
-                $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
-
-
-                User::create([
-
-                'name' => $request->input('nombre'),
-                'email' =>$request->input('email'),
-                'password'=> Hash::make($request->input('contrasena')),
-                'email_verified_at'=> null,
-                'remember_token'=>null,
-                'created_at'=>$current_date_time,
-                'updated_at'=> $current_date_time
-                ]);
-
-
-                $empresa=Empresa::where('nombre',$request->nombre);            
-                $user = Auth::user();
-                $usuario = new Usuario();
-
-                $usuario->nombre = $request->input('nombre');
-                $usuario->cedula = $request->input('cedula');
-                $usuario->telefono = $request->input('telefono');
-                $usuario->direccion = $request->input('direccion');
-                $usuario->empresa_id = $empresa->first()->id;
-                $usuario->nit = '0';
-                $usuario->user_id = '0';
-                $usuario->tipo= '2';
-                $usuario->estado ='A';
-
-                //Vincular correo a un user registrado en el sistema
-                $user = User::Where('email',$request->input('email'))->get()->get(0);     
-                $usuario->user_id = $user->id;
-                $usuario->save();    
+   
 
                 
                 //dd($empresa->first()->id);

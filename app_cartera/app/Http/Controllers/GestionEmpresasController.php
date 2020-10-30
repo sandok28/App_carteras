@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\HistorialVentaCartera;
+use App\HistorialVentaCliente;
 use App\Producto;
 use App\Empresa;
 use App\Cartera;
@@ -23,6 +24,14 @@ use Illuminate\Support\Facades\DB;
 
 class GestionEmpresasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        //$this->middleware('RolUserAdminMiddleware');
+      
+    }
+
+
 
 //////////////////// CARTERAS DE LA EMPRESA ////////////////////  
 
@@ -1228,6 +1237,26 @@ public function usuarios4_activar(Usuario $usuario)
         //dd($ventas->get()->all());
             
     }
+
+    public function historial_cliente($cliente_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        //dd($cliente_id);
+        $transacciones=HistorialVentaCliente::where('cliente_id',$cliente_id)->orderBy('fecha','desc')->get(); 
+        $cartera_id=Cliente::find($cliente_id)->cartera_id;
+        //dd($cartera_id);
+        //dd($transacciones);
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_cliente_ventas')->with('transacciones',$transacciones)
+            ->with('cartera_id',$cartera_id);}  
+          
+    }
+
+
     
     
 }
