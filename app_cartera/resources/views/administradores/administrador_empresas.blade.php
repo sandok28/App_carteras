@@ -13,15 +13,16 @@
 
 @section('content')
     <main>
+        @include('Partials.general.alertas')
         <header class="page-header page-header-dark bg-gradient-primary-to-secondary pb-10">
-            <div class="container">
+            <div class="container">                
                 <div class="page-header-content pt-12">
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">Panel de administracion de empresas</div>
                                 <div class="row center-md card-body">
-                                
+                                    
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-success col-md-2" type="button" href="{{ route('administrador.administrador_empresas.formulario_empresas_crear') }}">Registar empresa</a>
                                     

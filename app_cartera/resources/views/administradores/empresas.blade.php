@@ -14,7 +14,9 @@
     <main>
         <header class="page-header page-header-dark bg-gradient-primary-to-secondary pb-10">
             <div class="container">
+               
                 <div class="page-header-content pt-12">
+                    
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">

@@ -126,16 +126,19 @@ class EmpresasController extends Controller
 
                 
                 //dd($empresa->first()->id);
-
+                
             //dd($listainactivos);
             DB::commit(); //////->SAVE
         }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
+           
+            //dd($ex);
             DB::rollback();
-
+            return redirect()->route('administrador.administrador_empresas.formulario_empresas_crear')->with(['message'=> 'Ago salio mal ','tipo'=>'error']);
+            
         }
 
-        return redirect()->route('administrador.administrador_empresas');
+        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'tODO SALIO BIEN','tipo'=>'message']);
     }
 
     public function formulario_empresas_actualizar($empresa_id)
