@@ -18,7 +18,7 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de visualizacion de transacciones</div>
+                                <div class="card-header">Panel de visualizacion de Cuentas</div>
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
@@ -36,37 +36,49 @@
         <!-- Main page content-->
         <div class="container mt-n10">
             <div class="card mb-4">
-                <div class="card-header">Listado de transacciones de la cartera</div>
+                <div class="card-header">Resumen del dia</div>
                 <div class="card-body">
                     <div class="datatable">
                         <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
-                                    <th>Credito inicial</th>
-                                    <th>Ventas del dia</th>
-                                    <th>Abonos del dia</th> 
-                                    <th>Credito final</th>                                    
+                                    
+                                    <th>Cargue</th>
+                                    <th>Descargue</th> 
+                                    <th>Bonos</th>
+                                    <th>Almuerzos</th>
+                                    <th>Gastos</th>
+                                    <th>Abonos</th>
+                                    <th>Dinero a recibir</th>                                    
                                     
                                 </tr>
                             </thead>
                             <tfoot>
                                 <tr>
                                     <th>Fecha</th>
-                                    <th>Credito inicial</th>
-                                    <th>Ventas del dia</th>
-                                    <th>Abonos del dia</th> 
-                                    <th>Credito final</th>  
+                                    
+                                    <th>Cargue</th>
+                                    <th>Descargue</th> 
+                                    <th>Bonos</th>
+                                    <th>Almuerzos</th>
+                                    <th>Gastos</th>
+                                    <th>Abonos</th>
+                                    <th>Dinero a recibir</th>  
                                 </tr>
                             </tfoot>
                             <tbody>
-                            @foreach($ventas as $venta)
+                            @foreach($cuentas as $cuenta)
                                 <tr>
-                                    <td>{{$venta->fecha}}</td>
-                                    <td>{{$venta->deuda}}</td>
-                                    <td>{{$venta->venta}}</td>
-                                    <td>{{$venta->abono}}</td>
-                                    <td>{{$venta->saldo_final}}</td>
+                                    <td>{{$cuenta->fecha}}</td>
+                                    
+                                    <td>{{$cuenta->cargue}}</td>
+                                    <td>{{$cuenta->descargue}}</td>
+                                    <td>{{$cuenta->bono}}</td>
+                                    <td>{{$cuenta->almuerzo}}</td>
+                                    <td>{{$cuenta->gasto}}</td>
+                                    <td>{{$cuenta->abono}}</td>
+                                    <td>{{$cuenta->total}}</td>
                                 </tr>
                                 
                             @endforeach

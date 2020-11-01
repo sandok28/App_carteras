@@ -22,7 +22,7 @@
                                 <div class="row center-md card-body">
                                 
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/empresa/bodeguistas/formulario_bodeguistas_crear') }}">Registar bodeguista</a>
+                                    <a class="btn btn-success col-md-2" type="button" href="{{ url('/empresa/bodeguistas/formulario_bodeguistas_crear') }}">Registar bodeguero</a>
                                     
                                 
                                 </div>

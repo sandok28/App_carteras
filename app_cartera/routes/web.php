@@ -117,6 +117,10 @@ Route::PUT('/empresa/listainactivos/{cliente_id}','GestionEmpresasController@cli
 
 Route::get('/empresa/ventas/{cartera_id}','GestionEmpresasController@ventas')->name('empresa.ventas');
 
+/////->Gestionempresa - Cuentas
+
+Route::get('/empresa/cuentas/{cartera_id}','GestionEmpresasController@cuentas')->name('empresa.cuentas');
+
 /////->Gestionempresa - bonos
 
 Route::get('/empresa/bonos/{cartera_id}','GestionEmpresasController@bonos')->name('empresa.bonos');
@@ -233,6 +237,10 @@ Route::post('/carterista/devolucion/{cliente_id}/devolucion_crear','CarteristasC
 //Carterista - cliente - historial ventas
 
 Route::get('/carterista/cliente/{cliente_id}/transacciones','CarteristasController@historial_cliente')->name('carterista.historial_cliente');
+
+//Carterista - cliente - historial ventas
+
+Route::get('/carterista/cliente/{cliente_id}/atendido','CarteristasController@cliente_atendido')->name('carterista.cliente_atendido');
 
 ////
 Route::get('/usuariosadmin/formulario_usuarios_crear','Usuarioscontroller@formulario_usuariosadmin_crear');

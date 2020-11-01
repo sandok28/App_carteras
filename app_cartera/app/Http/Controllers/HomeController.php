@@ -45,6 +45,9 @@ class HomeController extends Controller
             case '3':
                 return redirect()->route('carterista');
                 break;
+            case '4':
+                return redirect()->route('bodega');
+                break;
         }
 
 

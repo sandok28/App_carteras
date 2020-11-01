@@ -31,6 +31,8 @@
                             <p>Ventas del dia: {{$venta}}</p>
                             <p>Abonos del dia: {{$abono}}</p>
                             <p>saldo cartera: {{$saldo}}</p>
+                            <p>total dinero de la cartera: {{$total}}</p>
+
                         </div>
                     </div>
                 </div>

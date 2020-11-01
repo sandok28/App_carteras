@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Rules\UsuariosEmailRule;
 use Illuminate\Support\Facades\DB;
 
+
 class GestionEmpresasController extends Controller
 {
     public function __construct()
@@ -968,6 +969,8 @@ public function lista_carteristas()
 
 public function lista_bodeguistas()
 {
+    
+
     $user = Auth::user();
     $empresa_id = $user->usuarios->get(0)->empresa_id;
     $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
@@ -1254,6 +1257,26 @@ public function usuarios4_activar(Usuario $usuario)
         else{return view('adminempresa.empresa_cliente_ventas')->with('transacciones',$transacciones)
             ->with('cartera_id',$cartera_id);}  
           
+    }
+
+    public function cuentas($cartera_id)
+    {
+        
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        $cuentas = DB::table('cuentas')->where('cartera_id',$cartera_id)->orderBy('fecha','desc')->get();
+        
+
+    if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_cuentas', compact('cuentas'));}
+        //dd($cartera_id);
+        //$ventas=HistorialVentaCartera::where('cartera_id',$cartera_id)->get();
+       
+        //dd($ventas->get()->all());
+            
     }
 
 

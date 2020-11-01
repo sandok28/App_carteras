@@ -64,7 +64,8 @@
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/carteras/'.$cartera->id.'/clientes') }}" title="Clientes"><i data-feather ="users"></i></a>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/bonos/'.$cartera->id)}}" title="Bonos"><i data-feather ="dollar-sign"></i></a>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/novedades/'.$cartera->id)}}" title="Novedades"><i data-feather ="message-circle"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/ventas/'.$cartera->id)}}"title="Transacciones"><i data-feather ="shopping-cart"></i></a>                                                                  
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/ventas/'.$cartera->id)}}"title="Transacciones"><i data-feather ="archive"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/cuentas/'.$cartera->id)}}"title="Cuentas"><i data-feather ="shopping-cart"></i></a>                                                                  
                                         
                                         
                                     </td>

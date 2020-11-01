@@ -116,7 +116,6 @@ class UsuariosSeeder extends Seeder
         'tipo'=>'1',
         'estado'=>'A',
         'user_id'=>'18',
-        'empresa_id'=>'1',
         'created_at'=>$current_date_time,
         'updated_at'=> $current_date_time
     ]);

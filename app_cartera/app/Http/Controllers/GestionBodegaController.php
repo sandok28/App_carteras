@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Cartera;
+use App\Bono;
 use App\Producto;
 use App\Nevera;
 use App\Cliente;
@@ -11,6 +12,7 @@ use App\Empresa;
 use App\Devolucion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+
 
 use Illuminate\Http\Request;
 
@@ -35,9 +37,12 @@ class GestionBodegaController extends Controller
         //$carteras_por_atender=$carteras->where('tipo',1)->where('cargue','=','D')->get();////// filtro de las carteras tipo 1
        
         $current_day = Carbon::now()->dayOfWeek; // Produces something like "2019-03-11"
-
+        if($current_day == 0){
+            $current_day = 7;
+        }
         $carteras_por_atender = DB::table('carteras')
                 ->join('cartera_dia', 'cartera_dia.cartera_id', '=', 'carteras.id')
+                ->where('empresa_id',$empresa_id)
                 ->where('carteras.tipo',1)
                 ->where('carteras.cargue','=','D')
                 ->where('cartera_dia.dia_id','=',$current_day)
@@ -46,6 +51,7 @@ class GestionBodegaController extends Controller
 
         $carteras_atendidas = DB::table('carteras')
                 ->join('cartera_dia', 'cartera_dia.cartera_id', '=', 'carteras.id')
+                ->where('empresa_id',$empresa_id)
                 ->where('carteras.tipo',1)
                 ->where('carteras.cargue','=','C')
                 ->where('cartera_dia.dia_id','=',$current_day)
@@ -397,7 +403,61 @@ class GestionBodegaController extends Controller
 
                 
             }
+
+            $productos_nevera=Nevera::where('cartera_id',$cartera_id)->get()->all();
+            $descargue=0;
+            foreach($productos_nevera as $producto){
+                $var_aux1 =$producto;
+                //dd($var_aux1);
+                $produnev_id=$var_aux1->producto_id;
+                $produnev_cant=$var_aux1->cantidad;
+                $produnev_precio=$var_aux1->producto->precio;
+                //dd($produnev_id, $produnev_cant, $produnev_precio);
+                //dd();
+                $descargue=$descargue+(($produnev_cant)*($produnev_precio));
+                
+            }
             
+            //dd($cartera_id);
+            //dd($total);
+            
+            
+            $cargue_inicial=Cartera::find($cartera_id)->cargue_del_dia;
+            $abonos=Cartera::find($cartera_id)->abono_del_dia;
+            
+            if(is_null($bonos=Bono::where('cartera_id',$cartera_id)->where('tipo',1)->where('mi_fecha',$current_date)->first())){
+                
+                $bonos = 0;
+                
+            }else{$bonos=Bono::where('cartera_id',$cartera_id)->where('tipo',1)->where('mi_fecha',$current_date)->first()->valor;}
+            
+            if(is_null($almuerzos=Bono::where('cartera_id',$cartera_id)->where('tipo',2)->where('mi_fecha',$current_date)->first())){
+                
+                $almuerzos = 0;
+                
+            }else{$almuerzos=Bono::where('cartera_id',$cartera_id)->where('tipo',2)->where('mi_fecha',$current_date)->first()->valor;}
+
+            if(is_null($gastos=Bono::where('cartera_id',$cartera_id)->where('tipo',3)->where('mi_fecha',$current_date)->first())){
+                
+                $gastos = 0;
+                
+            }else{$gastos=Bono::where('cartera_id',$cartera_id)->where('tipo',3)->where('mi_fecha',$current_date)->first()->valor;}     
+            
+            $total=$abonos-($gastos+$almuerzos+$bonos);
+            DB::insert('insert into cuentas (fecha, cartera_id, cargue, abono, bono, almuerzo, gasto, descargue, total) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$current_date, $cartera_id, $cargue_inicial, $abonos, $bonos, $almuerzos, $gastos, $descargue, $total]);
+            
+            
+            //dd($productos_nevera);
+            //dd($cuentas);
+
+           
+
+
+
+
+
+
+
             $affected = DB::update('update carteras set credito_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total de la deuda  en la cartera
             $affected = DB::update('update carteras set saldo_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total del saldo  en la cartera
             $affected = DB::update('update carteras set abono_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total de la abono  en la cartera

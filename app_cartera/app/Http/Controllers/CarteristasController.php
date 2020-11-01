@@ -774,13 +774,36 @@ class CarteristasController extends Controller
         $usuario = $user->usuarios->get(0);
         $cartera = $usuario->cartera();
         $creditoinicial=$cartera->credito_del_dia;
+        $cartera_id=$cartera->id;
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         $saldo=$cartera->saldo_del_dia;
         $venta=$cartera->venta_del_dia;
         $abono=$cartera->abono_del_dia;
         
+
+        if(is_null($bonos=Bono::where('cartera_id',$cartera_id)->where('tipo',1)->where('mi_fecha',$current_date)->first())){
+                
+            $bonos = 0;
+            
+        }else{$bonos=Bono::where('cartera_id',$cartera_id)->where('tipo',1)->where('mi_fecha',$current_date)->first()->valor;}
+        
+        if(is_null($almuerzos=Bono::where('cartera_id',$cartera_id)->where('tipo',2)->where('mi_fecha',$current_date)->first())){
+            
+            $almuerzos = 0;
+            
+        }else{$almuerzos=Bono::where('cartera_id',$cartera_id)->where('tipo',2)->where('mi_fecha',$current_date)->first()->valor;}
+
+        if(is_null($gastos=Bono::where('cartera_id',$cartera_id)->where('tipo',3)->where('mi_fecha',$current_date)->first())){
+            
+            $gastos = 0;
+            
+        }else{$gastos=Bono::where('cartera_id',$cartera_id)->where('tipo',3)->where('mi_fecha',$current_date)->first()->valor;}     
+        //dd($abono);
+        $total=$abono-($gastos+$almuerzos+$bonos);
+        //dd($total);
         //dd($creditoinicial,$saldo,$venta,$abono);
 
-        return view('carteristas.resumen_del_dia')->with('creditoinicial',$creditoinicial)->with('saldo',$saldo)->with('venta',$venta)->with('abono',$abono); 
+        return view('carteristas.resumen_del_dia')->with('creditoinicial',$creditoinicial)->with('saldo',$saldo)->with('venta',$venta)->with('abono',$abono)->with('total',$total); 
     }
 
     public function historial_cliente($cliente_id)
@@ -789,7 +812,7 @@ class CarteristasController extends Controller
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
         $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         //dd($cliente_id);
-        $transacciones=HistorialVentaCliente::where('cliente_id',$cliente_id)->orderBy('fecha','desc')->get(); 
+        $transacciones=HistorialVentaCliente::where('cliente_id',$cliente_id)->orderBy('fecha','desc')->latest()->take(5)->get(); 
         
         //dd($cartera_id);
         //dd($transacciones);
@@ -798,6 +821,26 @@ class CarteristasController extends Controller
         }
         else{return view('carteristas.clientes.carterista_cliente_ventas')->with('transacciones',$transacciones)
             ->with('cliente_id',$cliente_id);}  
+          
+    }
+
+    public function cliente_atendido($cliente_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        //dd($cliente_id);
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+
+            DB::table('clientes')
+              ->where('id',  $cliente_id)->update(['fecha_ultima_visita' => $current_date]); 
+        
+        //dd($cartera_id);
+        //dd($transacciones);
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return  redirect()->route('carterista');}  
           
     }
 

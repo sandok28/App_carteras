@@ -18,6 +18,7 @@ class CrearTablaEmpresas extends Migration
             $table->string('nombre');
             $table->string('descripcion');
             $table->string('telefono');
+            $table->string('estado')->default("A");
             
             $table->timestamps();
         });
