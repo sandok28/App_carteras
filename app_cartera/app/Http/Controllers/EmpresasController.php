@@ -78,16 +78,6 @@ class EmpresasController extends Controller
 
 
 
-                $validatedData = $request->validate([
-                    'nombre' => 'required',
-                    'cedula' => 'required',
-                    'telefono' => 'required',
-                    'direccion' => 'required',
-                    'contrasena' => 'required',
-                    'email' => 'required',
-                    'email' => new UsuariosEmailRule 
-                    ]);
-
                 $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
 
 
@@ -124,16 +114,19 @@ class EmpresasController extends Controller
 
                 
                 //dd($empresa->first()->id);
-
+                
             //dd($listainactivos);
             DB::commit(); //////->SAVE
         }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
+           
+            //dd($ex);
             DB::rollback();
-
+            return redirect()->route('administrador.administrador_empresas.formulario_empresas_crear')->with(['message'=> 'Ago salio mal ','tipo'=>'error']);
+            
         }
 
-        return redirect()->route('administrador.administrador_empresas');
+        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'tODO SALIO BIEN','tipo'=>'message']);
     }
 
     public function formulario_empresas_actualizar($empresa_id)
