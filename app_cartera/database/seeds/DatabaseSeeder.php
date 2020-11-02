@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
          $this->call(ListaNegraClientesSeeder::class);
          $this->call(NeverasSeeder::class);
          $this->call(DiasSeeder::class);
+         $this->call(CarteraDiaSeeder::class);
 
          
     }
