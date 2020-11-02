@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista productos
+    Lista de carteristas
 @endsection
 
 @section('content_css')
@@ -23,7 +23,7 @@
                                 
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-success col-md-2" type="button" href="{{ url('/empresa/carteristas/formulario_carteristas_crear') }}">Registar carterista</a>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    
                                 
                                 </div>
                                 
@@ -83,12 +83,12 @@
                                     </td>
 
                                     <td>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/carteristas/'.$usuario->id.'/formulario_carteristas_actualizar') }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/carteristas/'.$usuario->id.'/formulario_carteristas_actualizar') }}" title="Editar"><i data-feather="edit"></i></a>
                                         
                                         @if ($usuario->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{url('/empresa/empresa_carterista/carterista_desactivar/'.$usuario->id)}}"><i data-feather="user-x"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{url('/empresa/empresa_carterista/carterista_desactivar/'.$usuario->id)}}" title="Desactivar"><i data-feather="user-x"></i></a>
                                         @elseif ($usuario->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{url('/empresa/empresa_carterista/carterista_activar/'.$usuario->id)}}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{url('/empresa/empresa_carterista/carterista_activar/'.$usuario->id)}}" title="Activar"><i data-feather="user-check"></i></a>
                                         @endif
                                     
                                     </td>

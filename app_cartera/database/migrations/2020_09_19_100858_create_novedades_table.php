@@ -14,12 +14,14 @@ class CreateNovedadesTable extends Migration
     public function up()
     {
         Schema::create('novedades', function (Blueprint $table) {
-            $table->id();
-            $table->integer("cartera_id");
+            $table->increments('id');
+            $table->integer("cartera_id")->unsigned();
             $table->string("novedad");
             $table->string("usuario_nombre");
             $table->date("mi_fecha");
             $table->timestamps();
+
+            $table->foreign('cartera_id')->references('id')->on('carteras')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

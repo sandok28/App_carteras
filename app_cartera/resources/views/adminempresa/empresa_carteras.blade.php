@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista carteras
+    Lista de carteras
 @endsection
 
 @section('content_css')
@@ -21,8 +21,7 @@
                                 <div class="card-header">Panel de administracion de carteras</div>
                                 <div class="row center-md card-body">
                                 
-                                    <div class="col-md-8"></div>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    
                                 
                                 </div>
                                 
@@ -65,7 +64,8 @@
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/carteras/'.$cartera->id.'/clientes') }}" title="Clientes"><i data-feather ="users"></i></a>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/bonos/'.$cartera->id)}}" title="Bonos"><i data-feather ="dollar-sign"></i></a>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/novedades/'.$cartera->id)}}" title="Novedades"><i data-feather ="message-circle"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/ventas/'.$cartera->id)}}"title="Transacciones"><i data-feather ="shopping-cart"></i></a>                                                                  
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/ventas/'.$cartera->id)}}"title="Transacciones"><i data-feather ="archive"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/cuentas/'.$cartera->id)}}"title="Cuentas"><i data-feather ="shopping-cart"></i></a>                                                                  
                                         
                                         
                                     </td>

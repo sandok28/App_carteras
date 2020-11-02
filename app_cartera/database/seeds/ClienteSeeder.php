@@ -20,7 +20,7 @@ class ClienteSeeder extends Seeder
         //Cantidad carteras
         for($i = 1; $i <= 8; $i++){
             //Cantidad Clientes
-            for($j = 1; $j <= 100; $j++){
+            for($j = 1; $j <= 10; $j++){
                 App\Cliente::create([
                     'id'=>$cont_id,
                     'nombre'=>'Cliente '.$cont_id,

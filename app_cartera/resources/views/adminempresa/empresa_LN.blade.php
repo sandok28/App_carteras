@@ -4,7 +4,7 @@
 
 
 @section('titulo_pigina')
-    Lista clientes
+    Lista de clientes lista negra
 @endsection
 
 @section('content_css')
@@ -19,10 +19,10 @@
                     <div class="row align-items-center justify-content-between">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header">Panel de administracion de clientes de la cartera</div>
+                                <div class="card-header">Panel de administracion de clientes de la empresa</div>
                                 <div class="row center-md card-body">
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -44,6 +44,7 @@
                                     <th>Telefono</th>
                                     <th>Cedula</th>
                                     <th>Deuda</th>
+                                    <th>Razon</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -54,6 +55,7 @@
                                     <th>Telefono</th>
                                     <th>Cedula</th>
                                     <th>Deuda</th>
+                                    <th>Razon</th>
                                     <th>Acciones</th>
                                 </tr>
                             </tfoot>
@@ -65,6 +67,7 @@
                                     <td>{{$cliente->telefono}}</td>
                                     <td>{{$cliente->cedula}}</td>
                                     <td>{{$cliente->deuda}}</td>
+                                    <td><div style="width: 200px;">{{$cliente->comentarios}}</div></td>
                                     <td>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/listanegra/'.$cliente->id.'/formulario_cliente_listanegra_actualizar')}}"title="Cambiar Cliente de Cartera"><i data-feather="edit"></i></a>
                                         <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/listanegra/confirmar/'.$cliente->id)}}"title="Enviar Cliente a Lista Negra"><i data-feather="x-circle"></i></a>
@@ -113,7 +116,7 @@
                                     <td>{{$cliente->cedula}}</td>
                                     <td>{{$cliente->deuda}}</td>
                                     <td>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/listanegra/'.$cliente->id.'/formulario_cliente_listanegra_actualizar')}}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/listanegra/'.$cliente->id.'/formulario_cliente_listanegra_actualizar')}}" title="Trasladar"><i data-feather="edit"></i></a>
                                     </td>
                                 </tr>
                                 

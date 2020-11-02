@@ -15,6 +15,7 @@ class Cliente extends Model
             'direccion',
             'telefono',
             'cedula',
+            'comentarios',
             'cartera_id',
             'fecha_ultima_visita',
             'posicion',

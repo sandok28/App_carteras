@@ -49,7 +49,7 @@
                                 </div>
                                 
                                 {!! Form::submit('Guardar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
+                                <a class="btn btn-primary " type="button" href="{{route('administrador.administrador_empresas')}}">Volver</a>
                                 
                             {!! Form::close() !!}
                             </form>

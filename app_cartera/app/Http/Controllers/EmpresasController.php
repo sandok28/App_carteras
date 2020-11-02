@@ -16,10 +16,13 @@ use App\Usuario;
 
 class EmpresasController extends Controller
 {
-    public function __construct()
+    protected  $erroreslog;
+    protected  $controller_name = 'EmpresasController.';
+    public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
         $this->middleware('RolUserAdminMiddleware');
+        $this->erroreslog = $erroreslog_init;
     }
 
     public function formulario_empresas_crear()
@@ -29,6 +32,8 @@ class EmpresasController extends Controller
 
     public function empresas_crear(Request $request)
     {
+
+        //dd($request);
         $validatedData = $request->validate([
             'nombre' => 'required',
             'descripcion' => 'required',
@@ -44,6 +49,42 @@ class EmpresasController extends Controller
         
             ]);
 
+            $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
+
+
+            User::create([
+
+            'name' => $request->input('nombre'),
+            'email' =>$request->input('email'),
+            'password'=> Hash::make($request->input('contrasena')),
+            'email_verified_at'=> null,
+            'remember_token'=>null,
+            'created_at'=>$current_date_time,
+            'updated_at'=> $current_date_time
+            ]);
+
+
+            $empresa=Empresa::where('nombre',$request->nombre);            
+            $user = Auth::user();
+
+            $usuario = new Usuario();
+
+            $usuario->nombre = $request->input('nombre');
+            $usuario->cedula = $request->input('cedula');
+            $usuario->telefono = $request->input('telefono');
+            $usuario->direccion = $request->input('direccion');
+            $usuario->empresa_id = $empresa->first()->id;
+            $usuario->nit = '0';
+            $usuario->user_id = '0';
+            $usuario->tipo= '2';
+            $usuario->estado ='A';
+
+            //Vincular correo a un user registrado en el sistema
+            $user = User::Where('email',$request->input('email'))->get()->get(0);     
+            $usuario->user_id = $user->id;
+            $usuario->save(); 
+            //dd($usuario->id);
+
             $ultima_empresa = DB::table('empresas')
                 ->select('id','nombre')
                 ->orderBy('created_at', 'desc')
@@ -55,7 +96,7 @@ class EmpresasController extends Controller
                 'descripcion'=>'lista de las personas que le deben a la empresa '.$ultima_empresa->nombre,
                 'estado'=>'A',
                 'empresa_id'=>$ultima_empresa->id,
-                'usuario_id'=>'0',
+                'usuario_id'=>$usuario->id,
                 'tipo'=>'2'       
             ]);
             
@@ -68,49 +109,14 @@ class EmpresasController extends Controller
                 'descripcion'=>'lista de las personas sin deudas que no volvieron a comprar a la empresa '.$ultima_empresa->nombre,
                 'estado'=>'A',
                 'empresa_id'=>$ultima_empresa->id,
-                'usuario_id'=>'0',
+                'usuario_id'=>$usuario->id,
                 'tipo'=>'3'       
             ]);
             
             $listainactivos = DB::table('carteras')
                 ->orderBy('created_at', 'desc')
                 ->first();
-
-
-
-                $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
-
-
-                User::create([
-
-                'name' => $request->input('nombre'),
-                'email' =>$request->input('email'),
-                'password'=> Hash::make($request->input('contrasena')),
-                'email_verified_at'=> null,
-                'remember_token'=>null,
-                'created_at'=>$current_date_time,
-                'updated_at'=> $current_date_time
-                ]);
-
-
-                $empresa=Empresa::where('nombre',$request->nombre);            
-                $user = Auth::user();
-                $usuario = new Usuario();
-
-                $usuario->nombre = $request->input('nombre');
-                $usuario->cedula = $request->input('cedula');
-                $usuario->telefono = $request->input('telefono');
-                $usuario->direccion = $request->input('direccion');
-                $usuario->empresa_id = $empresa->first()->id;
-                $usuario->nit = '0';
-                $usuario->user_id = '0';
-                $usuario->tipo= '2';
-                $usuario->estado ='A';
-
-                //Vincular correo a un user registrado en el sistema
-                $user = User::Where('email',$request->input('email'))->get()->get(0);     
-                $usuario->user_id = $user->id;
-                $usuario->save();    
+                
 
                 
                 //dd($empresa->first()->id);
@@ -122,11 +128,14 @@ class EmpresasController extends Controller
            
             //dd($ex);
             DB::rollback();
-            return redirect()->route('administrador.administrador_empresas.formulario_empresas_crear')->with(['message'=> 'Ago salio mal ','tipo'=>'error']);
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'empresas_crear',$ex->getMessage());            
+            return redirect()->route('administrador.administrador_empresas.formulario_empresas_crear')->with(['message'=> 'Error al crear la empresa ','tipo'=>'error']);
             
         }
 
-        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'tODO SALIO BIEN','tipo'=>'message']);
+        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     public function formulario_empresas_actualizar($empresa_id)
@@ -134,12 +143,19 @@ class EmpresasController extends Controller
         
        
         $empresa = Empresa::find($empresa_id);
+
+        $usuario = Usuario::where('empresa_id',$empresa_id)->where('tipo',2)->get()->get(0);
+        $empresa->cedula=$usuario->cedula;
+        $empresa->direccion=$usuario->direccion;
+        $empresa->email=$usuario->user->email;
         
-        return view('administradores.administrador_empresas.formulario_empresas_actualizar', compact('empresa'));
+
+        return view('administradores.administrador_empresas.formulario_empresas_actualizar')->with('empresa',$empresa)->with('usuario',$usuario);
     }
 
     public function empresas_actualizar(Request $request, $empresa_id)
     {
+        //dd($request);
         $validatedData = $request->validate([
             'nombre' => 'required',
             'descripcion' => 'required',
@@ -151,14 +167,37 @@ class EmpresasController extends Controller
             $empresa->fill($request->all());
             $empresa->telefono = $request->input('telefono');
             $empresa->save();
+
+            $usuario = Usuario::where('empresa_id',$empresa_id)->where('tipo',2)->get()->get(0);
+            $usuario->cedula=($request->cedula);
+            $usuario->direccion=($request->direccion);
+            $usuario->save();
+
+            $user=User::where('id',$usuario->user_id)->get()->get(0);
+            //dd($request->input('contrasena'));
+            $user->email=($request->email);
+            
+            if(!is_null($request->input('contrasena'))){
+                $user->password = Hash::make($request->input('contrasena'));
+            }
+            $user->save();
+            //dd($usuario->user->email);
+            
+            
+            //dd($usuario);
+
+
         DB::commit();
              
          }
-         catch (\Exception $ex){dd($ex);
+         catch (\Exception $ex){
                                  DB::rollback();
-                                 }
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'empresas_actualizar',$ex->getMessage());
+            return redirect()->route('administrador.administrador_empresas.formulario_empresas_actualizar')->with(['message'=> 'Error al actualizar la empresa ','tipo'=>'error']);}
 
-        return redirect()->route('administrador.administrador_empresas');
+        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     public function vistacarterasempresa($empresa_id)//vista de las carteras de la empresa del usuario logueado

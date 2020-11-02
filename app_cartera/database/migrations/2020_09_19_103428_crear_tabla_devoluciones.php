@@ -16,15 +16,19 @@ class CrearTablaDevoluciones extends Migration
         //
         Schema::create('devoluciones', function (Blueprint $table) {
             
-            $table->id("id");
-            $table->integer ("empresa_id");
-            $table->integer ("cartera_id");
-            $table->integer ("cliente_id");
+            $table->increments('id');
+            $table->integer ("empresa_id")->unsigned();
+            $table->integer ("cartera_id")->unsigned();
+            $table->integer ("cliente_id")->unsigned();
             $table->date("fecha");
-            $table->integer ("producto_id");
+            $table->integer ("producto_id")->unsigned();
             $table->integer("producto_cantidad");
             $table->timestamps();
-            
+
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('cartera_id')->references('id')->on('carteras')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

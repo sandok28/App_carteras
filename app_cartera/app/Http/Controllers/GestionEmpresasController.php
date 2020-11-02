@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\HistorialVentaCartera;
+use App\HistorialVentaCliente;
 use App\Producto;
 use App\Empresa;
 use App\Cartera;
@@ -21,8 +22,20 @@ use Illuminate\Support\Facades\Hash;
 use App\Rules\UsuariosEmailRule;
 use Illuminate\Support\Facades\DB;
 
+
 class GestionEmpresasController extends Controller
 {
+    protected  $erroreslog;
+    protected  $controller_name = 'EmpresasController.';
+    public function __construct(ErroresController $erroreslog_init)
+    {
+        $this->middleware('auth');
+        //$this->middleware('RolUserAdminMiddleware');
+        $this->erroreslog = $erroreslog_init;
+      
+    }
+
+
 
 //////////////////// CARTERAS DE LA EMPRESA ////////////////////  
 
@@ -33,10 +46,17 @@ class GestionEmpresasController extends Controller
         $user = Auth::user();
         //$empresa_cartera = $user->usuarios->get(0)->empresa->carteras;
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        //dd($estado_empresa);
         $carteras = Cartera::where('empresa_id',$empresa_id);////// carteras de la empresa del usuario logueado
-        $empresa_cartera=$carteras->where('tipo',1)->get();////// filtro de las carteras tipo 1
+        $empresa_cartera=$carteras->where('tipo',1)->where('estado','A')->get();////// filtro de las carteras tipo 1
         //dd($empresa_cartera);
-        return view('adminempresa.empresa_carteras')->with('empresa_carteras', $empresa_cartera);
+
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_carteras')->with('empresa_carteras', $empresa_cartera);}
+        
                                                 
     }
 
@@ -47,103 +67,106 @@ class GestionEmpresasController extends Controller
         //dd($dias);
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $empresa_id_cartera=Cartera::find($cartera_id)->empresa_id;//////empresa a la cual pertenece la cartera
         //dd($empresa_id);
 
 
-
-        if($empresa_id == $empresa_id_cartera)
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{if($empresa_id == $empresa_id_cartera)
             {
                 //$usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->pluck('usuario_id')->toArray();
 
-        $usuarios_empresa_sin_asignados = Usuario::all()
+                $usuarios_empresa_sin_asignados = Usuario::all()
+                                                    ->where('empresa_id','=',$empresa_id)
+                                                    ->where('estado','=','A')//Activo
+                                                    ->where('tipo','=','3')// 3 - Carterista
+                                                    //->whereNotIn('id',$usuarios_empresa_asignados)
+                                                    ->pluck('nombre', 'id');
+
+            // dd($usuarios_empresa_sin_asignados);
+
+                //$usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->select('usuario_id')->get();
+
+                //dd($usuario_actual_cartera);
+
+                $cartera = Cartera::find($cartera_id);
+
+                $usuarios_empresa = Usuario::all()
                                             ->where('empresa_id','=',$empresa_id)
                                             ->where('estado','=','A')//Activo
                                             ->where('tipo','=','3')// 3 - Carterista
-                                            //->whereNotIn('id',$usuarios_empresa_asignados)
                                             ->pluck('nombre', 'id');
 
-       // dd($usuarios_empresa_sin_asignados);
-
-        //$usuarios_empresa_asignados = Cartera::where('empresa_id','=',$empresa_id)->select('usuario_id')->get();
-
-        //dd($usuario_actual_cartera);
-
-        $cartera = Cartera::find($cartera_id);
-
-        $usuarios_empresa = Usuario::all()
-                                      ->where('empresa_id','=',$empresa_id)
-                                      ->where('estado','=','A')//Activo
-                                      ->where('tipo','=','3')// 3 - Carterista
-                                      ->pluck('nombre', 'id');
-
-        //dd($usuarios_empresa);
-        
-        $dia1 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',1)->get()->all();
-        
-        if(empty($dia1)){
-            $dia1_id=0;
-        }else{$dia1_id=1;}
+                //dd($usuarios_empresa);
                 
-        $dia2 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',2)->get()->all();
-        
-        if(empty($dia2)){
-            $dia2_id=0;
-        }else{$dia2_id=1;}
+                $dia1 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',1)->get()->all();
+                
+                if(empty($dia1)){
+                    $dia1_id=0;
+                }else{$dia1_id=1;}
+                        
+                $dia2 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',2)->get()->all();
+                
+                if(empty($dia2)){
+                    $dia2_id=0;
+                }else{$dia2_id=1;}
 
-        $dia3 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',3)->get()->all();
-        
-        if(empty($dia3)){
-            $dia3_id=0;
-        }else{$dia3_id=1;}
+                $dia3 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',3)->get()->all();
+                
+                if(empty($dia3)){
+                    $dia3_id=0;
+                }else{$dia3_id=1;}
 
-        $dia4 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',4)->get()->all();
-        
-        if(empty($dia4)){
-            $dia4_id=0;
-        }else{$dia4_id=1;}
+                $dia4 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',4)->get()->all();
+                
+                if(empty($dia4)){
+                    $dia4_id=0;
+                }else{$dia4_id=1;}
 
-        $dia5 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',5)->get()->all();
+                $dia5 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',5)->get()->all();
 
-        if(empty($dia5)){
-            $dia5_id=0;
-        }else{$dia5_id=1;}
+                if(empty($dia5)){
+                    $dia5_id=0;
+                }else{$dia5_id=1;}
 
-        $dia6 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',6)->get()->all();
-        
-        if(empty($dia6)){
-            $dia6_id=0;
-        }else{$dia6_id=1;}
-        
-        $dia7 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',7)->get()->all();
-        //dd($dia7);
-        if(empty($dia7)){
-            $dia7_id=0;
-        }else{$dia7_id=1;}
-        //dd($dia1_id,$dia2_id,$dia3_id,$dia4_id,$dia5_id,$dia6_id,$dia7_id);
-        
-           //dd($var_aux);
+                $dia6 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',6)->get()->all();
+                
+                if(empty($dia6)){
+                    $dia6_id=0;
+                }else{$dia6_id=1;}
+                
+                $dia7 = DB::table('cartera_dia')->where('cartera_id',$cartera_id)->where('dia_id',7)->get()->all();
+                //dd($dia7);
+                if(empty($dia7)){
+                    $dia7_id=0;
+                }else{$dia7_id=1;}
+                //dd($dia1_id,$dia2_id,$dia3_id,$dia4_id,$dia5_id,$dia6_id,$dia7_id);
+                
+                //dd($var_aux);
 
-            
-        
-        return view('adminempresa.carteras.formulario_carteras_actualizar' )->with('cartera',$cartera)
-                                                                                            ->with('empresa_id',$empresa_id)
-                                                                                            ->with('usuarios_empresa',$usuarios_empresa_sin_asignados)
-                                                                                            ->with('dia1_id',$dia1_id)
-                                                                                            ->with('dia2_id',$dia2_id)
-                                                                                            ->with('dia3_id',$dia3_id)
-                                                                                            ->with('dia4_id',$dia4_id)
-                                                                                            ->with('dia5_id',$dia5_id)
-                                                                                            ->with('dia6_id',$dia6_id)
-                                                                                            ->with('dia7_id',$dia7_id);
-    }
-            
-
-            else {
-                return redirect('xxx');
+                
+                
+                return view('adminempresa.carteras.formulario_carteras_actualizar' )->with('cartera',$cartera)
+                                                                                                    ->with('empresa_id',$empresa_id)
+                                                                                                    ->with('usuarios_empresa',$usuarios_empresa_sin_asignados)
+                                                                                                    ->with('dia1_id',$dia1_id)
+                                                                                                    ->with('dia2_id',$dia2_id)
+                                                                                                    ->with('dia3_id',$dia3_id)
+                                                                                                    ->with('dia4_id',$dia4_id)
+                                                                                                    ->with('dia5_id',$dia5_id)
+                                                                                                    ->with('dia6_id',$dia6_id)
+                                                                                                    ->with('dia7_id',$dia7_id);
             }
+                    
 
+                    else {
+                        return redirect('xxx');
+                    }
         }
+    }
     public function carteras_actualizar(Request $request,$cartera_id)
     {
         //dd($request);
@@ -194,11 +217,15 @@ class GestionEmpresasController extends Controller
 
         DB::commit();
         }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
                                 DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'carteras_actualizar',$ex->getMessage());            
+                                return redirect()->route('empresa.empresa_carteras.formulario_cartera_actualizar')->with(['message'=> 'Error al actualizar la cartera ','tipo'=>'error']);
                                 }
 
-        return redirect()->route('empresa.empresa_carteras'); 
+        return redirect()->route('empresa.empresa_carteras')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']); 
     
     }
 
@@ -209,17 +236,31 @@ public function lista_productos()
 
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         //dd($user);
         //
         $productos = Producto::all()->where('empresa_id','=',$empresa_id);
         //dd($empresa_id);
         //dd($productos);
-        return view('adminempresa.empresa_productos', compact('productos'));
+
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{ return view('adminempresa.empresa_productos', compact('productos'));}
+
+       
     }
 
     public function formulario_productos_crear()
     {
-        return view('adminempresa.productos.formulario_productos_crear');
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.productos.formulario_productos_crear');}
+        
     }
 
     public function productos_crear(Request $request)
@@ -248,24 +289,35 @@ public function lista_productos()
 
         // //DB::commit();
          }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
                                 DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'productos_crear',$ex->getMessage());            
+                                return redirect()->route('empresa.empresa_productos.formulario_productos_crear')->with(['message'=> 'Error al crear el producto ','tipo'=>'error']);
                                 }
         
 
         
 
         
-        return redirect()->route('empresa.empresa_productos');
+        return redirect()->route('empresa.empresa_productos')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
 
     public function formulario_productos_actualizar($producto_id)
     {
         //dd($producto_id);
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $producto = Producto::find($producto_id);
         //dd($producto);
-        return view('adminempresa.productos.formulario_productos_actualizar', compact('producto'));
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.productos.formulario_productos_actualizar', compact('producto'));}
+        
     }
 
     public function productos_actualizar(Request $request, $producto_id)
@@ -276,18 +328,29 @@ public function lista_productos()
             $producto->save();
             DB::commit();
             }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
                                 DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'productos_actualizar',$ex->getMessage());            
+                                return redirect()->route('empresa.empresa_productos.formulario_productos_actualizar')->with(['message'=> 'Error al actualizar el producto ','tipo'=>'error']);
                                 }
-        return redirect()->route('empresa.empresa_productos');
+        return redirect()->route('empresa.empresa_productos')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     public function formulario_productos_agregar($producto_id)
     {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         //dd($producto_id);
         $producto = Producto::find($producto_id);
         //dd($producto);
-        return view('adminempresa.productos.formulario_productos_agregar', compact('producto'));
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.productos.formulario_productos_agregar', compact('producto'));}
+        
     }
 
     // public function formulario_productos_agregar($producto_id)
@@ -298,16 +361,9 @@ public function lista_productos()
 
     public function productos_agregar(Request $request, $producto_id)
     {
-        //dd($request);
-        // try{DB::beginTransaction();
-        //      contenido del codigo a proteger
-        //     DB::commit();
-        //     
-        // }
-        // catch (\Exception $ex){dd($ex);
-        //                         DB::rollback();
-        //                         }
-
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $producto = Producto::find($producto_id);
         
         try{DB::beginTransaction();
@@ -318,13 +374,69 @@ public function lista_productos()
             DB::commit();
             //contenido
         }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
                                 DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'productos_agregar',$ex->getMessage());            
+                                return redirect()->route('empresa.productos.formulario.productos_agregar')->with(['message'=> 'Error al agregar el producto ','tipo'=>'error']);
+
                                 }
         
         
         //$producto->save();
-        return redirect()->route('empresa.empresa_productos');
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return redirect()->route('empresa.empresa_productos')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);}
+        
+    }
+
+    public function formulario_productos_restar($producto_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        //dd($producto_id);
+        $producto = Producto::find($producto_id);
+        //dd($producto);
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.productos.formulario_productos_restar', compact('producto'));}
+        
+    }
+
+    public function productos_restar(Request $request, $producto_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        $producto = Producto::find($producto_id);
+        
+        try{DB::beginTransaction();
+            $cantproductoact=(($producto->cantidad)-($request->cantidad1));
+            //dd($cantproductoact);
+            $affected = DB::update('update productos set cantidad = ? where id = ?', [$cantproductoact, $producto_id]);
+
+            DB::commit();
+            //contenido
+        }
+        catch (\Exception $ex){
+                                DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'productos_restar',$ex->getMessage());            
+                                return redirect()->route('empresa.productos.formulario.productos_restar')->with(['message'=> 'Error al restar el producto ','tipo'=>'error']);
+                                }
+        
+        
+        //$producto->save();
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return redirect()->route('empresa.empresa_productos')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);}
+        
     }
 
 //////////////////// CARTERISTAS DE LA EMPRESA //////////////////// 
@@ -334,6 +446,7 @@ public function lista_carteristas()
     {
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         //dd($user);
         //
         $usuarios = Usuario::all()->where('empresa_id','=',$empresa_id)
@@ -341,12 +454,23 @@ public function lista_carteristas()
         
         //dd($empresa_id);
         //dd($usuarios);
-        return view('adminempresa.empresa_carteristas', compact('usuarios'));
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_carteristas', compact('usuarios'));}
+        
     }
 
     public function formulario_carteristas_crear()
     {
-        return view('adminempresa.carteristas.formulario_carteristas_crear');
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.carteristas.formulario_carteristas_crear');}
+        
     }
 
     public function carteristas_crear(Request $request)
@@ -400,22 +524,34 @@ public function lista_carteristas()
         DB::commit();
              
          }
-         catch (\Exception $ex){dd($ex);
+         catch (\Exception $ex){
             DB::rollback();
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'carteristas_crear',$ex->getMessage());            
+            return redirect()->route('empresa.empresa_carteristas.formulario_carteristas_crear')->with(['message'=> 'Error al crear el carterista ','tipo'=>'error']);
             }
 
         
-        return redirect()->route('empresa.empresa_carteristas');
+        return redirect()->route('empresa.empresa_carteristas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     public function formulario_carteristas_actualizar($usuario_id)
     {
         //dd($producto_id);
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $usuario = Usuario::find($usuario_id);
         //dd($producto);
         $usuario->email= $usuario->user->email;
 
-        return view('adminempresa.carteristas.formulario_carteristas_actualizar', compact('usuario'));
+        
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.carteristas.formulario_carteristas_actualizar', compact('usuario'));}
+                
     }   
 
 
@@ -448,14 +584,20 @@ public function lista_carteristas()
                 DB::commit();
              
             }
-            catch (\Exception $ex){dd($ex);
+            catch (\Exception $ex){
                 DB::rollback();
+                
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'carteristas_actualizar',$ex->getMessage());            
+            return redirect()->route('empresa.empresa_carteristas.formulario.carteristas_actualizar')->with(['message'=> 'Error al actualizar el carterista ','tipo'=>'error']);
+                
                 }
 
 
             $usuario->save();
 
-            return redirect('/empresa/carteristas');
+            return redirect('/empresa/carteristas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
         
         }
 
@@ -552,7 +694,7 @@ public function lista_carteristas()
             //dd($cartera_id);
             $user = Auth::user();
             $empresa_id = $user->usuarios->get(0)->empresa_id;/////// empresa a la que pertenece el usuario logueado
-
+            $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
 
             $cartera_empresa_id= Cartera::find($cartera_id)->empresa_id;
             //dd($cartera_empresa_id, $empresa_id);
@@ -567,7 +709,11 @@ public function lista_carteristas()
             }
             
             //dd($clientes);
-            return view('adminempresa.empresa_clientes', compact('clientes'));
+            if($estado_empresa=='I'){
+                return view('errores.empresa');
+            }
+            else{return view('adminempresa.empresa_clientes', compact('clientes'));}
+            
         }
 
     public function formulario_cliente_actualizar( $cliente_id)
@@ -575,6 +721,7 @@ public function lista_carteristas()
 
             $user = Auth::user();
             $empresa_id = $user->usuarios->get(0)->empresa_id; /////// empresa a la que pertenece el usuario logueado
+            $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
 
             $cliente = Cliente::find($cliente_id);////// datos del cliente que se va a modificar
             //dd($cliente);
@@ -584,14 +731,20 @@ public function lista_carteristas()
             //dd($empresa_id_cartera);
             
             //dd($producto);
-            if($empresa_id == $empresa_id_cartera)
-            {
-                return view('adminempresa.clientes.formulario_clientes_actualizar', compact('cliente'));
+            if($estado_empresa=='I'){
+                return view('errores.empresa');
+            }
+            else{if($empresa_id == $empresa_id_cartera)
+                {
+                    return view('adminempresa.clientes.formulario_clientes_actualizar', compact('cliente'));
+                }
+    
+                else {
+                    return redirect('xxx');
+                }
             }
 
-            else {
-                return redirect('xxx');
-            }
+            
             //return view('adminempresa.clientes.formulario_clientes_actualizar', compact('cliente'));
     } 
 
@@ -621,11 +774,16 @@ public function lista_carteristas()
                 DB::commit();
                 
             }
-            catch (\Exception $ex){dd($ex);
+            catch (\Exception $ex){
                 DB::rollback();
+                
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'cliente_actualizar',$ex->getMessage());            
+            return redirect()->route('empresa.empresa_clientes.formulario.clientes_actualizar')->with(['message'=> 'Error al actualizar el cliente ','tipo'=>'error']);
                 }
 
-            return redirect('/empresa/empresa_carteras');
+            return redirect('/empresa/empresa_carteras')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
         }
 //////Lista negra de la empresa////////////////////
 
@@ -633,7 +791,7 @@ public function lista_carteristas()
     {
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
-
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
 
         $lista_negra= Cartera::all()->where('tipo',2)->where('empresa_id',$empresa_id);//////cartera lista negra de la empresa
         //dd($lista_negra);
@@ -648,19 +806,29 @@ public function lista_carteristas()
                                    ->where('estado','=','LNC');
 
 
-        return view('adminempresa.empresa_LN', compact('clientesP','clientesC'));
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_LN', compact('clientesP','clientesC'));}                          
+        
     }
 
     public function formulario_cliente_listanegra_actualizar($cliente_id)
         {
             $user = Auth::user();
             $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
+            $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
 
             $empresa_carteras= Cartera::where('empresa_id',$empresa_id)->where('tipo',1)->pluck('nombre','id');////// nombre de las carteras de la empresa
             //dd($empresa_carteras);
             $cliente = Cliente::find($cliente_id);
             //dd($cliente);
-            return view('adminempresa.listanegra.formulario_clientes_listanegra_actualizar', compact('cliente','empresa_carteras'));
+
+            if($estado_empresa=='I'){
+                return view('errores.empresa');
+            }
+            else{return view('adminempresa.listanegra.formulario_clientes_listanegra_actualizar', compact('cliente','empresa_carteras'));}
+            
         }
 
         public function cliente_listanegra_actualizar(Request $request,$cliente_id)
@@ -681,11 +849,15 @@ public function lista_carteristas()
             DB::commit();
              
          }
-         catch (\Exception $ex){dd($ex);
+         catch (\Exception $ex){
                                  DB::rollback();
+                                 $user = Auth::user();
+                                 $usuario = $user->usuarios->get(0)->id;
+                                 $this->erroreslog->registrarerrores($usuario,$this->controller_name.'cliente_listanegra_actualizar',$ex->getMessage());            
+                                 return redirect()->route('formulario_cliente_listanegra.actualizar')->with(['message'=> 'Error al actualizar al cliente ','tipo'=>'error']);
                                  }
 
-            return redirect('/empresa/listanegra');
+            return redirect('/empresa/listanegra')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
         }
 
         public function cliente_listanegraP_confirmar($cliente_id)//////pasar el cliente de la lista negra de pendiente a confirmado
@@ -707,11 +879,15 @@ public function lista_carteristas()
             DB::commit();
              
          }
-         catch (\Exception $ex){dd($ex);
+         catch (\Exception $ex){
                                  DB::rollback();
+                                 $user = Auth::user();
+                                 $usuario = $user->usuarios->get(0)->id;
+                                 $this->erroreslog->registrarerrores($usuario,$this->controller_name.'cliente_listanegraP_confirmar',$ex->getMessage());            
+                                 return redirect()->route('empresa.listanegra')->with(['message'=> 'Error al pasar cliente a lista negra ','tipo'=>'error']);
                                  }
 
-            return redirect('/empresa/listanegra');
+            return redirect('/empresa/listanegra')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
         }
 
 
@@ -721,7 +897,7 @@ public function lista_carteristas()
     {
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
-
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
 
         $lista_inactivos= Cartera::all()->where('tipo',3)->where('empresa_id',$empresa_id);//////cartera lista inactivos de la empresa
         //dd($lista_inactivos);
@@ -732,20 +908,28 @@ public function lista_carteristas()
         $clientesI = Cliente::all()->where('cartera_id','=',$lista_inactivos_id)
                                   ->where('estado','=','LI');
 
-
-        return view('adminempresa.empresa_LI', compact('clientesI'));
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_LI', compact('clientesI'));}
+        
     }
 
     public function formulario_cliente_listainactivos_actualizar($cliente_id)
     {
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;///////id de la empresa a la que pertenece el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
 
         $empresa_carteras= Cartera::where('empresa_id',$empresa_id)->where('tipo',1)->pluck('nombre','id');////// nombre de las carteras de la empresa
         //dd($empresa_carteras);
         $cliente = Cliente::find($cliente_id);
         //dd($cliente);
-        return view('adminempresa.lista_inactivos.formulario_clientes_listainactivos_actualizar', compact('cliente','empresa_carteras'));
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.lista_inactivos.formulario_clientes_listainactivos_actualizar', compact('cliente','empresa_carteras'));}
+        
     }
 
     public function cliente_listainactivos_actualizar(Request $request,$cliente_id)
@@ -772,27 +956,40 @@ public function lista_carteristas()
             
             $user = Auth::user();
             $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+            $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
             $bonos = Bono::where('cartera_id',$cartera_id)->get();////// bonos de la cartera
             //dd($carteras);
+            if($estado_empresa=='I'){
+                return view('errores.empresa');
+            }
+            else{return view('adminempresa.empresa_bonos')->with('bonos', $bonos);}
             
-            return view('adminempresa.empresa_bonos')->with('bonos', $bonos);
                                                     
         }
 
         public function novedades($cartera_id) 
         {
+            $user = Auth::user();
+            $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+            $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
             $novedades = Novedad::where('cartera_id',$cartera_id)->get();////// bonos de la cartera
-            //dd($carteras);
-            
-            return view('adminempresa.empresa_novedades')->with('novedades', $novedades);
-                                                    
+
+
+            if($estado_empresa=='I'){
+            return view('errores.empresa');
+            }
+            else{return view('adminempresa.empresa_novedades')->with('novedades', $novedades);}
+           
+            //dd($carteras);                                        
         }
 
         public function devoluciones_empresa() 
         {
             $user = Auth::user();
             $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+            $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
             $devoluciones = Devolucion::where('empresa_id',$empresa_id)->get();////// devoluciones de la empresa
+            
             //dd($carteras);
             //dd($devoluciones->all());
             
@@ -801,7 +998,11 @@ public function lista_carteristas()
             //$devoluciones = DB::table('devoluciones')->where('empresa_id',$empresa_id)->orderBy('fecha','desc')->get();
             //dd($ventas->get()->all());
             //dd($devoluciones);
-            return view('adminempresa.empresa_devoluciones', compact('devoluciones'));
+            if($estado_empresa=='I'){
+                return view('errores.empresa');
+            }
+            else{return view('adminempresa.empresa_devoluciones', compact('devoluciones'));}
+            
             
             //return view('adminempresa.empresa_devoluciones')->with('devoluciones', $devoluciones);
                                                     
@@ -815,8 +1016,11 @@ public function lista_carteristas()
 
 public function lista_bodeguistas()
 {
+    
+
     $user = Auth::user();
     $empresa_id = $user->usuarios->get(0)->empresa_id;
+    $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
     //dd($user);
     //
     $usuarios = Usuario::all()->where('empresa_id','=',$empresa_id)
@@ -824,12 +1028,24 @@ public function lista_bodeguistas()
     
     //dd($empresa_id);
     //dd($usuarios);
-    return view('adminempresa.empresa_bodeguistas', compact('usuarios'));
+    if($estado_empresa=='I'){
+        return view('errores.empresa');
+    }
+    else{return view('adminempresa.empresa_bodeguistas', compact('usuarios'));}
+    
 }
 
 public function formulario_bodeguistas_crear()
 {
-    return view('adminempresa.bodeguistas.formulario_bodeguistas_crear');
+    $user = Auth::user();
+    $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+    $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+
+    if($estado_empresa=='I'){
+        return view('errores.empresa');
+    }
+    else{return view('adminempresa.bodeguistas.formulario_bodeguistas_crear');}
+    
 }
 
 public function bodeguistas_crear(Request $request)
@@ -863,6 +1079,8 @@ public function bodeguistas_crear(Request $request)
 
                                     
         $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $usuario = new Usuario();
 
         $usuario->nombre = $request->input('nombre');
@@ -882,22 +1100,38 @@ public function bodeguistas_crear(Request $request)
         DB::commit();
              
         }
-         catch (\Exception $ex){dd($ex);
-                                 DB::rollback();
+         catch (\Exception $ex){
+                                DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'bodeguistas_crear',$ex->getMessage());            
+                                return redirect()->route('empresa.bodeguistas.formulario_bodeguistas_crear')->with(['message'=> 'Error al actualizar el bodeguero ','tipo'=>'error']);
                                  }
 
+        if($estado_empresa=='I'){
+                return view('errores.empresa');
+            }
+            else{return redirect()->route('empresa.bodeguistas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);}
     
-    return redirect()->route('empresa.bodeguistas');
 }
 
 public function formulario_bodeguistas_actualizar($usuario_id)
 {
     //dd($producto_id);
+    $user = Auth::user();
+    $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+    $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+    
     $usuario = Usuario::find($usuario_id);
     //dd($producto);
     $usuario->email= $usuario->user->email;
 
-    return view('adminempresa.bodeguistas.formulario_bodeguistas_actualizar', compact('usuario'));
+    if($estado_empresa=='I'){
+        return view('errores.empresa');
+    }
+    else{return view('adminempresa.bodeguistas.formulario_bodeguistas_actualizar', compact('usuario'));}
+
+    
 }   
 
 
@@ -934,21 +1168,35 @@ public function bodeguistas_actualizar(Request $request,$usuario_id)
             DB::commit();
              
         }
-         catch (\Exception $ex){dd($ex);
+         catch (\Exception $ex){
                                  DB::rollback();
+                                 $user = Auth::user();
+                                 $usuario = $user->usuarios->get(0)->id;
+                                 $this->erroreslog->registrarerrores($usuario,$this->controller_name.'bodeguistas_actualizar',$ex->getMessage());            
+                                 return redirect()->route('empresa.bodeguistas.formulario.bodeguistas_actualizar')->with(['message'=> 'Error al actualizar el bodeguero ','tipo'=>'error']);
                                  }
 
-        return redirect('/empresa/bodeguistas');
+        return redirect('/empresa/bodeguistas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     
     }
 
     public function formulario_correo_bodeguistas_actualizar( $usuario_id)
-{
+    {
+    $user = Auth::user();
+    $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+    $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
     
     $usuario = Usuario::find($usuario_id);
+
+
+    if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.bodeguistas.formulario_correo_editar', compact('usuario'));}
+    
     
   
-    return view('adminempresa.bodeguistas.formulario_correo_editar', compact('usuario'));
+    
 }
 
 public function correo_bodeguistas_actualizar(Request $request, $usuario_id)
@@ -1031,14 +1279,62 @@ public function usuarios4_activar(Usuario $usuario)
 
     public function ventas($cartera_id)
     {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        $ventas = DB::table('historial_venta_carteras')->where('cartera_id',$cartera_id)->orderBy('fecha','desc')->get();
+
+
+    if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_ventas', compact('ventas'));}
         //dd($cartera_id);
         //$ventas=HistorialVentaCartera::where('cartera_id',$cartera_id)->get();
-        $ventas = DB::table('historial_venta_carteras')->where('cartera_id',$cartera_id)->orderBy('fecha','desc')->get();
+       
         //dd($ventas->get()->all());
-        return view('adminempresa.empresa_ventas', compact('ventas'));
-
-    
+            
     }
 
+    public function historial_cliente($cliente_id)
+    {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        //dd($cliente_id);
+        $transacciones=HistorialVentaCliente::where('cliente_id',$cliente_id)->orderBy('fecha','desc')->get(); 
+        $cartera_id=Cliente::find($cliente_id)->cartera_id;
+        //dd($cartera_id);
+        //dd($transacciones);
+        if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_cliente_ventas')->with('transacciones',$transacciones)
+            ->with('cartera_id',$cartera_id);}  
+          
+    }
+
+    public function cuentas($cartera_id)
+    {
+        
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        $cuentas = DB::table('cuentas')->where('cartera_id',$cartera_id)->orderBy('fecha','desc')->get();
+        
+
+    if($estado_empresa=='I'){
+            return view('errores.empresa');
+        }
+        else{return view('adminempresa.empresa_cuentas', compact('cuentas'));}
+        //dd($cartera_id);
+        //$ventas=HistorialVentaCartera::where('cartera_id',$cartera_id)->get();
+       
+        //dd($ventas->get()->all());
+            
+    }
+
+
+    
     
 }
