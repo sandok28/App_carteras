@@ -185,6 +185,10 @@ Route::get('/bodega/{cartera_id}/cierre_cartera','GestionBodegaController@cierre
 //Carteristas
 Route::get('/carterista','CarteristasController@panel_central_carteristas')->name('carterista');
 
+//-->Carteristas - Activar cliente
+
+Route::PUT('/carterista/clientes/activar_cliente/{cliente_id}', 'CarteristasController@activar_cliente')->name('carterista.clientes.activar_cliente');
+
 //-->carteristas - crear clientes
 Route::get('/carterista/clientes/formulario_clientes_crear', 'CarteristasController@formulario_clientes_crear')->name('carterista.clientes.formulario_clientes_crear');
 Route::post('/carterista/clientes/clientes_crear','CarteristasController@clientes_crear')->name('carterista.clientes.clientes_crear');

@@ -15,7 +15,7 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4"> 
-                        <div class="card-header">Registrar cliente </div>
+                        <div class="card-header">Actualizar cliente </div>
                         <div class="card-body">
                             @include('Partials.formularios.alerta_validaciones')
                             {!! Form::model($cliente, ['route' => ['carterista.clientes.clientes_actualizar', $cliente], 'method' => 'PUT']) !!}
