@@ -16,10 +16,13 @@ use App\Usuario;
 
 class EmpresasController extends Controller
 {
-    public function __construct()
+    protected  $erroreslog;
+    protected  $controller_name = 'EmpresasController.';
+    public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
         $this->middleware('RolUserAdminMiddleware');
+        $this->erroreslog = $erroreslog_init;
     }
 
     public function formulario_empresas_crear()
@@ -29,6 +32,7 @@ class EmpresasController extends Controller
 
     public function empresas_crear(Request $request)
     {
+
         //dd($request);
         $validatedData = $request->validate([
             'nombre' => 'required',
@@ -44,16 +48,6 @@ class EmpresasController extends Controller
                 'telefono'=>$request->telefono
         
             ]);
-
-            $validatedData = $request->validate([
-                'nombre' => 'required',
-                'cedula' => 'required',
-                'telefono' => 'required',
-                'direccion' => 'required',
-                'contrasena' => 'required',
-                'email' => 'required',
-                'email' => new UsuariosEmailRule 
-                ]);
 
             $current_date_time = Carbon::now()->toDateTimeString(); // Produces something like "2019-03-11 12:25:00"
 
@@ -122,7 +116,7 @@ class EmpresasController extends Controller
             $listainactivos = DB::table('carteras')
                 ->orderBy('created_at', 'desc')
                 ->first();
-   
+                
 
                 
                 //dd($empresa->first()->id);
@@ -134,11 +128,14 @@ class EmpresasController extends Controller
            
             //dd($ex);
             DB::rollback();
-            return redirect()->route('administrador.administrador_empresas.formulario_empresas_crear')->with(['message'=> 'Ago salio mal ','tipo'=>'error']);
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'empresas_crear',$ex->getMessage());            
+            return redirect()->route('administrador.administrador_empresas.formulario_empresas_crear')->with(['message'=> 'Error al crear la empresa ','tipo'=>'error']);
             
         }
 
-        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'tODO SALIO BIEN','tipo'=>'message']);
+        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     public function formulario_empresas_actualizar($empresa_id)
@@ -193,11 +190,14 @@ class EmpresasController extends Controller
         DB::commit();
              
          }
-         catch (\Exception $ex){dd($ex);
+         catch (\Exception $ex){
                                  DB::rollback();
-                                 }
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'empresas_actualizar',$ex->getMessage());
+            return redirect()->route('administrador.administrador_empresas.formulario_empresas_actualizar')->with(['message'=> 'Error al actualizar la empresa ','tipo'=>'error']);}
 
-        return redirect()->route('administrador.administrador_empresas');
+        return redirect()->route('administrador.administrador_empresas')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     public function vistacarterasempresa($empresa_id)//vista de las carteras de la empresa del usuario logueado

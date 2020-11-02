@@ -19,10 +19,13 @@ use Carbon\Carbon;
 class CarteristasController extends Controller
 {
 
-    public function __construct()
+    protected  $erroreslog;
+    protected  $controller_name = 'EmpresasController.';
+    public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
         //$this->middleware('RolUserAdminMiddleware');
+        $this->erroreslog = $erroreslog_init;
       
     }
 
@@ -122,12 +125,15 @@ class CarteristasController extends Controller
         }
         catch (\Exception $ex){
             DB::rollback();
-            dd($ex);
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'clientes_crear',$ex->getMessage());            
+            return redirect()->route('carterista.clientes.formulario_clientes_crear')->with(['message'=> 'Error al crear el cliente ','tipo'=>'error']);
             
 
         }            
 
-        return redirect()->route('carterista');
+        return redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
 /**
@@ -190,12 +196,15 @@ class CarteristasController extends Controller
         }
         catch (\Exception $ex){
             DB::rollback();
-            dd($ex);
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'clientes_actualizar',$ex->getMessage());            
+            return redirect()->route('carterista.clientes.formulario_clientes_actualizar')->with(['message'=> 'Error al actualizar el cliente ','tipo'=>'error']);
             
 
         }            
 
-        return redirect()->route('carterista');
+        return redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     //Vista venta del Cliente
@@ -317,7 +326,10 @@ class CarteristasController extends Controller
         }
         catch (\Exception $ex){
             DB::rollback();
-            dd($ex);
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'formulario_cliente_pagar',$ex->getMessage());            
+            return redirect()->route('carterista.gestion_cliente_cartera')->with(['message'=> 'Error al efectuar la operacion ','tipo'=>'error']);
             
 
         }
@@ -326,7 +338,7 @@ class CarteristasController extends Controller
         if($estado_empresa=='I' || $estado_usuario=='I'){
             return view('errores.usuario');
         }
-        else{return view('carteristas.clientes.confirmar_compra')->with('resumen_venta',$resumen_venta);}
+        else{return view('carteristas.clientes.confirmar_compra')->with('resumen_venta',$resumen_venta)->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);}
         
         
     
@@ -394,11 +406,14 @@ class CarteristasController extends Controller
         }
         catch (\Exception $ex){
             DB::rollback();
-            dd($ex);
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'recaudo',$ex->getMessage());            
+            return redirect()->route('carterista.cliente.formulario_pagar')->with(['message'=> 'Error al efectuar la operacion ','tipo'=>'error']);
             
 
         }
-        return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);
+        return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id)->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
     public function formulario_reportar_lista_negra($cliente_id)
     {      
@@ -434,7 +449,7 @@ class CarteristasController extends Controller
                                                     'comentarios' => $request->comentarios
                                                 ]);
 
-        return redirect()->route('carterista');    
+        return redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);    
     }
 
     public function formulario_bono_crear()
@@ -490,7 +505,7 @@ class CarteristasController extends Controller
             $bono->save();
         }
        
-        return  redirect()->route('carterista');    
+        return  redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);    
     }
 
     public function formulario_novedad_crear()
@@ -541,7 +556,7 @@ class CarteristasController extends Controller
             $novedad->save();
         }
        
-        return  redirect()->route('carterista');    
+        return  redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);    
     }
 
 
@@ -589,11 +604,14 @@ class CarteristasController extends Controller
         }
         catch (\Exception $ex){
             DB::rollback();
-            dd($ex);           
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'clientes_ordenar',$ex->getMessage());            
+            return redirect()->route('carterista.clientes.formulario_clientes_ordenar')->with(['message'=> 'Error al ordenar los clientes ','tipo'=>'error']);           
 
         }
        
-        return  redirect()->route('carterista');    
+        return  redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);    
     }
 
     public function formulario_devolucion_crear($cliente_id)
@@ -647,9 +665,13 @@ class CarteristasController extends Controller
         }
         catch (\Exception $ex){
             DB::rollback();
-            dd($ex);
+            $user = Auth::user();
+            $usuario = $user->usuarios->get(0)->id;
+            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'devolucion_crear',$ex->getMessage());            
+            return redirect()->route('carterista.devolucion.formulario_devolucion_crear')->with(['message'=> 'Error al efectuar la operacion ','tipo'=>'error']);
+            
         }
-        return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id);           
+        return redirect()->route('carterista.gestion_cliente_cartera',$cliente_id)->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);           
     }
 
     public function formulario_almuerzo_crear()
@@ -705,7 +727,7 @@ class CarteristasController extends Controller
             $bono->save();
         }
        
-        return  redirect()->route('carterista');    
+        return  redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);    
     }
 
     ////////////////////////
@@ -763,7 +785,7 @@ class CarteristasController extends Controller
             $bono->save();
         }
        
-        return  redirect()->route('carterista');    
+        return  redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);    
     }
 
 

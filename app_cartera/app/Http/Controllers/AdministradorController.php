@@ -18,11 +18,13 @@ use Carbon\Carbon;
 class AdministradorController extends Controller
 {
 
-
-    public function __construct()
+    protected  $erroreslog;
+    protected  $controller_name = 'EmpresasController.';
+    public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
         $this->middleware('RolUserAdminMiddleware');
+        $this->erroreslog = $erroreslog_init;
       
     }
 
@@ -55,7 +57,6 @@ class AdministradorController extends Controller
     public function formulario_usuarios_crear()
     {
 
-        
         return view('administradores.administrador_usuarios.formulario_usuarios_crear');
     }
 
@@ -110,11 +111,16 @@ class AdministradorController extends Controller
             DB::commit();
              
         }
-         catch (\Exception $ex){dd($ex);
-                                 DB::rollback();
+         catch (\Exception $ex){
+            
+                                DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'usuarios_crear',$ex->getMessage());
+                                return redirect()->route('administrador.administrador_usuarios.formulario_usuarios_crear')->with(['message'=> 'Error al crear el usuario ','tipo'=>'error']);
                                  }
 //hasta aqui
-        return redirect()->route('administrador.administrador_usuarios');
+        return redirect()->route('administrador.administrador_usuarios')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     
@@ -157,8 +163,12 @@ class AdministradorController extends Controller
             DB::commit();
              
         }
-         catch (\Exception $ex){dd($ex);
-                                 DB::rollback();
+         catch (\Exception $ex){
+                                DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'usuarios_actualizar ',$ex->getMessage());            
+                                return redirect()->route('administrador.administrador_usuarios.formulario_usuarios_actualizar')->with(['message'=> 'Error al actualizar el usuario ','tipo'=>'error']);
                                  }
 
 
@@ -174,7 +184,7 @@ class AdministradorController extends Controller
 
         
 
-        return redirect()->route('administrador.administrador_usuarios');
+        return redirect()->route('administrador.administrador_usuarios')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     
     }
 
@@ -340,11 +350,15 @@ public function correo_usuarios_actualizar(Request $request, $usuario_id)
             DB::commit();
              
         }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
                                 DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'carteras_crear',$ex->getMessage());            
+                                return redirect()->route('administrador.administrador_carteras.formulario_carteras_crear')->with(['message'=> 'Error al crear la cartera ','tipo'=>'error']);
                                 }
 
-        return redirect()->route('administrador.administrador_carteras',$request->input('empresa_id')); 
+        return redirect()->route('administrador.administrador_carteras',$request->input('empresa_id'))->with(['message'=> 'Operacion exitosa ','tipo'=>'message']); 
     }
 
     
@@ -389,12 +403,23 @@ public function correo_usuarios_actualizar(Request $request, $usuario_id)
                                         ]);
 
         $cartera = Cartera::find($cartera_id);
-
+        try{DB::beginTransaction();
         $cartera->fill($request->all());
 
         $cartera->save();
+        DB::commit();
+        }
+            catch (\Exception $ex){
+                DB::rollback();
+                $user = Auth::user();
+                $usuario = $user->usuarios->get(0)->id;
+                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'carteras_actualizar',$ex->getMessage());            
+                return redirect()->route('administrador.administrador_carteras.formulario_carteras_actualizar')->with(['message'=> 'Error al actualizar la cartera ','tipo'=>'error']);
+            }
+             
+        
 
-        return redirect()->route('administrador.administrador_carteras',$request->input('empresa_id')); 
+        return redirect()->route('administrador.administrador_carteras',$request->input('empresa_id'))->with(['message'=> 'Operacion exitosa ','tipo'=>'message']); 
     
     }
 

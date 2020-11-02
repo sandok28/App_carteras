@@ -18,10 +18,13 @@ use Illuminate\Http\Request;
 
 class GestionBodegaController extends Controller
 {
-    public function __construct()
+    protected  $erroreslog;
+    protected  $controller_name = 'EmpresasController.';
+    public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
         //$this->middleware('RolUserAdminMiddleware');
+        $this->erroreslog = $erroreslog_init;
       
     }
     
@@ -199,11 +202,15 @@ class GestionBodegaController extends Controller
             DB::commit();
         }
         
-            catch (\Exception $ex){dd($ex);
+            catch (\Exception $ex){
                                     DB::rollback();
+                                    $user = Auth::user();
+                                    $usuario = $user->usuarios->get(0)->id;
+                                    $this->erroreslog->registrarerrores($usuario,$this->controller_name.'cargar_cartera',$ex->getMessage());            
+                                    return redirect()->route('bodega.formulario_cargar_cartera')->with(['message'=> 'Error al cargar la cartera ','tipo'=>'error']);
                                     }
                                 
-     return redirect()->route('bodega');
+     return redirect()->route('bodega')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
             
     }
 
@@ -297,11 +304,14 @@ class GestionBodegaController extends Controller
 
                                         DB::commit();
                                     }
-                                    catch (\Exception $ex){dd($ex);
+                                    catch (\Exception $ex){
                                                             DB::rollback();
-                                                            }
+                                                            $user = Auth::user();
+                                                            $usuario = $user->usuarios->get(0)->id;
+                                                            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'recargar_cartera',$ex->getMessage());            
+                                                            return redirect()->route('bodega.formulario_recargar_cartera')->with(['message'=> 'Error al recargar la cartera ','tipo'=>'error']);}
 
-    return redirect()->route('bodega.informacion_carga_cartera',$cartera_id);
+    return redirect()->route('bodega.informacion_carga_cartera',$cartera_id)->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
                                                         
 
     }
@@ -360,11 +370,15 @@ class GestionBodegaController extends Controller
                 // $contador=$contador-1;
                 DB::commit();
             }
-            catch (\Exception $ex){dd($ex);
+            catch (\Exception $ex){
                                     DB::rollback();
+                                    $user = Auth::user();
+                                    $usuario = $user->usuarios->get(0)->id;
+                                    $this->erroreslog->registrarerrores($usuario,$this->controller_name.'descargar_cartera',$ex->getMessage());            
+                                    return redirect()->route('bodega.formulario_descargar_cartera')->with(['message'=> 'Error al descargar la cartera ','tipo'=>'error']);
                                     }
 
-                return redirect()->route('bodega.informacion_carga_cartera',$cartera_id);
+                return redirect()->route('bodega.informacion_carga_cartera',$cartera_id)->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
                                                         
  
     }
@@ -487,11 +501,15 @@ class GestionBodegaController extends Controller
 
 
         }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
                                 DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'cierre_dia_cartera',$ex->getMessage());            
+                                return redirect()->route('bodega.informacion_carga_cartera')->with(['message'=> 'Error al hacer el cierre de la cartera ','tipo'=>'error']);
                                 }
 
-            return redirect()->route('bodega');
+            return redirect()->route('bodega')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     
