@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Actualizar empresa
+    Editar bodeguero
 @endsection
 
 
@@ -20,7 +20,7 @@
                 <div class="col-xl-12">
                     <!-- Account details card-->
                     <div class="card mb-4">
-                        <div class="card-header">Actualizar bodeguistas</div>
+                        <div class="card-header">Editar bodeguero</div>
                         <div class="card-body">
                             @include('Partials.formularios.alerta_validaciones')
                             
@@ -29,7 +29,7 @@
                                 @include('adminempresa.bodeguistas.formulario')
                                 
                                 {!! Form::submit('Actualizar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
+                                <a class="btn btn-primary " type="button" href="{{route('empresa.bodeguistas')}}">Volver</a>
                             
                             {!! Form::close() !!}
                         </div>

@@ -4,33 +4,79 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Cartera;
+use App\Bono;
 use App\Producto;
 use App\Nevera;
 use App\Cliente;
+use App\Empresa;
+use App\Devolucion;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+
 
 use Illuminate\Http\Request;
 
 class GestionBodegaController extends Controller
 {
+    protected  $erroreslog;
+    protected  $controller_name = 'EmpresasController.';
+    public function __construct(ErroresController $erroreslog_init)
+    {
+        $this->middleware('auth');
+        //$this->middleware('RolUserAdminMiddleware');
+        $this->erroreslog = $erroreslog_init;
+      
+    }
     
     public function panel_central_bodega()
     {
 
         $user = Auth::user();
         $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
-        $cartera = Cartera::where('empresa_id',$empresa_id);////// carteras de la empresa del usuario logueado
-        $carteras_por_atender=$cartera->where('tipo',1)->where('cargue','=','D')->get();////// filtro de las carteras tipo 1
+        //$carteras = Cartera::where('empresa_id',$empresa_id);////// carteras de la empresa del usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        //dd($estado_empresa, $estado_usuario);
+        //$carteras_por_atender=$carteras->where('tipo',1)->where('cargue','=','D')->get();////// filtro de las carteras tipo 1
+       
+        $current_day = Carbon::now()->dayOfWeek; // Produces something like "2019-03-11"
+        if($current_day == 0){
+            $current_day = 7;
+        }
+        $carteras_por_atender = DB::table('carteras')
+                ->join('cartera_dia', 'cartera_dia.cartera_id', '=', 'carteras.id')
+                ->where('empresa_id',$empresa_id)
+                ->where('carteras.tipo',1)
+                ->where('carteras.cargue','=','D')
+                ->where('cartera_dia.dia_id','=',$current_day)
+                ->select('carteras.*')
+                ->get();
+
+        $carteras_atendidas = DB::table('carteras')
+                ->join('cartera_dia', 'cartera_dia.cartera_id', '=', 'carteras.id')
+                ->where('empresa_id',$empresa_id)
+                ->where('carteras.tipo',1)
+                ->where('carteras.cargue','=','C')
+                ->where('cartera_dia.dia_id','=',$current_day)
+                ->select('carteras.*')
+                ->get();
+
+     
+
+       
+       
+       
         //dd($carteras_por_atender);
-        $cartera = Cartera::where('empresa_id',$empresa_id);
-        $carteras_atendidas  =$cartera->where('tipo',1)->where('cargue','=','C')->get();
+       // $carteras_atendidas  =$carteras->where('tipo',1)->where('cargue','=','C')->get();
         //dd($carteras_atendidas,$carteras_por_atender);
 
+        if($estado_empresa=='I'|| $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('bodega.panel_central_bodega')
+            ->with('carteras_atendidas',$carteras_atendidas)
+            ->with('carteras_por_atender',$carteras_por_atender);}
 
-        return view('bodega.panel_central_bodega')
-                                                  ->with('carteras_atendidas',$carteras_atendidas)
-                                                  ->with('carteras_por_atender',$carteras_por_atender);
                                                      
     }
 
@@ -38,22 +84,28 @@ class GestionBodegaController extends Controller
     {
         //dd($id);
         $user = Auth::user();
-        $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $productos=Producto::where('empresa_id',$empresa_id)->get();
         $empresa_id_cartera=Cartera::find($id)->empresa_id;
         $nombre_cartera=Cartera::find($id)->nombre;
         //dd($nombre_cartera);
 
-
-        if($empresa_id == $empresa_id_cartera){
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{if($empresa_id == $empresa_id_cartera){
 
             return view('bodega.cargar.formulario_cartera_cargar')->with('productos',$productos)
-                                                              ->with('cartera_id',$id)
-                                                              ->with('nombre_cartera',$nombre_cartera);
+                                                            ->with('cartera_id',$id)
+                                                            ->with('nombre_cartera',$nombre_cartera);
+            }
+            else {
+                return redirect('xxx');
+            }
         }
-        else {
-            return redirect('xxx');
-        }
+                       
         
     }
 
@@ -137,6 +189,7 @@ class GestionBodegaController extends Controller
                         }
                         //dd($total_deuda);
                         $affected = DB::update('update carteras set credito_del_dia = ? where id = ?', [$total_deuda,$cartera_id]);//actualiza el total de la deuda de todos los clientes en la cartera
+                        $affected = DB::update('update carteras set saldo_del_dia = ? where id = ?', [$total_deuda,$cartera_id]);//actualiza el total de la deuda de todos los clientes en la cartera
 
                         
                         
@@ -149,44 +202,70 @@ class GestionBodegaController extends Controller
             DB::commit();
         }
         
-            catch (\Exception $ex){dd($ex);
+            catch (\Exception $ex){
                                     DB::rollback();
+                                    $user = Auth::user();
+                                    $usuario = $user->usuarios->get(0)->id;
+                                    $this->erroreslog->registrarerrores($usuario,$this->controller_name.'cargar_cartera',$ex->getMessage());            
+                                    return redirect()->route('bodega.formulario_cargar_cartera')->with(['message'=> 'Error al cargar la cartera ','tipo'=>'error']);
                                     }
                                 
-     return redirect()->route('bodega');
+     return redirect()->route('bodega')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
             
     }
 
     public function informacion_carga_cartera($cartera_id)
     {
-
+        $current_date= Carbon::now()->toDateString(); // Produces something like "2019-03-11 12:25:00"
         $user = Auth::user();
-        $empresa_id = $user->usuarios->get(0)->empresa_id;
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $empresa_id_cartera=Cartera::find($cartera_id)->empresa_id;//////empresa a la cual pertenece la cartera
         $productos=Producto::where('empresa_id',$empresa_id)->get();
         $neveras=Nevera::where('cartera_id',$cartera_id)->get();
         $cargue_inicial=Cartera::find($cartera_id)->cargue_del_dia;
-        
+        $devoluciones= Devolucion::where('cartera_id',$cartera_id)->where('fecha',$current_date)->get();
+        //dd($devoluciones);
+        //dd($current_date);
 
-        if($empresa_id == $empresa_id_cartera){
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+            else{if($empresa_id == $empresa_id_cartera){
 
-            return view('bodega.cargar.informacion_carga_cartera')->with('productos',$productos)
-                                                                  ->with('neveras',$neveras)
-                                                                  ->with('cargue_inicial',$cargue_inicial)
-                                                                  ->with('cartera_id',$cartera_id);
-        }
-        else {
-            return redirect('xxx');
-        }
+                return view('bodega.cargar.informacion_carga_cartera')->with('productos',$productos)
+                                                                    ->with('neveras',$neveras)
+                                                                    ->with('cargue_inicial',$cargue_inicial)
+                                                                    ->with('cartera_id',$cartera_id)
+                                                                    ->with('devoluciones',$devoluciones);
+                }
+                else {
+                    return redirect('xxx');
+                }
+            }
+
+
+                
 
     }
 
     public function formulario_recargar_cartera($nevera_id)
     {
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
+
         $producto_nevera=Nevera::where('id',$nevera_id)->get();
         //dd($producto_nevera);
-        return view('bodega.cargar.formulario_cartera_recargar')->with('producto_nevera',$producto_nevera)
-                                                                ->with('nevera_id',$nevera_id);
+
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('bodega.cargar.formulario_cartera_recargar')->with('producto_nevera',$producto_nevera)
+            ->with('nevera_id',$nevera_id);}
+        
     }
 
     public function recargar_cartera(Request $request,$nevera_id)
@@ -225,11 +304,14 @@ class GestionBodegaController extends Controller
 
                                         DB::commit();
                                     }
-                                    catch (\Exception $ex){dd($ex);
+                                    catch (\Exception $ex){
                                                             DB::rollback();
-                                                            }
+                                                            $user = Auth::user();
+                                                            $usuario = $user->usuarios->get(0)->id;
+                                                            $this->erroreslog->registrarerrores($usuario,$this->controller_name.'recargar_cartera',$ex->getMessage());            
+                                                            return redirect()->route('bodega.formulario_recargar_cartera')->with(['message'=> 'Error al recargar la cartera ','tipo'=>'error']);}
 
-    return redirect()->route('bodega.informacion_carga_cartera',$cartera_id);
+    return redirect()->route('bodega.informacion_carga_cartera',$cartera_id)->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
                                                         
 
     }
@@ -237,10 +319,19 @@ class GestionBodegaController extends Controller
     public function formulario_descargar_cartera($nevera_id)
     {
         //dd('hola');
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $estado_usuario=$user->usuarios->get(0)->estado;// estado de el usuario logueado
+        $estado_empresa=Empresa::find($empresa_id)->estado;// estado de la empresa del usuario logueado
         $producto_nevera=Nevera::where('id',$nevera_id)->get();
         //dd($producto_nevera);
-        return view('bodega.cargar.formulario_cartera_descargar')->with('producto_nevera',$producto_nevera)
-                                                                ->with('nevera_id',$nevera_id);
+
+        if($estado_empresa=='I' || $estado_usuario=='I'){
+            return view('errores.usuario');
+        }
+        else{return view('bodega.cargar.formulario_cartera_descargar')->with('producto_nevera',$producto_nevera)
+            ->with('nevera_id',$nevera_id);}
+        
     }
 
     public function descargar_cartera(Request $request,$nevera_id)
@@ -279,11 +370,15 @@ class GestionBodegaController extends Controller
                 // $contador=$contador-1;
                 DB::commit();
             }
-            catch (\Exception $ex){dd($ex);
+            catch (\Exception $ex){
                                     DB::rollback();
+                                    $user = Auth::user();
+                                    $usuario = $user->usuarios->get(0)->id;
+                                    $this->erroreslog->registrarerrores($usuario,$this->controller_name.'descargar_cartera',$ex->getMessage());            
+                                    return redirect()->route('bodega.formulario_descargar_cartera')->with(['message'=> 'Error al descargar la cartera ','tipo'=>'error']);
                                     }
 
-                return redirect()->route('bodega.informacion_carga_cartera',$cartera_id);
+                return redirect()->route('bodega.informacion_carga_cartera',$cartera_id)->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
                                                         
  
     }
@@ -322,7 +417,61 @@ class GestionBodegaController extends Controller
 
                 
             }
+
+            $productos_nevera=Nevera::where('cartera_id',$cartera_id)->get()->all();
+            $descargue=0;
+            foreach($productos_nevera as $producto){
+                $var_aux1 =$producto;
+                //dd($var_aux1);
+                $produnev_id=$var_aux1->producto_id;
+                $produnev_cant=$var_aux1->cantidad;
+                $produnev_precio=$var_aux1->producto->precio;
+                //dd($produnev_id, $produnev_cant, $produnev_precio);
+                //dd();
+                $descargue=$descargue+(($produnev_cant)*($produnev_precio));
+                
+            }
             
+            //dd($cartera_id);
+            //dd($total);
+            
+            
+            $cargue_inicial=Cartera::find($cartera_id)->cargue_del_dia;
+            $abonos=Cartera::find($cartera_id)->abono_del_dia;
+            
+            if(is_null($bonos=Bono::where('cartera_id',$cartera_id)->where('tipo',1)->where('mi_fecha',$current_date)->first())){
+                
+                $bonos = 0;
+                
+            }else{$bonos=Bono::where('cartera_id',$cartera_id)->where('tipo',1)->where('mi_fecha',$current_date)->first()->valor;}
+            
+            if(is_null($almuerzos=Bono::where('cartera_id',$cartera_id)->where('tipo',2)->where('mi_fecha',$current_date)->first())){
+                
+                $almuerzos = 0;
+                
+            }else{$almuerzos=Bono::where('cartera_id',$cartera_id)->where('tipo',2)->where('mi_fecha',$current_date)->first()->valor;}
+
+            if(is_null($gastos=Bono::where('cartera_id',$cartera_id)->where('tipo',3)->where('mi_fecha',$current_date)->first())){
+                
+                $gastos = 0;
+                
+            }else{$gastos=Bono::where('cartera_id',$cartera_id)->where('tipo',3)->where('mi_fecha',$current_date)->first()->valor;}     
+            
+            $total=$abonos-($gastos+$almuerzos+$bonos);
+            DB::insert('insert into cuentas (fecha, cartera_id, cargue, abono, bono, almuerzo, gasto, descargue, total) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$current_date, $cartera_id, $cargue_inicial, $abonos, $bonos, $almuerzos, $gastos, $descargue, $total]);
+            
+            
+            //dd($productos_nevera);
+            //dd($cuentas);
+
+           
+
+
+
+
+
+
+
             $affected = DB::update('update carteras set credito_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total de la deuda  en la cartera
             $affected = DB::update('update carteras set saldo_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total del saldo  en la cartera
             $affected = DB::update('update carteras set abono_del_dia = ? where id = ?', ['0',$cartera_id]);//actualiza el total de la abono  en la cartera
@@ -340,7 +489,9 @@ class GestionBodegaController extends Controller
             //dd($abono);
             $venta=$cartera->venta_del_dia;
             //dd($venta);
-            DB::insert('insert into historial_venta_carteras (cartera_id, fecha, venta, deuda, saldo, abono) values (?, ?, ?, ?, ?, ?)', [$cartera_id, $current_date, $venta, $credito, $saldo, $abono]);
+            $saldo_final=($credito+$venta)-($abono);
+            //dd($saldo_final);
+            DB::insert('insert into historial_venta_carteras (cartera_id, fecha, venta, deuda, saldo, abono, saldo_final) values (?, ?, ?, ?, ?, ?, ?)', [$cartera_id, $current_date, $venta, $credito, $saldo, $abono, $saldo_final]);
            
            
             DB::commit();
@@ -350,11 +501,15 @@ class GestionBodegaController extends Controller
 
 
         }
-        catch (\Exception $ex){dd($ex);
+        catch (\Exception $ex){
                                 DB::rollback();
+                                $user = Auth::user();
+                                $usuario = $user->usuarios->get(0)->id;
+                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'cierre_dia_cartera',$ex->getMessage());            
+                                return redirect()->route('bodega.informacion_carga_cartera')->with(['message'=> 'Error al hacer el cierre de la cartera ','tipo'=>'error']);
                                 }
 
-            return redirect()->route('bodega');
+            return redirect()->route('bodega')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
     }
 
     

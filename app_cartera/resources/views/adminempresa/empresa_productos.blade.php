@@ -3,7 +3,7 @@
 
 
 @section('titulo_pigina')
-    Lista productos
+    Lista de productos
 @endsection
 
 @section('content_css')
@@ -23,7 +23,7 @@
                                 
                                     <div class="col-md-8"></div>
                                     <a class="btn btn-success col-md-2" type="button" href="{{ url('/empresa/productos/formulario_productos_crear') }}">Registar producto</a>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    
                                 
                                 </div>
                                 
@@ -71,9 +71,11 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_actualizar') }}"><i data-feather="edit"></i></a>
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_agregar') }}"><i data-feather="plus-square"></i></a>                                                                           
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_actualizar') }}" title="Editar"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_agregar') }}" title="Agregar"><i data-feather="plus-square"></i></a>                                                                           
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ url('/empresa/productos/'.$producto->id.'/formulario_productos_restar') }}" title="Restar"><i data-feather="minus-square"></i></a>
                                         
+
                                     </td>
                                 </tr>
                                 

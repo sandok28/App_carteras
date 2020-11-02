@@ -78,12 +78,12 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_carteras.formulario_carteras_actualizar',[$empresa_id, $cartera->id ]) }}"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{ route('administrador.administrador_carteras.formulario_carteras_actualizar',[$empresa_id, $cartera->id ])}}"title="Editar"><i data-feather="edit"></i></a>
                                                                                                            
                                         @if ($cartera->estado === "A")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_desactivar/'.$cartera->id) }}"><i data-feather="user-x"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_desactivar/'.$cartera->id) }}"title="Desactivar"><i data-feather="user-x"></i></a>
                                         @elseif ($cartera->estado === "I")
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_activar/'.$cartera->id) }}"><i data-feather="user-check"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark" href="{{ url('/administrador/administrador_carteras/carteras_activar/'.$cartera->id) }}"title="Activar"><i data-feather="user-check"></i></a>
                                         @endif
 
                                         

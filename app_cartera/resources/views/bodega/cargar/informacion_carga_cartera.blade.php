@@ -15,6 +15,51 @@
         <div class="container mt-4">
             <!-- Account page navigation-->
             <hr class="mt-0 mb-4" />
+
+
+
+            <div class="card mb-4">
+                <div class="card-header">Listado de devoluciones de la cartera</div>
+                <div class="card-body">
+                    <div class="datatable">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Nombre de producto</th>
+                                    <th>Cantidad</th>                                   
+                                    
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Nombre de producto</th>
+                                    <th>Cantidad</th>
+                                    
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach($devoluciones as $devolucion)
+                                <tr>
+                                    <td>{{$devolucion->producto->nombre}}</td>
+                                    <td>{{$devolucion->producto_cantidad}}</td>
+                                    
+                                </tr>
+                                
+                            @endforeach
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
             <div class="row">
                 
                 <div class="col-xl-12">
@@ -64,6 +109,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </main>
  

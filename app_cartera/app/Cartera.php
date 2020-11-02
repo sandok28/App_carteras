@@ -61,5 +61,8 @@ class Cartera extends Model
             return $this->hasMany('App\Devolucion', 'producto_id', 'id');
         }
 
+    
+    
+
 
 }

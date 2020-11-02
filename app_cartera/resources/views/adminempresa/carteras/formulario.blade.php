@@ -11,9 +11,7 @@
 
 {{ Form::hidden('empresa_id', $empresa_id) }}
 
-
-
-
+<label for="fname">Dias de trabajo</label><br>
 <div class="form-check ">
     {!!Form::checkbox('1','value',$dia1_id)!!}
     <label class="form-check-label" for="inlineCheckbox1">Lunes</label>

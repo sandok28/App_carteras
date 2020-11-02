@@ -14,12 +14,14 @@ class CreateListaNegraClientesTable extends Migration
     public function up()
     {
         Schema::create('listanegraclientes', function (Blueprint $table) {
-            $table->id();
-            $table->integer("cliente_id");
+            $table->increments('id');
+            $table->integer("cliente_id")->unsigned();
             $table->date ("fecha_ingreso");
             $table->integer("monto_ingreso");
             $table->string("estado");
             $table->timestamps();
+
+            $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

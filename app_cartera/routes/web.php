@@ -86,11 +86,17 @@ Route::PUT('/empresa/productos/{producto_id}','GestionEmpresasController@product
 
 Route::get('/empresa/productos/{producto_id}/formulario_productos_agregar','GestionEmpresasController@formulario_productos_agregar')->name('empresa.productos.formulario.productos_agregar');
 Route::PUT('/empresa/productos/{producto_id}/agregar','GestionEmpresasController@productos_agregar')->name('empresa.productos.agregar');
+
+Route::get('/empresa/productos/{producto_id}/formulario_productos_restar','GestionEmpresasController@formulario_productos_restar')->name('empresa.productos.formulario.productos_restar');
+Route::PUT('/empresa/productos/{producto_id}/restar','GestionEmpresasController@productos_restar')->name('empresa.productos.restar');
 /////->Gestionempresa - clientes
 
 Route::get('/empresa/carteras/{cartera_id}/clientes','GestionEmpresasController@lista_clientes')->name('empresa.empresa_carteras_clientes');
 Route::get('/empresa/carteras/clientes/{cliente_id}/formulario_cliente_actualizar','GestionEmpresasController@formulario_cliente_actualizar')->name('empresa.empresa_clientes.formulario.clientes_actualizar');
 Route::PUT('/empresa/empresa_carteras/clientes/{cliente_id}/cliente_actualizar','GestionEmpresasController@cliente_actualizar')->name('empresa.empresa_cartera_clientes.empresa.cartera_clientes_actualizar');
+/////->Gestionempresa - Historial clientes
+
+Route::get('/empresa/empresa_carteras/clientes/{cliente_id}/transacciones','GestionEmpresasController@historial_cliente')->name('empresa.historial_cliente');
 
 /////->Gestionempresa - lista negra
 
@@ -110,6 +116,10 @@ Route::PUT('/empresa/listainactivos/{cliente_id}','GestionEmpresasController@cli
 /////->Gestionempresa - Reportes
 
 Route::get('/empresa/ventas/{cartera_id}','GestionEmpresasController@ventas')->name('empresa.ventas');
+
+/////->Gestionempresa - Cuentas
+
+Route::get('/empresa/cuentas/{cartera_id}','GestionEmpresasController@cuentas')->name('empresa.cuentas');
 
 /////->Gestionempresa - bonos
 
@@ -187,6 +197,9 @@ Route::PUT('/carterista/clientes/{cliente_id}/clientes_actualizar','CarteristasC
 Route::get('/carterista/clientes/formulario_clientes_ordenar', 'CarteristasController@formulario_clientes_ordenar')->name('carterista.clientes.formulario_clientes_ordenar');
 Route::post('/carterista/clientes/clientes_ordenar','CarteristasController@clientes_ordenar')->name('carterista.clientes.clientes_ordenar');
 
+//-->carteristas - resumen del dia
+Route::get('/carterista/resumen_del_dia', 'CarteristasController@resumen_del_dia')->name('carterista.resumen_del_dia');
+
 
 //-->carteristas - Venta a clientes
 Route::get('/carterista/gestion_cliente_cartera/{cliente_id}','CarteristasController@gestion_cliente_cartera')->name('carterista.gestion_cliente_cartera');
@@ -201,6 +214,13 @@ Route::get('/carterista/cliente/{cliente_id}/formulario_reportar_lista_negra', '
 Route::post('/carterista/cliente/{cliente_id}/reportar_lista_negra', 'CarteristasController@reportar_lista_negra')->name('carterista.cliente.reportar_lista_negra');
 
 
+//Carterista - almuerzos
+Route::get('/carterista/almuerzo/formulario_almuerzo_crear','CarteristasController@formulario_almuerzo_crear')->name('carterista.almuerzo.formulario_almuerzo_crear');
+Route::post('/carterista/almuerzo/almuerzo_crear','CarteristasController@almuerzo_crear')->name('carterista.almuerzo.almuerzo_crear');
+
+//Carterista - gastos
+Route::get('/carterista/gasto/formulario_gasto_crear','CarteristasController@formulario_gasto_crear')->name('carterista.gasto.formulario_gasto_crear');
+Route::post('/carterista/gasto/gasto_crear','CarteristasController@gasto_crear')->name('carterista.gasto.gasto_crear');
 
 //Carterista - bonos
 Route::get('/carterista/bono/formulario_bono_crear','CarteristasController@formulario_bono_crear')->name('carterista.bono.formulario_bono_crear');
@@ -214,6 +234,13 @@ Route::post('/carterista/novedad/novedad_crear','CarteristasController@novedad_c
 Route::get('/carterista/devolucion/{cliente_id}/formulario_devolucion_crear','CarteristasController@formulario_devolucion_crear')->name('carterista.devolucion.formulario_devolucion_crear');
 Route::post('/carterista/devolucion/{cliente_id}/devolucion_crear','CarteristasController@devolucion_crear')->name('carterista.devolucion.devolucion_crear');
 
+//Carterista - cliente - historial ventas
+
+Route::get('/carterista/cliente/{cliente_id}/transacciones','CarteristasController@historial_cliente')->name('carterista.historial_cliente');
+
+//Carterista - cliente - historial ventas
+
+Route::get('/carterista/cliente/{cliente_id}/atendido','CarteristasController@cliente_atendido')->name('carterista.cliente_atendido');
 
 ////
 Route::get('/usuariosadmin/formulario_usuarios_crear','Usuarioscontroller@formulario_usuariosadmin_crear');

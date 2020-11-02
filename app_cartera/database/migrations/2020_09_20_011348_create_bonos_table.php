@@ -14,12 +14,15 @@ class CreateBonosTable extends Migration
     public function up()
     {
         Schema::create('bonos', function (Blueprint $table) {
-            $table->id();
-            $table->integer("cartera_id");
+            $table->increments('id');
+            $table->integer("cartera_id")->unsigned();
             $table->string("descripcion");
             $table->date("mi_fecha");
             $table->integer("valor");
+            $table->integer("tipo")->nullable();
             $table->timestamps();
+
+            $table->foreign('cartera_id')->references('id')->on('carteras')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

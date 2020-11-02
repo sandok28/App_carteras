@@ -13,6 +13,7 @@ class HistorialVentaCartera extends Model
         'venta',
         'deuda',
         'abono',
+        'saldo_final',
         'saldo'
 
     ];

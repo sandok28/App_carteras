@@ -37,6 +37,12 @@
                                     </br>
                                     <label class="small mb-1" for="inputUsername">Deuda:  {{$cliente->deuda}}</label>                                
                                 </div>
+
+                                <div class="form-group">
+                                {!! Form::label('comentarios', 'Comentarios', ['for' => 'exampleFormControlInput1']) !!}
+                                {!! Form::textarea('comentarios', null, ['class' => 'form-control', 'id' => 'exampleFormControlInput1']) !!}
+                                </div>
+
                             
                                 <div class="form-group">
                                     {!! Form::label('Pago','¿Esta seguro que quiere reportar el cliente?: ', ['for' => 'exampleFormControlInput1']) !!}    

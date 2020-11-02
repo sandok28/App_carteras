@@ -14,7 +14,7 @@ class CreatePruebasTable extends Migration
     public function up()
     {
         Schema::create('pruebas', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string("prueba_descripcion");
             $table->timestamps();
         });

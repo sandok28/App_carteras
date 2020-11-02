@@ -22,7 +22,7 @@
                                 <div class="card-header">Panel de administracion de clientes de la cartera</div>
                                 <div class="row center-md card-body">
                                     <div class="col-md-8"></div>
-                                    <a class="btn btn-primary col-md-2" type="button" href="{{ url()->previous() }}">Volver</a>
+                                    <a class="btn btn-primary col-md-2" type="button" href="{{ route('empresa.empresa_carteras') }}">Volver</a>
                                 </div>
                             </div>
                         </div>
@@ -79,8 +79,8 @@
                                     <td>
 
 
-                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/carteras/clientes/'.$cliente->id.'/formulario_cliente_actualizar')}}"><i data-feather="edit"></i></a>
-                                      
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/carteras/clientes/'.$cliente->id.'/formulario_cliente_actualizar')}}"title="Editar"><i data-feather="edit"></i></a>
+                                        <a class="btn btn-datatable btn-icon btn-transparent-dark mr-2" href="{{url('/empresa/empresa_carteras/clientes/'.$cliente->id.'/transacciones')}}"title="Transacciones"><i data-feather="shopping-cart"></i></a>
                                         
                                     </td>
                                 </tr>

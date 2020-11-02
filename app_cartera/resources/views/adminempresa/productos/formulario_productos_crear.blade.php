@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('titulo_pigina')
-    Crear cartera
+    Crear producto
 @endsection
 
 @section('content')
@@ -23,7 +23,7 @@
                          
                                 @include('adminempresa.productos.formulario')
                                 {!! Form::submit('Guardar', ['class' => 'btn btn-success'] ) !!}
-                                <a class="btn btn-primary " type="button" href="{{ url()->previous() }}">Volver</a>
+                                <a class="btn btn-primary " type="button" href="{{route('empresa.empresa_productos')}}">Volver</a>
                                 
                             {!! Form::close() !!}
                         </div>
