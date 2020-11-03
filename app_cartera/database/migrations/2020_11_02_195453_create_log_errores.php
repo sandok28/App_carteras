@@ -17,7 +17,7 @@ class CreateLogErrores extends Migration
             $table->id();
             $table->string("usuario_id");
             $table->string("controlador_metodo");
-            $table->string("mensaje");
+            $table->text("mensaje");
             $table->timestamps();
         });
     }
