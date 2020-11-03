@@ -322,20 +322,31 @@ public function lista_productos()
 
     public function productos_actualizar(Request $request, $producto_id)
     {
-        try{DB::beginTransaction();
-            $producto = Producto::find($producto_id);
-            $producto->fill($request->all());
-            $producto->save();
-            DB::commit();
-            }
-        catch (\Exception $ex){
-                                DB::rollback();
-                                $user = Auth::user();
-                                $usuario = $user->usuarios->get(0)->id;
-                                $this->erroreslog->registrarerrores($usuario,$this->controller_name.'productos_actualizar',$ex->getMessage());            
-                                return redirect()->route('empresa.empresa_productos.formulario_productos_actualizar')->with(['message'=> 'Error al actualizar el producto ','tipo'=>'error']);
-                                }
-        return redirect()->route('empresa.empresa_productos')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
+        $user = Auth::user();
+        $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+        $cartera=Cartera::where('empresa_id',$empresa_id)->where('cargue','C')->get();
+        //dd($cartera);
+
+        if($cartera->isEmpty()){
+
+            try{DB::beginTransaction();
+                $producto = Producto::find($producto_id);
+                $producto->fill($request->all());
+                $producto->save();
+                //$a=1/0;
+                DB::commit();
+                }
+            catch (\Exception $ex){
+                                    DB::rollback();
+                                    $user = Auth::user();
+                                    $usuario = $user->usuarios->get(0)->id;
+                                    $this->erroreslog->registrarerrores($usuario,$this->controller_name.'productos_actualizar',$ex->getMessage());            
+                                    return redirect()->route('empresa.empresa_productos.formulario.productos_actualizar',[$producto_id])->with(['message'=> 'Error al actualizar el producto ','tipo'=>'error']);
+                                    }
+            return redirect()->route('empresa.empresa_productos')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
+        }
+        
+        else{return redirect()->route('empresa.empresa_productos.formulario.productos_actualizar',[$producto_id])->with(['message'=> 'Error, el producto no se puede editar, mientras las carteras esten trabajando ','tipo'=>'error']);}
     }
 
     public function formulario_productos_agregar($producto_id)
