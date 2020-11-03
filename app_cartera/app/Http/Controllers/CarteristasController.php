@@ -105,10 +105,117 @@ class CarteristasController extends Controller
             $usuario = $user->usuarios->get(0);
             $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
         
+            
+          
+            // Validar si cliente esta en lista negra
+        
+                      
+            $empresa_id = $user->usuarios->get(0)->empresa_id;////// id de la empresa del usuario logueado
+            $cartera_LNC_id = Cartera::where('empresa_id',$empresa_id)->where('tipo','2')->get()->get(0)->id;
+            $cartera_LI_id = Cartera::where('empresa_id',$empresa_id)->where('tipo','3')->get()->get(0)->id;
+            $clientes_listanegra_telefono = Cliente::where('estado','LNC')
+                                        ->where('cartera_id',$cartera_LNC_id)
+                                        ->where(   
+                                                'telefono',(is_null($request->input('telefono')) ? '-1' : $request->input('telefono'))
+                                                )                                        
+                                        ->get();
+           
+
+            if(!$clientes_listanegra_telefono->isEmpty()){ //cliente existe en lista negra por telefono
+                $cliente=$clientes_listanegra_telefono->first();
+                //dd($cliente);
+                return view('carteristas.clientes.cliente_lnT')->with('cliente',$cliente)->with(['message'=> 'Cliente reportado en lista negra con numero de telefono','tipo'=>'error']);
+                //dd($clientes_listanegra_telefono, $request->input('telefono'),'aaa');
+                //poner parametro tipo por el que fallo --  si fue por telefono o cedula
+            }
+
+
+            $clientes_listanegra_cedula = Cliente::where('estado','LNC')
+                                        ->where('cartera_id',$cartera_LNC_id)
+                                        ->where(   
+                                                'cedula',(is_null($request->input('cedula')) ? '-1' : $request->input('cedula'))
+                                                )
+                                        ->get();
+           
+
+            if(!$clientes_listanegra_cedula->isEmpty()){ //cliente existe en lista negra por telefono
+                $cliente=$clientes_listanegra_cedula->first();
+    
+                return view('carteristas.clientes.cliente_lnC')->with('cliente',$cliente)->with(['message'=> 'Cliente reportado en lista negra con numero de cedula','tipo'=>'error']);
+                //dd($clientes_listanegra_cedula, $request->input('telefono'),'aaa');
+                //poner parametro tipo por el que fallo --  si fue por telefono o cedula
+            }
+
+            /////////////////////////////////////
+
+            $clientes_inactivos_cedula = Cliente::where('estado','LIP')
+                                        ->where('cartera_id',$cartera_LI_id)
+                                        ->where(   
+                                                'cedula',(is_null($request->input('cedula')) ? '-1' : $request->input('cedula'))
+                                                )
+                                        ->get();
+           
+
+            if(!$clientes_inactivos_cedula->isEmpty()){ //cliente existe en lista negra por telefono
+                $cliente=$clientes_inactivos_cedula->first();
+    
+                return view('carteristas.clientes.cliente_li')->with('cliente',$cliente)->with(['message'=> 'Cliente desactivado con numero de cedula','tipo'=>'error']);
+                //dd($clientes_listanegra_cedula, $request->input('telefono'),'aaa');
+                //poner parametro tipo por el que fallo --  si fue por telefono o cedula
+            }
+
+            //////////////////////////////////////////
+            $clientes_inactivos_telefono = Cliente::where('estado','LIP')
+                                        ->where('cartera_id',$cartera_LI_id)
+                                        ->where(   
+                                                'telefono',(is_null($request->input('telefono')) ? '-1' : $request->input('telefono'))
+                                                )
+                                        ->get();
+           
+
+            if(!$clientes_inactivos_telefono->isEmpty()){ //cliente existe en lista negra por telefono
+                $cliente=$clientes_inactivos_telefono->first();
+    
+                return view('carteristas.clientes.cliente_li')->with('cliente',$cliente)->with(['message'=> 'Cliente desactivado con numero de telefono','tipo'=>'error']);
+                //dd($clientes_listanegra_cedula, $request->input('telefono'),'aaa');
+                //poner parametro tipo por el que fallo --  si fue por telefono o cedula
+            }
+
+            
+
+
+
+
+
+
+            // Validar si clienmte esta en lista inactivo
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            //crea cliente
+
+            
             $clientes_por_atender = DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
             DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('fecha_ultima_visita','!=',$current_date)->increment('posicion',1);
             
-            //dd($clientes_por_atender);
+        
             $cliente = new Cliente();
             $cliente->nombre = $request->input('nombre');
             $cliente->direccion = $request->input('direccion');
@@ -121,17 +228,25 @@ class CarteristasController extends Controller
             $cliente->deuda = 0;
             $cliente->intentos_sin_ventas = 0;
             $cliente->save();
+                
+  
+
+
+            
+
+
+            //dd($clientes_por_atender);
+            
             
             DB::commit(); //////->SAVE
         }
-        catch (\Exception $ex){
+        catch (\Exception $ex){dd($ex);
             DB::rollback();
             $user = Auth::user();
             $usuario = $user->usuarios->get(0)->id;
             $this->erroreslog->registrarerrores($usuario,$this->controller_name.'clientes_crear',$ex->getMessage());            
             return redirect()->route('carterista.clientes.formulario_clientes_crear')->with(['message'=> 'Error al crear el cliente ','tipo'=>'error']);
             
-
         }            
 
         return redirect()->route('carterista')->with(['message'=> 'Operacion exitosa ','tipo'=>'message']);
@@ -181,14 +296,14 @@ class CarteristasController extends Controller
                
                 $user = Auth::user();
                 $usuario = $user->usuarios->get(0);        
-                $cartera_lista_negra = Cartera::where('empresa_id',$usuario->empresa_id)->where('tipo','3')->get();//tipo=3 es cartera tipo lista inactivo
+                $cartera_lista_inactivo = Cartera::where('empresa_id',$usuario->empresa_id)->where('tipo','3')->get();//tipo=3 es cartera tipo lista inactivo
         
 
                 DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('posicion','>',$cliente->posicion)->decrement('posicion',1);
 
                 DB::table('clientes')
-                    ->where('id',  $cliente_id)->update([   'estado' => 'LIP',//LNP -Lista Inactivo pendiente de confirmar
-                                                            'cartera_id'=> $cartera_lista_negra->get(0)->id
+                    ->where('id',  $cliente_id)->update([   'estado' => 'LIP',//LIP -Lista Inactivo pendiente de confirmar
+                                                            'cartera_id'=> $cartera_lista_inactivo->get(0)->id
                                                         ]);
             }
                         
@@ -867,5 +982,21 @@ class CarteristasController extends Controller
           
     }
 
+    public function activar_cliente($cliente_id)
+    {
+        $user = Auth::user();
+        $usuario = $user->usuarios->get(0);
+        $cliente=Cliente::where('id',$cliente_id)->first();
+        $cartera_id=$usuario->cartera()->id;
+        $current_date = Carbon::now()->toDateString(); // Produces something like "2019-03-11"
+        $clientes_por_atender = DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('fecha_ultima_visita','!=',$current_date)->orderBy('posicion','asc')->get();
+        DB::table('clientes')->where('cartera_id',$usuario->cartera()->id)->where('fecha_ultima_visita','!=',$current_date)->increment('posicion',1);
 
+        $affected = DB::update('update clientes set estado = ? where id = ?', ['A',$cliente_id]);
+        $affected = DB::update('update clientes set cartera_id = ? where id = ?', [$cartera_id,$cliente_id]);
+        $affected = DB::update('update clientes set posicion = ? where id = ?', [($clientes_por_atender->isEmpty() ? '1': $clientes_por_atender->get(0)->posicion),$cliente_id]);
+
+        return  redirect()->route('carterista');
+        
+    }
  }
