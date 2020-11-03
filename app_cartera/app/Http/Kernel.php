@@ -67,7 +67,9 @@ class Kernel extends HttpKernel
 
         //Personalizados
         'RolUserAdminMiddleware' => 'App\Http\Middleware\RolUserAdminMiddleware',
-        'UsuariosTipo3Rule' => 'App\Http\Middleware\UsuariosTipo3Rule',
+        'RolUserEmpresaMiddleware' => 'App\Http\Middleware\RolUserEmpresaMiddleware',
+        'RolUserCarteristaMiddleware' => 'App\Http\Middleware\RolUserCarteristaMiddleware',
+        'RolUserBodegaMiddleware' => 'App\Http\Middleware\RolUserBodegaMiddleware',
 
     ];
 }

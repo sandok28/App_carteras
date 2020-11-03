@@ -6,6 +6,7 @@
 
 @section('content')
     <main>
+    @include('Partials.general.alertas')
         <!-- Main page content-->
         <div class="container mt-4">
             <!-- Account page navigation-->

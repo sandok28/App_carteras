@@ -11,6 +11,7 @@
 @section('content')
 
     <main>
+    
         <!-- Main page content-->
         <div class="container mt-4">
             <!-- Account page navigation-->

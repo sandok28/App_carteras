@@ -23,7 +23,7 @@ class GestionBodegaController extends Controller
     public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
-        //$this->middleware('RolUserAdminMiddleware');
+        $this->middleware('RolUserBodegaMiddleware');
         $this->erroreslog = $erroreslog_init;
       
     }

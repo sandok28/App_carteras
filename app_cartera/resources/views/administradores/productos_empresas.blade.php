@@ -12,6 +12,7 @@
 
 @section('content')
     <main>
+    @include('Partials.general.alertas')
         <header class="page-header page-header-dark bg-gradient-primary-to-secondary pb-10">
             <div class="container">
                 <div class="page-header-content pt-12">

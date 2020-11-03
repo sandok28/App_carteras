@@ -7,7 +7,7 @@ use App\Usuario;
 use Illuminate\Contracts\Auth\Guard;
 use Mockery\Exception;
 
-class RolUserEmpresaMiddleware
+class RolUserBodegaMiddleware
 {
 
     protected $auth;
@@ -35,11 +35,11 @@ class RolUserEmpresaMiddleware
                 return redirect()->to('/home');
             }
 
-            if($usuario->tipo == 2) // Es tipo 2 - Empresa
+            if($usuario->tipo == 4) // Es tipo 4 - Bodega
             {
                 return $next($request);
             }
-            else // No es tipo 2 - Empresa
+            else // No es tipo 4 - Bodega
             {
                 return redirect()->to('/home');
             }

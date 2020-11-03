@@ -30,7 +30,7 @@ class GestionEmpresasController extends Controller
     public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
-        //$this->middleware('RolUserAdminMiddleware');
+        $this->middleware('RolUserEmpresaMiddleware');
         $this->erroreslog = $erroreslog_init;
       
     }

@@ -24,7 +24,7 @@ class CarteristasController extends Controller
     public function __construct(ErroresController $erroreslog_init)
     {
         $this->middleware('auth');
-        //$this->middleware('RolUserAdminMiddleware');
+        $this->middleware('RolUserCarteristaMiddleware');
         $this->erroreslog = $erroreslog_init;
       
     }

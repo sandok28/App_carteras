@@ -90,7 +90,7 @@
                 </nav>
             </div>
             <div id="layoutSidenav_content">
-                @include('Partials.general.alertas')
+                
                 @yield('content')
             </div>
         </div>
