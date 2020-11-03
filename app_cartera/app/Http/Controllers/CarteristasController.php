@@ -61,6 +61,7 @@ class CarteristasController extends Controller
                 $clientes_atendidos = DB::table('clientes')->where('cartera_id',$cartera->id)->where('fecha_ultima_visita','=',$current_date)->orderBy('posicion','asc')->get();
                 
                 return view('carteristas.panel_central_carteristas')->with('cartera',$cartera)
+                                                                    ->with('current_date',$current_date)
                                                                     ->with('clientes_atendidos',$clientes_atendidos)
                                                                     ->with('clientes_por_atender',$clientes_por_atender);
                 }

@@ -41,7 +41,14 @@
                             <div class="timeline-item-content pt-0">
                                 <div class="card shadow-sm">
                                     <div class="card-body">
-                                        <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->posicion}} - {{$cliente->nombre}} </a><span class="badge badge-warning">Pendiente</span></h5>
+                                        
+                                        @if(Str::of($cliente->created_at)->substr(0,10) == $current_date)
+                                            <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->posicion}} - {{$cliente->nombre}} </a><span class="badge badge-dark">Nuevo - Pendiente</span></h5>                                            
+                                        @else 
+                                            <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->posicion}} - {{$cliente->nombre}} </a><span class="badge badge-warning">Pendiente</span></h5>
+                                            
+                                        @endif
+                                        
                                         {{$cliente->direccion}}
                                         </br>
                                         Deuda: ${{$cliente->deuda}}
@@ -57,7 +64,7 @@
                             <div class="timeline-item-content pt-0">
                                 <div class="card shadow-sm">
                                     <div class="card-body">
-                                        <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->nombre}} </a> <span class="badge badge-success">Atendido</span></h5>
+                                        <h5 class="text-primary"><a href = "{{route('carterista.gestion_cliente_cartera',$cliente->id)}}">{{$cliente->posicion}} - {{$cliente->nombre}} </a> <span class="badge badge-success">Atendido</span></h5>
                                         {{$cliente->direccion}}
                                         </br>
                                         Deuda: ${{$cliente->deuda}}
